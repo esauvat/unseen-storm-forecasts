@@ -56,7 +56,7 @@ def mapping(pathToFile : str, day : int) -> None :
 
     assert(pathToFile.endswith('.nc'))
     ("The file must be in .nc format.")
-    assert(pathToFile.startswith('tp24_'))
+    assert(pathToFile.startswith('/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/'))
     ("The file must be an ERA5 reanalysis data")
 
     data = Dataset(pathToFile, 'r')
