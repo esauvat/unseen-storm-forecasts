@@ -25,7 +25,7 @@ def map_creator(data : Dataset) -> tuple :
     projPlane = ccrs.PlateCarree()
 
     latS = max(57.1, data['tp24'].GRIB_latitudeOfFirstGridPointInDegrees)
-    latN = min(71.2, data['tp24'].GRIB_latitudeOfLastridPointInDegrees)
+    latN = min(71.2, data['tp24'].GRIB_latitudeOfLastGridPointInDegrees)
     lonW = max(3.1, data['tp24'].GRIB_longitudeOfFirstGridPointInDegrees)
     lonE = min(31.3, data['tp24'].GRIB_longitudeOfLastGridPointInDegrees)
     cLat = (latS + latN) / 2
