@@ -38,7 +38,7 @@ def map_creator(data : Dataset) -> tuple :
     )
  
     fig = plt.figure(figsize=(10,10))
-    ax = plt.subplot(1, 1, 1, projPlane)
+    ax = plt.subplot(1, 1, 1, projection=projPlane)
     ax.set_extent([lonW, lonE, latS, latN], crs=projPlane)
     ax.coastlines()
     ax.add_feature(cfeature.STATES, linewidth=0.3, linestyle='--', edgecolor='black')
