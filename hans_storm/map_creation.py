@@ -48,6 +48,8 @@ def map_creator(data : Dataset) -> tuple :
     ax.add_feature(cfeature.RIVERS)
     ax.add_feature(cities_mask)
 
+    return fig, ax
+
 
 
 def mapping(pathToFile : str, day : int) -> None :
