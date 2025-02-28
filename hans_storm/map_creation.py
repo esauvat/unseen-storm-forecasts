@@ -54,7 +54,7 @@ def mapping_1d(pathToFile : str, day : int) -> None :
 
     assert(pathToFile.endswith('.nc'))
     ("The file must be in .nc format.")
-    # assert(pathToFile.startswith('/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/'))
+    assert(pathToFile.startswith('/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/'))
     ("The file must be an ERA5 reanalysis data")
 
     data = Dataset(pathToFile, 'r')
@@ -80,7 +80,7 @@ def mapping_avg_3d(pathToFile : str, day : int) -> None :
 
     assert(pathToFile.endswith('.nc'))
     ("The file must be in .nc format.")
-    # assert(pathToFile.startswith('/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/'))
+    assert(pathToFile.startswith('/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/'))
     ("The file must be an ERA5 reanalysis data")
 
     data = Dataset(pathToFile, 'r')
@@ -98,16 +98,17 @@ def mapping_avg_3d(pathToFile : str, day : int) -> None :
         # Averaged 3 days
     tpPlot3d = ax.contourf(tp['longitude'], tp['latitude'], tp.mean(dim="time"), transform=ccrs.PlateCarree())
     plt.colorbar(tpPlot3d)
-    plt.savefig('unseen-storm-forecasts/hans_storm/maps/3d_avg_tp/3d_avg_tp'+nbToDate(day))
+    plt.savefig('unseen-storm-forecasts/hans_storm/maps/3d_tp/3d_avgp_'+nbToDate(day))
 
 
 
 ### Applying
 
 for number in range(217,223):
-    # mapping(pathToFile="/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc", day=number)
-    mapping_1d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number)
-    mapping_avg_3d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number)
+    mapping_1d(pathToFile="/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc", day=number)
+    mapping_avg_3d(pathToFile="/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc", day=number)
+    """ mapping_1d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number)
+    mapping_avg_3d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number) """
 
 ### Short testing
 
