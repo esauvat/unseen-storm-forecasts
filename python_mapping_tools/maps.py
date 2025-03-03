@@ -50,12 +50,6 @@ def map(n=1, p=1, size='medium', boundaries = None, proj=projPlane) :
     assert((size in sizes.keys()))
 
     figSize = sizes[size]
-
-    if n==1 & p==1:
-        fig, ax = plt.subplot(n, p, 1, figure=plt.figure(figsize=figSize), projection=proj)
-        map_background(ax,boundaries)
-
-        return fig, ax
     
     axesClass = (GeoAxes,
                dict(projection=proj))

@@ -1,7 +1,7 @@
 
 ''' Function to use the dataset properly '''
 
-import maps as m
+import maps as mp
 
 import numpy as np
 import xarray as xr
@@ -25,10 +25,10 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
 
     s, n, w, e = bound_values[size]
 
-    latS = max(s, data['tp24'].GRIB_latitudeOfLastGridPointInDegrees)
-    latN = min(n, data['tp24'].GRIB_latitudeOfFirstGridPointInDegrees)
-    lonW = max(w, data['tp24'].GRIB_longitudeOfFirstGridPointInDegrees)
-    lonE = min(e, data['tp24'].GRIB_longitudeOfLastGridPointInDegrees)
+    latS = max(s, data['latitude'][-1])
+    latN = min(n, data['latitude'][0])
+    lonW = max(w, data['longitude'][0])
+    lonE = min(e, data['longitude'][-1])
 
     return np.array([lonW, lonE, latS, latN]), (latS + latN) / 2, (lonW + lonE) / 2
 
@@ -36,19 +36,22 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
 ###   Showcasing the data   ###
 
 def showcase_data(data:xr.DataArray, 
-                  effectSample:xr.DataArray, 
-                  indexValues, 
-                  fig:m.plt.Figure, axgr:m.AxesGrid) -> tuple :
+                  boundaries:np.ndarray, 
+                  timesIndex:np.ndarray, 
+                  fig:mp.plt.Figure, axgr:mp.AxesGrid) -> tuple :
+
+    assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
+    effectSample = select_sample(data, boundaries, timesIndex)
 
     i = 0
     vmin, vmax = effectSample.min(), effectSample.max()
     _, Y, X = data.dims
 
     for ax in axgr:
-        p = ax.pcolormesh(data[X], data[Y], data.loc[indexValues[i]],
+        p = ax.pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
                           vmin=vmin,
                           vmax=vmax,
-                          transform=m.projPlane)
+                          transform=mp.projPlane)
         i += 1
 
     axgr.cbar_axes[0].colorbar(p)
@@ -96,10 +99,10 @@ def select_area(data:xr.DataArray, boundaries:np.ndarray) :
 
 def select_time(data:xr.DataArray, timesIndex:np.ndarray) -> xr.DataArray :
     res = xr.DataArray(
-        data[timesIndex, :, :],
+        data.loc[timesIndex, :, :],
         dims=data.dims,
         coords={
-            "time":data['time'][timesIndex],
+            "time":timesIndex,
             "latitude":data['latitude'],
             "longitude":data['longitude']
         }
@@ -148,5 +151,24 @@ def mean_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
 def nbToDate(nb : int, year : str) -> str :
     dayNum = str(nb)
     dayNum.rjust(3 + len(dayNum), '0')
-    res = datetime.strptime(year + "-" + dayNum, "%Y-%j").strftime("%m-%d-%Y")
+    res = datetime.strptime(year + "-" + dayNum, "%Y-%j").strftime("%d-%m-%Y")
     return res
+
+def nbToSortingDate(nb : int, year : str) -> str :
+    dayNum = str(nb)
+    dayNum.rjust(3 + len(dayNum), '0')
+    res = datetime.strptime(year + "-" + dayNum, "%Y-%j").strftime("%Y-%m-%d")
+    return res
+
+
+###   Mosaic Split : give the best mosaic for a given day list
+
+def mosaic_split(nbFig:int):
+    nbRow = 1
+    while True :
+        ''' The loop ends because nbRow grows strictly and 
+        for nbRow==nbFig the condition is valid'''
+        nbColumn = nbFig//nbRow + (nbFig%nbRow > 0)
+        if nbColumn-nbRow <= 1:
+            return nbRow, nbColumn
+        nbRow += 1
