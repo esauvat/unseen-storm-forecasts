@@ -145,6 +145,41 @@ def mean_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
         res[t,:,:]=data[max(0,begin):min(totalTime,end), :, :].mean(dim="time")
     return res
 
+def sum_over_space(data:xr.DataArray, span:int) -> xr.DataArray :
+    res = xr.DataArray(
+        np.zeros_like(data.values),
+        dims=data.dims,
+        coords=data.coords
+    )
+    nbLat = len(data['latitude'])
+    nbLon = len(data['longitude'])
+    for y in range(nbLat):
+        yBegin, yEnd = y-span//2, y+(span+1)//2
+        if yBegin>=0 & yEnd<=nbLat:
+            for x in range(nbLon):
+                xBegin, xEnd = x-span//2, x+(span+1)//2
+                if xBegin>=0 & xEnd<=nbLon:
+                    res[:,y,x] = data[:, yBegin:yEnd, xBegin:xEnd].sum(dim=["latitude","longitude"])
+                else:
+                    res[:,y,x] = None
+        else:
+            res[:,y,:] = np.zeros_like(data['tp24'][:,y,:]).fill(None)
+    return res
+
+def mean_over_space(data:xr.DataArray, span:int) -> xr.DataArray :
+    res = xr.DataArray(
+        np.zeros_like(data.values),
+        dims=data.dims,
+        coords=data.coords
+    )
+    nbLat = len(data['latitude'])
+    nbLon = len(data['longitude'])    
+    for y in range(nbLat):
+        yBegin, yEnd = y-span//2, y+(span+1)//2
+        for x in range(nbLon):
+            xBegin, xEnd = x-span//2, x+(span+1)//2
+            res[:,y,x]=data[:, yBegin:yEnd, xBegin:xEnd].mean(dim=["latitude", "longitude"])
+    return res
 
 ###   Day number to date   ###
 

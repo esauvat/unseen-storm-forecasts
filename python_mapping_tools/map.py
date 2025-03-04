@@ -3,11 +3,12 @@
 import sys
 import getopt
 
-sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping_tools')
-sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools')
+""" sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping_tools')
+sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools') """
 
 import maps as mp
 import weatherdata as wd
+import get_data
 
 ###     The passed arguments are the following : 
 ###     --file   (can be multiple inputs separated by a comma)
@@ -125,26 +126,6 @@ else :
 nbRow, nbColumn = wd.mosaic_split(len(days))
 
 totalPrecipitation = None
-
-def daily_data():
-    return totalPrecipitation
-
-def time_avg_data():
-    return wd.mean_over_time(totalPrecipitation, span=timeSpan)
-
-def time_sum_data():
-    return wd.sum_over_time(totalPrecipitation, span=timeSpan)
-
-def get_data():
-    global type
-    if type=="daily":
-        return daily_data()
-    elif type=="time_avg":
-        return time_avg_data()
-    elif type=="time_sum":
-        return time_sum_data()
-    print(type)
-    sys.exit()
     
 
 def draw(pathToFile:str) :
@@ -159,9 +140,9 @@ def draw(pathToFile:str) :
 
     fig, axis = mp.map(nbRow, nbColumn, size, boundaries, projection)
 
-    fullData = get_data()
+    get_data.get_data()
 
-    fig, axis = wd.showcase_data(fullData, boundaries, days, fig, axis)
+    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, days, fig, axis)
     i=0
     for ax in axis:
         ax.set_title(wd.nbToDate(days[i], year))
@@ -181,7 +162,7 @@ def draw(pathToFile:str) :
 
 ###   Execution
 
-def create_map():
+def create():
     for pathToFile in pathToFileList:
         draw(pathToFile)
 
