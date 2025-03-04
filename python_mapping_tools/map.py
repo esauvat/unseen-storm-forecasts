@@ -8,7 +8,6 @@ sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_map
 
 import maps as mp
 import weatherdata as wd
-import get_data
 
 ###     The passed arguments are the following : 
 ###     --file   (can be multiple inputs separated by a comma)
@@ -17,13 +16,15 @@ import get_data
 ###     --day-end
 ###     --day-list
 ###     --year
+###     --hindcast date
 ###     --type    (must be one of "time_avg" or "time_sum")
 ###     --time-span (mandatory went not using --result)
 ###     --size      (size of the map)
-###     --output
+###     --coordinates
+###     --directory
 
 try: 
-    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:T:ts:s:cr:d:", 
+    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:cr:d:", 
                                [
                                    "file=", 
                                    "title=",
@@ -31,6 +32,7 @@ try:
                                    "day-end=",
                                    "day-list=",
                                    "year=",
+                                   "hindcast=",
                                    "type=",
                                    "time-span=",
                                    "size=",
@@ -48,6 +50,7 @@ title=None
 dayBegin = None
 dayEnd = None
 dayList = None
+hindcastDate = None
 type = "daily"
 timeSpan = 0
 size = 'medium'
@@ -77,6 +80,8 @@ for opt, arg in opts:
         dayList = arg.split()
     elif opt in ['-y', '--year'] :
         year = arg
+    elif opt in ['-h', '--hindcast']:
+        hindcastDate = int(arg)
     elif opt in ['-T', '--type'] :
         assert(arg in typeDict.keys())
         ("The type argument must be of " + str(typeDict.keys()))
@@ -119,34 +124,44 @@ if not dir.endswith('/'):
 ###   Program
 
 if dayBegin :
-    days = wd.np.arange(dayBegin, dayEnd)
+    days = wd.np.arange(dayBegin, dayEnd+1)
 else :
     days = wd.np.array([int(num) for num in dayList])
-
+nbMap = len(days)
 nbRow, nbColumn = wd.mosaic_split(len(days))
 
 totalPrecipitation = None
     
+
+def get_data():
+    global totalPrecipitation
+    if type=="time_avg":
+        totalPrecipitation = wd.mean_over_time(totalPrecipitation, span=timeSpan)
+    elif type=="time_sum":
+        totalPrecipitation = wd.sum_over_time(totalPrecipitation, span=timeSpan)
+    elif type=="space_avg":
+        totalPrecipitation = wd.mean_over_space(totalPrecipitation, span=timeSpan)
+    elif type=="space_sum":
+        totalPrecipitation = wd.sum_over_space(totalPrecipitation, span=timeSpan)
+
 
 def draw(pathToFile:str) :
 
     global totalPrecipitation
 
     ncData = wd.Dataset(pathToFile, 'r')
-    totalPrecipitation = wd.dataset_to_xr(ncData)
+    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
     projection = mp.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
-    fig, axis = mp.map(nbRow, nbColumn, size, boundaries, projection)
+    fig, axis = mp.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
-    get_data.get_data()
+    get_data()
 
-    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, days, fig, axis)
-    i=0
-    for ax in axis:
-        ax.set_title(wd.nbToDate(days[i], year))
-        i+=1
+    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, days, nbMap, fig, axis)
+    for i in range(nbMap):
+        axis[i].set_title(wd.nbToDate(days[i], year))
     if title:
         fig.suptitle(title)
 

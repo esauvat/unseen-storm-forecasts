@@ -20,8 +20,6 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
     
     assert(size in bound_values.keys())
     ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
-    
-    
 
     s, n, w, e = bound_values[size]
 
@@ -38,21 +36,20 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
 def showcase_data(data:xr.DataArray, 
                   boundaries:np.ndarray, 
                   timesIndex:np.ndarray, 
+                  nbMap:int,
                   fig:mp.plt.Figure, axgr:mp.AxesGrid) -> tuple :
 
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
     effectSample = select_sample(data, boundaries, timesIndex)
 
-    i = 0
     vmin, vmax = effectSample.min(), effectSample.max()
     _, Y, X = data.dims
 
-    for ax in axgr:
-        p = ax.pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
+    for i in range(nbMap):
+        p = axgr[i].pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
                           vmin=vmin,
                           vmax=vmax,
                           transform=mp.projPlane)
-        i += 1
 
     axgr.cbar_axes[0].colorbar(p)
 
@@ -62,7 +59,24 @@ def showcase_data(data:xr.DataArray,
 
 ###   Dataset to Xarray   ###
 
-def dataset_to_xr(data:Dataset) :
+def dataset_to_xr(data:Dataset, hindcastDate) :
+    if hindcastDate :
+        tab = xr.DataArray(
+            data['tp24'][:,:,:,:],
+            dims=("hdate", "time", "latitude", "longitude"),
+            coords={
+                "hdate":data['hdate'][:],
+                "time":data['time'][:],
+                "latitude":data['latitude'][:],
+                "longitude":data['longitude'][:]
+            }
+        )
+        res = xr.DataArray(
+            tab.sel(hdate=hindcastDate).values,
+            dims=tab.dims[1:],
+            coords={key:tab.coords[key] for key in tab.dims[1:]}
+        )
+        return res
     res = xr.DataArray(
         data['tp24'][:,:,:], 
         dims=("time", "latitude", "longitude"), 

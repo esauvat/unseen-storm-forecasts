@@ -45,7 +45,7 @@ def map_background(ax:GeoAxes, boundaries=[]) :
     return ax
 
 
-def map(n=1, p=1, size='medium', boundaries = None, proj=projPlane) :
+def map(n=1, p=1, nbMap=1, size='medium', boundaries = None, proj=projPlane) :
 
     assert((size in sizes.keys()))
 
@@ -61,7 +61,7 @@ def map(n=1, p=1, size='medium', boundaries = None, proj=projPlane) :
                     cbar_location='right',
                     cbar_mode='single')
 
-    for ax in axgr:
-        map_background(ax,boundaries)
+    for i in range(nbMap):
+        map_background(axgr[i],boundaries)
 
     return fig, axgr
