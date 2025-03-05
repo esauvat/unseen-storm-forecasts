@@ -2,6 +2,7 @@
 
 import sys
 import getopt
+import os
 
 """ sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping_tools')
 sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools') """
@@ -24,7 +25,7 @@ import weatherdata as wd
 ###     --directory
 
 try: 
-    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:cr:d:", 
+    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:g:d:", 
                                [
                                    "file=", 
                                    "title=",
@@ -36,7 +37,7 @@ try:
                                    "type=",
                                    "time-span=",
                                    "size=",
-                                   "coords-range=",
+                                   "geo-area=",
                                    "dir="
                                 ]
                                 ) 
@@ -67,9 +68,16 @@ typeDict = {
 
 for opt, arg in opts:
     if opt in ['-f', '--file']:
-        paths = arg.split(',')
-        for path in paths :
-            pathToFileList.append(path)
+        if arg.endswith('.txt'):
+            paths = open(arg, 'r')
+            pathToFileList = paths.read().split('\n')
+            if len(pathToFileList[-1])==0:
+                pathToFileList.pop()
+        elif arg.endswith('/'):
+            for filename in os.listdir(arg):
+                pathToFileList.append(arg+filename)
+        else:
+            pathToFileList = arg.split(',')
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
@@ -81,18 +89,18 @@ for opt, arg in opts:
     elif opt in ['-y', '--year'] :
         year = arg
     elif opt in ['-h', '--hindcast']:
-        hindcastDate = int(arg)
+        hindcastDate = arg
     elif opt in ['-T', '--type'] :
         assert(arg in typeDict.keys())
         ("The type argument must be of " + str(typeDict.keys()))
         type = arg
-    elif opt in ['-ts', '--time-span'] :
+    elif opt in ['-w', '--time-span'] :
         timeSpan = int(arg)
     elif opt in ['-s', '--size'] :
         assert(arg in mp.sizes.keys())
         ("The size argument must be in " + str(mp.sizes.keys()))
         size = arg
-    elif opt in ['-cr', '--coords-range'] :
+    elif opt in ['g', '--geo-area'] :
         assert(arg in wd.bound_values.keys())
         ("The coordinate range argument must be in " + str(wd.bound_values.keys()))
         coordsRange = arg
@@ -147,9 +155,30 @@ def get_data():
 
 def draw(pathToFile:str) :
 
+    dataDate = pathToFile.split('_')[-1]
+    if not dataDate.startswith(year):
+        return
+
     global totalPrecipitation
 
     ncData = wd.Dataset(pathToFile, 'r')
+    if 'hindcast' in pathToFile:
+        fileDate = pathToFile[-8:-3].split('-')
+        hindcastDate = int(
+            hindcastDate + fileDate[0] + fileDate[1]
+        )
+    else:
+        hindcastDate = None
+
+    firstDay, lastDay = days[0], days[-1]
+    firstData, lastData = ncData['time'][0], ncData['time'][-1]
+    if lastDay<firstData or firstDay>lastData :
+        return
+    else :
+        firstDay = max(firstDay, firstData)
+        lastDay = min(lastDay, lastData)
+    days = wd.np.arange(firstDay, lastDay+1)
+
     totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
@@ -166,12 +195,19 @@ def draw(pathToFile:str) :
         fig.suptitle(title)
 
     pathScatter = pathToFile.split('/')
-    fileName = pathScatter[-1][:-3]
+    dataType = None
+    if 'continuous-format' in pathScatter:
+        dataType = 'continuous'
+    elif 'forecast' in pathScatter:
+        dataType = 'forecast'
+    elif 'hindcast' in pathScatter:
+        dataType = 'hindcast'
+    fileName = pathScatter[-1][5:-3]
     typeName = "_" + type
     if timeSpan:
         typeName += "_" + str(timeSpan)
 
-    fig.savefig(dir + fileName.split('_')[0] + '_' + wd.nbToSortingDate(days[0], year) + typeName + ".png")
+    fig.savefig(dir + dataType + fileName + typeName + ".png")
 
     
 
