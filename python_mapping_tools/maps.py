@@ -9,7 +9,6 @@ from cartopy import config
 from matplotlib.axes import Axes
 from mpl_toolkits.axes_grid1 import AxesGrid
 import matplotlib.pyplot as plt
-from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 
 ###   Some projection variable   ###
 
@@ -20,7 +19,8 @@ projLCon = ccrs.LambertConformal()
 sizes = {
     'small':(8,5),
     'medium':(15,10),
-    'large':(20,15)
+    'large':(20,15),
+    'huge':(60,45)
 }
 
 

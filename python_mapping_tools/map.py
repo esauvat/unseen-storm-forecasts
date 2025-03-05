@@ -51,7 +51,7 @@ title=None
 dayBegin = None
 dayEnd = None
 dayList = None
-hindcastDate = None
+hindcastYear = None
 type = "daily"
 timeSpan = 0
 size = 'medium'
@@ -60,9 +60,9 @@ year = "2023"
 dir=None
 
 typeDict = {
-    "daily":0,
-    "time_avg":1,
-    "time_sum":2
+    "daily":['',''],
+    "time_avg":[' - Mean on ',' days'],
+    "time_sum":[' - Sum on ', ' days']
 }
 
 
@@ -89,7 +89,7 @@ for opt, arg in opts:
     elif opt in ['-y', '--year'] :
         year = arg
     elif opt in ['-h', '--hindcast']:
-        hindcastDate = arg
+        hindcastYear = arg
     elif opt in ['-T', '--type'] :
         assert(arg in typeDict.keys())
         ("The type argument must be of " + str(typeDict.keys()))
@@ -131,6 +131,7 @@ if not dir.endswith('/'):
 
 ###   Program
 
+days = []
 if dayBegin :
     days = wd.np.arange(dayBegin, dayEnd+1)
 else :
@@ -162,22 +163,26 @@ def draw(pathToFile:str) :
     global totalPrecipitation
 
     ncData = wd.Dataset(pathToFile, 'r')
+
+    startingDate = 0
+
     if 'hindcast' in pathToFile:
         fileDate = pathToFile[-8:-3].split('-')
         hindcastDate = int(
-            hindcastDate + fileDate[0] + fileDate[1]
+            hindcastYear + fileDate[0] + fileDate[1]
         )
+        startingDate = wd.getDayNumber(pathToFile[-13:-3])
     else:
         hindcastDate = None
 
-    firstDay, lastDay = days[0], days[-1]
+    firstDay, lastDay = days[0]-startingDate, days[-1]-startingDate
     firstData, lastData = ncData['time'][0], ncData['time'][-1]
     if lastDay<firstData or firstDay>lastData :
         return
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    days = wd.np.arange(firstDay, lastDay+1)
+    effectDays = wd.np.arange(firstDay, lastDay+1)
 
     totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
@@ -188,14 +193,14 @@ def draw(pathToFile:str) :
 
     get_data()
 
-    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, days, nbMap, fig, axis)
+    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, effectDays, nbMap, fig, axis)
     for i in range(nbMap):
-        axis[i].set_title(wd.nbToDate(days[i], year))
+        axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))
     if title:
-        fig.suptitle(title)
+        fig.suptitle(title+typeDict[type][0]+str(timeSpan)+typeDict[type][1])
 
     pathScatter = pathToFile.split('/')
-    dataType = None
+    dataType = 'test'
     if 'continuous-format' in pathScatter:
         dataType = 'continuous'
     elif 'forecast' in pathScatter:

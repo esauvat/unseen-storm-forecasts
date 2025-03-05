@@ -209,6 +209,11 @@ def nbToSortingDate(nb : int, year : str) -> str :
     res = datetime.strptime(year + "-" + dayNum, "%Y-%j").strftime("%Y-%m-%d")
     return res
 
+def getDayNumber(date):
+    dayNum = datetime.strptime(date, "%Y-%m-%d").strftime("%Y-%j")
+    res = dayNum.split('-')[1]
+    return int(res)
+
 
 ###   Mosaic Split : give the best mosaic for a given day list
 
