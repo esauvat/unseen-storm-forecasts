@@ -207,7 +207,7 @@ def draw(pathToFile:str) :
         dataType = 'forecast'
     elif 'hindcast' in pathScatter:
         dataType = 'hindcast'
-    fileName = pathScatter[-1][5:-3]
+    fileName = pathScatter[-1][4:-3]
     typeName = "_" + type
     if timeSpan:
         typeName += "_" + str(timeSpan)
