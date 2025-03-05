@@ -1,0 +1,1826 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{Berghald_S_trends_heatwave_UNSEEN_nordic}{article}{}
+      \name{author}{3}{}{%
+        {{hash=e51116493a270562038f440dd0ead2f7}{%
+           family={Berghald},
+           familyi={B\bibinitperiod},
+           given={S},
+           giveni={S\bibinitperiod}}}%
+        {{hash=6120fa2a45a945ca62aa0adbf33253a3}{%
+           family={Mayer},
+           familyi={M\bibinitperiod},
+           given={S},
+           giveni={S\bibinitperiod}}}%
+        {{hash=927228c42418659c4c104bf886e3be7c}{%
+           family={Bohlinger},
+           familyi={B\bibinitperiod},
+           given={P},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{449a94c2cb6339116e2db558c91cab9a}
+      \strng{fullhash}{449a94c2cb6339116e2db558c91cab9a}
+      \strng{bibnamehash}{449a94c2cb6339116e2db558c91cab9a}
+      \strng{authorbibnamehash}{449a94c2cb6339116e2db558c91cab9a}
+      \strng{authornamehash}{449a94c2cb6339116e2db558c91cab9a}
+      \strng{authorfullhash}{449a94c2cb6339116e2db558c91cab9a}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The increase in heatwave intensity, causing heat stress and crop failures in many regions is a concerning impact of global climate change. In northern Europe, significant interannual variability previously prevented robust assessments of trends in heat extremes. However, with a large-ensemble seasonal hindcasts and archived forecasts dataset covering 1981–2022 multiple realisations of weather patterns can be pooled and assessed. What are recent trends of extreme temperatures? Has the risk for a 100-year heatwave event increased in Northern Europe? We apply the UNSEEN (UNprecedented Simulated Extremes using ENsembles) approach to assess the credibility of the model ensemble and use non-stationary extreme value analysis to quantify recent trends in extreme 3-day heatwaves in late spring and early summer (May to July). We find significant non-stationarity and positive trends in annual maximum heatwave intensity. We also show that heatwave volatility, i.e. the risk of clearly outstanding heatwaves, is highest in central Scandinavia.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{2}
+      \field{number}{3}
+      \field{title}{{Revealing trends in extreme heatwave intensity: applying the UNSEEN approach to Nordic countries}}
+      \field{volume}{19}
+      \field{year}{2024}
+      \true{nocite}
+      \field{pages}{034026}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ad2893
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ad2893
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ad2893
+      \endverb
+    \endentry
+    \entry{Bradshaw_C_climate_extremes_South_Africa_maize}{article}{}
+      \name{author}{15}{}{%
+        {{hash=c469ed1f3111e02093bf26c1caf8f75d}{%
+           family={Bradshaw},
+           familyi={B\bibinitperiod},
+           given={Catherine\bibnamedelima D},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=68e00e62ea31ef9ef2e807be10c00bc3}{%
+           family={Pope},
+           familyi={P\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod}}}%
+        {{hash=9e4fa8707b41d98ccd58edf9e4aca5dc}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={Gillian},
+           giveni={G\bibinitperiod}}}%
+        {{hash=2dfc0221bfb858728a1aa9e8910ca406}{%
+           family={Davie},
+           familyi={D\bibinitperiod},
+           given={Jemma\bibnamedelimb C\bibnamedelima S},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7e94b85a9694c3351db6a99f6eea8ae9}{%
+           family={Cottrell},
+           familyi={C\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=74d68ca0b71d811a83c7c97ae3a462b4}{%
+           family={Bacon},
+           familyi={B\bibinitperiod},
+           given={James},
+           giveni={J\bibinitperiod}}}%
+        {{hash=61a03ef6fc19ab3d86f49619c9a50d4a}{%
+           family={Cosse},
+           familyi={C\bibinitperiod},
+           given={Adriana},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=4ca4de504a6781038ac1badd1195a383}{%
+           family={Jennings},
+           familyi={J\bibinitperiod},
+           given={Stewart},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0d364f3b42353e90994139dff598d9ab}{%
+           family={Challinor},
+           familyi={C\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9f9bc0f522bbddc6f88ed2f64c93dbcf}{%
+           family={Chapman},
+           familyi={C\bibinitperiod},
+           given={Sarah},
+           giveni={S\bibinitperiod}}}%
+        {{hash=87cafa8486f9c029bf981d98c1f6b30d}{%
+           family={Birch},
+           familyi={B\bibinitperiod},
+           given={Cathryn},
+           giveni={C\bibinitperiod}}}%
+        {{hash=265346e7918a2b6ed31264717429903a}{%
+           family={Sallu},
+           familyi={S\bibinitperiod},
+           given={Susannah\bibnamedelima M},
+           giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=8173f4351edc127f287c1e6fb01654e0}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=16107c0c4bb1f2af740cff8eb6c4517f}{%
+           family={Macdiarmid},
+           familyi={M\bibinitperiod},
+           given={Jennie},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{1b80c53de4f57fbee633cac5c57bfd6e}
+      \strng{fullhash}{3f82bdaa5c551e65b9feeb3312e19e7c}
+      \strng{bibnamehash}{1b80c53de4f57fbee633cac5c57bfd6e}
+      \strng{authorbibnamehash}{1b80c53de4f57fbee633cac5c57bfd6e}
+      \strng{authornamehash}{1b80c53de4f57fbee633cac5c57bfd6e}
+      \strng{authorfullhash}{3f82bdaa5c551e65b9feeb3312e19e7c}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Maize is the most important crop grown in South Africa, but yields can be severely reduced by extreme high summer average temperatures and low precipitation, potentially adversely affecting both domestic consumption and regional food security exports. To help understand and manage climate risks to food security in Southern Africa it is essential to quantify the present-day likelihood and magnitude of climate extremes in South Africa’s maize-growing region and explore the potential for unprecedented climate conditions which would likely result in record low maize yields. We analyse a large ensemble of initialised climate model simulations, which provides almost 100 times as many plausible present-day summers as the equivalent observational dataset. We quantify the risk of unprecedented climate extremes affecting maize production in South Africa and examine the role of the El Niño-Southern Oscillation. We find that the South African maize region is at risk of experiencing record-breaking hot, cold, dry or wet events under current climatic conditions. We find that the annual chance of unprecedented high temperatures in South Africa is approximately 4\%, increasing to 62\% during very strong El Niño years. We also find that the chance of exceeding the present day seasonal high temperature record has increased across the 1979–2018 period, being five times more likely now than it was in 1980. These extreme events could result in a record-breaking number of days above the optimum, or even the maximum, temperature for maize production, and lead to more severe floods or droughts. Under climate change scenarios, the magnitude and frequency of climate extremes is projected to increase meaning that the unprecedented extremes studied here could become commonplace in the future. This suggests that significant investment is needed to develop adaptations that manage the climate-related risks to food systems now and build resilience to the projected impacts of climate change.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{8}
+      \field{number}{8}
+      \field{title}{{Unprecedented climate extremes in South Africa and implications for maize production}}
+      \field{volume}{17}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{084028}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ac816d
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac816d
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac816d
+      \endverb
+    \endentry
+    \entry{Breivik_O_wave_extremes}{article}{}
+      \name{author}{5}{}{%
+        {{hash=013563e01d4aee8b9194b44bd29d9add}{%
+           family={Breivik},
+           familyi={B\bibinitperiod},
+           given={Øyvind},
+           giveni={Ø\bibinitperiod}}}%
+        {{hash=82aa0c194dc7feeea435d1b687b926ff}{%
+           family={Aarnes},
+           familyi={A\bibinitperiod},
+           given={Ole\bibnamedelima Johan},
+           giveni={O\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=e4610b163d4d1e32aae5c0555cc3c99b}{%
+           family={Bidlot},
+           familyi={B\bibinitperiod},
+           given={Jean-Raymond},
+           giveni={J\bibinithyphendelim R\bibinitperiod}}}%
+        {{hash=bdca9b6f09616ae83a83139f27a96da4}{%
+           family={Carrasco},
+           familyi={C\bibinitperiod},
+           given={Ana},
+           giveni={A\bibinitperiod}}}%
+        {{hash=30a7576e92f2a391132326ebc5ebfdc1}{%
+           family={Saetra},
+           familyi={S\bibinitperiod},
+           given={Øyvind},
+           giveni={Ø\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {American Meteorological Society}%
+      }
+      \strng{namehash}{954c311630e78b6f8c4ba0d0097a1b3b}
+      \strng{fullhash}{b761359056cd8a055157634c8d7c4faa}
+      \strng{bibnamehash}{954c311630e78b6f8c4ba0d0097a1b3b}
+      \strng{authorbibnamehash}{954c311630e78b6f8c4ba0d0097a1b3b}
+      \strng{authornamehash}{954c311630e78b6f8c4ba0d0097a1b3b}
+      \strng{authorfullhash}{b761359056cd8a055157634c8d7c4faa}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-0442}
+      \field{journaltitle}{Journal of Climate}
+      \field{month}{9}
+      \field{number}{19}
+      \field{title}{{Wave Extremes in the Northeast Atlantic from Ensemble Forecasts}}
+      \field{volume}{26}
+      \field{year}{2013}
+      \true{nocite}
+      \field{pages}{7525\bibrangedash 7540}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1175/jcli-d-12-00738.1
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1175/JCLI-D-12-00738.1
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1175/JCLI-D-12-00738.1
+      \endverb
+    \endentry
+    \entry{Coles_S_statistics_of_extremes}{book}{}
+      \name{author}{1}{}{%
+        {{hash=cc948339cfc306ea654ef4c3c95c34d8}{%
+           family={Coles},
+           familyi={C\bibinitperiod},
+           given={Stuart},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Bristol}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \strng{fullhash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \strng{bibnamehash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \strng{authorbibnamehash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \strng{authornamehash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \strng{authorfullhash}{cc948339cfc306ea654ef4c3c95c34d8}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{{An Introduction to Statistical Modeling of Extreme Values}}
+      \field{year}{2001}
+      \true{nocite}
+      \verb{urlraw}
+      \verb https://link.springer.com/book/10.1007/978-1-4471-3675-0#back-to-top
+      \endverb
+      \verb{url}
+      \verb https://link.springer.com/book/10.1007/978-1-4471-3675-0#back-to-top
+      \endverb
+    \endentry
+    \entry{Cotterill_D_UNSEEN_UK_winter_rainfall}{article}{}
+      \name{author}{4}{}{%
+        {{hash=33ab24271df7aece6b9d620f30fb7cfc}{%
+           family={Cotterill},
+           familyi={C\bibinitperiod},
+           given={Daniel\bibnamedelima F.},
+           giveni={D\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=dbf65969ce1616e2a4a7e3e4c3f90573}{%
+           family={Mitchell},
+           familyi={M\bibinitperiod},
+           given={Dann},
+           giveni={D\bibinitperiod}}}%
+        {{hash=8b76a2269efd98b1e12c12cb0c6735df}{%
+           family={Stott},
+           familyi={S\bibinitperiod},
+           given={Peter\bibnamedelima A.},
+           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=ed603c6c8b9f806bc1a17ad65c096b82}{%
+           family={Bates},
+           familyi={B\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{facb7e0a8ad4f5c8354d6f11110814f9}
+      \strng{fullhash}{710d648159af2e328842e805384aa974}
+      \strng{bibnamehash}{facb7e0a8ad4f5c8354d6f11110814f9}
+      \strng{authorbibnamehash}{facb7e0a8ad4f5c8354d6f11110814f9}
+      \strng{authornamehash}{facb7e0a8ad4f5c8354d6f11110814f9}
+      \strng{authorfullhash}{710d648159af2e328842e805384aa974}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract Three out of the five highest daily winter rainfall totals on record over Northern England have occurred from 2015 onwards. Heavy rainfall events in the winters of 2013–2014, 2015–2016 and 2019–2020 led to more than 2.8-billion-pounds of insurance losses from flooding in the UK. Has the frequency of these events been influenced by human-induced climate change? Winter rainfall in the UK is extremely variable year-to-year, which makes the attribution of rainfall extremes particularly challenging. To tackle this problem, we introduce an UNprecedented Simulated Extreme Ensemble (UNSEEN) approach for the attribution of such extremes, thereby increasing the data available, and apply this approach to five recent flooding events on a regional scale. Using this method, for all five events we found a significant climate signal in the extreme regional rainfall totals immediately preceding the flooding. Results were fairly similar for each—with the events being found to become from 1.4 to 2.6 times more likely. An alternative attribution method that uses a different model with substantially less data did not find significant increases, reinforcing the need for very large amounts of data to detect significant changes in extreme rainfall against a noisy background of natural variability. We also examine how extreme rainfall is changing more broadly across English regions in winter, finding that 1-in-10 to 1-in-90-year winter rainfall totals have changed significantly in Northern England. The high volume of data using UNSEEN has enabled us to examine the dynamics of these events, showing that daily extremes in winter are likely to have increased across all the circulation patterns responsible for high rainfall in English regions.}
+      \field{journaltitle}{International Journal of Climatology}
+      \field{number}{7}
+      \field{title}{{Using UNSEEN approach to attribute regional UK winter rainfall extremes}}
+      \field{volume}{44}
+      \field{year}{2024}
+      \true{nocite}
+      \field{pages}{2406\bibrangedash 2424}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1002/joc.8460
+      \endverb
+      \verb{eprint}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/joc.8460
+      \endverb
+      \verb{urlraw}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/joc.8460
+      \endverb
+      \verb{url}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/joc.8460
+      \endverb
+      \keyw{climate change attribution; extreme rainfall; trend detection; UNSEEN}
+    \endentry
+    \entry{Dunn-Sigouin_E_accuracy_precision_sub_seasonal_forecasts}{unpublished}{}
+      \name{author}{5}{}{%
+        {{hash=c24bf6584099894b8ab33916b426e738}{%
+           family={Dunn-Sigouin},
+           familyi={D\bibinithyphendelim S\bibinitperiod},
+           given={Etienne},
+           giveni={E\bibinitperiod}}}%
+        {{hash=33aa06e43fd921f69ee5ce6ec01eeeb5}{%
+           family={Kolstad},
+           familyi={K\bibinitperiod},
+           given={Erik\bibnamedelima W.},
+           giveni={E\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=80d95815da2fb6df24e0dc288d4a0b98}{%
+           family={Wulff},
+           familyi={W\bibinitperiod},
+           given={C.\bibnamedelimi Ole},
+           giveni={C\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=6688d6a0399cec5f67cbdb1839ba86ee}{%
+           family={Parker},
+           familyi={P\bibinitperiod},
+           given={Douglas\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=c57180b5df229a6e79ed84c5db2d875c}{%
+           family={Keane},
+           familyi={K\bibinitperiod},
+           given={Richard\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{7827d6ddf886cf1f3404713b36361a05}
+      \strng{fullhash}{60c03cf83fc001e3cc58f840df17db96}
+      \strng{bibnamehash}{7827d6ddf886cf1f3404713b36361a05}
+      \strng{authorbibnamehash}{7827d6ddf886cf1f3404713b36361a05}
+      \strng{authornamehash}{7827d6ddf886cf1f3404713b36361a05}
+      \strng{authorfullhash}{60c03cf83fc001e3cc58f840df17db96}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Balancing Accuracy versus Precision: Enhancing the Usability of Sub-Seasonal Forecasts}
+      \true{nocite}
+    \endentry
+    \entry{Granerod_M_MetNo}{misc}{}
+      \name{author}{5}{}{%
+        {{hash=f090a26f36d93a14e3c9b1ae6e22d5fd}{%
+           family={Granerød},
+           familyi={G\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=153ca9dd5e7c30e2135e77e87393d731}{%
+           family={Stabell},
+           familyi={S\bibinitperiod},
+           given={Dina},
+           giveni={D\bibinitperiod}}}%
+        {{hash=9b210b56e5416ca3b6864fa83997f0c9}{%
+           family={Mjelstad},
+           familyi={M\bibinitperiod},
+           given={Håkon},
+           giveni={H\bibinitperiod}}}%
+        {{hash=9ce8ad21a41110630d9b6a09c23bb2cc}{%
+           family={Therese},
+           familyi={T\bibinitperiod},
+           given={Helga},
+           giveni={H\bibinitperiod}}}%
+        {{hash=859f96d50c9f90300618ad772e80b789}{%
+           family={Tajet},
+           familyi={T\bibinitperiod},
+           given={Tilley},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Meteorologisk institutt}%
+      }
+      \strng{namehash}{2f8478ed52c99d4709622fa6e2627ab1}
+      \strng{fullhash}{8e06a47b1e268725165643b0a7f7218f}
+      \strng{bibnamehash}{2f8478ed52c99d4709622fa6e2627ab1}
+      \strng{authorbibnamehash}{2f8478ed52c99d4709622fa6e2627ab1}
+      \strng{authornamehash}{2f8478ed52c99d4709622fa6e2627ab1}
+      \strng{authorfullhash}{8e06a47b1e268725165643b0a7f7218f}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{METinfo Hendelserapport}
+      \field{title}{{Ekstremværet “Hans”, ekrstremt mye nedbør i deler av Sør-Norge 07.-09. august 2023}}
+      \true{nocite}
+    \endentry
+    \entry{Irvirg_D_extreme_rainfall_Australia}{article}{}
+      \name{author}{9}{}{%
+        {{hash=8d6c2e9bb5220a676c0a0da6db497cb6}{%
+           family={Irving},
+           familyi={I\bibinitperiod},
+           given={Damien\bibnamedelima B.},
+           giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=d223d1f9b849b2ab50537bb7e2171f5b}{%
+           family={Risbey},
+           familyi={R\bibinitperiod},
+           given={James\bibnamedelima S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=b3857f8c280e2439c2a3095bf1513fe3}{%
+           family={Squire},
+           familyi={S\bibinitperiod},
+           given={Dougal\bibnamedelima T.},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=bcb5d7944b4caf2181b414e84a18d226}{%
+           family={Matear},
+           familyi={M\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=c2e3f8eb6aa098da43b316e2b6c48d25}{%
+           family={Tozer},
+           familyi={T\bibinitperiod},
+           given={Carly},
+           giveni={C\bibinitperiod}}}%
+        {{hash=0acc72640db12d2bd767e69e00757e65}{%
+           family={Monselesan},
+           familyi={M\bibinitperiod},
+           given={Didier\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=4e1b75616ea4b56ec6402351682dc50f}{%
+           family={Ramesh},
+           familyi={R\bibinitperiod},
+           given={Nandini},
+           giveni={N\bibinitperiod}}}%
+        {{hash=c54037bd8a0d86a3a5e1c86d73d886ad}{%
+           family={Reddy},
+           familyi={R\bibinitperiod},
+           given={P.\bibnamedelimi Jyoteeshkumar},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=9c448c62f0d6b9bb1825e551ad163b24}{%
+           family={Freund},
+           familyi={F\bibinitperiod},
+           given={Mandy},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{2459429f2946ec2fdd99f04dddf5e192}
+      \strng{fullhash}{bf15deff1c49f9b0b37d3e1007a82fab}
+      \strng{bibnamehash}{2459429f2946ec2fdd99f04dddf5e192}
+      \strng{authorbibnamehash}{2459429f2946ec2fdd99f04dddf5e192}
+      \strng{authornamehash}{2459429f2946ec2fdd99f04dddf5e192}
+      \strng{authorfullhash}{bf15deff1c49f9b0b37d3e1007a82fab}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract A large stretch of the east coast of Australia experienced unprecedented rainfall and flooding over a two-week period in early 2022. It is difficult to reliably estimate the likelihood of such a rare event from the relatively short observational record, so an alternative is to use data from an ensemble prediction system (e.g., a seasonal or decadal forecast system) to obtain a much larger sample of simulated weather events. This so-called ‘UNSEEN’ method has been successfully applied in several scientific studies, but those studies typically rely on a single prediction system. In this study, we use data from the Decadal Climate Prediction Project to explore the model uncertainty associated with the UNSEEN method by assessing 10 different hindcast ensembles. Using the 15-day rainfall total averaged over the river catchments impacted by the 2022 east coast event, we find that the models produce a wide range of likelihood estimates. Even after excluding a number of models that fail basic fidelity tests, estimates of the event return period ranged from 320 to 1814 years. The vast majority of models suggested the event is rarer than a standard extreme value assessment of the observational record (297 years). Such large model uncertainty suggests that multi-model analysis should become part of the standard UNSEEN procedure.}
+      \field{journaltitle}{Meteorological Applications}
+      \field{number}{3}
+      \field{title}{{A multi-model likelihood analysis of unprecedented extreme rainfall along the east coast of Australia}}
+      \field{volume}{31}
+      \field{year}{2024}
+      \true{nocite}
+      \field{pages}{e2217}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1002/met.2217
+      \endverb
+      \verb{eprint}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/met.2217
+      \endverb
+      \verb{urlraw}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/met.2217
+      \endverb
+      \verb{url}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/met.2217
+      \endverb
+      \keyw{Australia; climate extremes; climate risk; CMIP6; decadal forecast; extreme rainfall}
+    \endentry
+    \entry{Jain_S_evolution_Indian_Summer_Monsoon_rainfall}{article}{}
+      \name{author}{2}{}{%
+        {{hash=739f0342f7f8fbec9474374ffded0537}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Shipra},
+           giveni={S\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{0c941118e64dc829553e76194668028e}
+      \strng{fullhash}{0c941118e64dc829553e76194668028e}
+      \strng{bibnamehash}{0c941118e64dc829553e76194668028e}
+      \strng{authorbibnamehash}{0c941118e64dc829553e76194668028e}
+      \strng{authornamehash}{0c941118e64dc829553e76194668028e}
+      \strng{authorfullhash}{0c941118e64dc829553e76194668028e}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We provide a methodology to estimate possible extreme changes in seasonal rainfall for the coming decades. We demonstrate this methodology using Indian summer monsoon rainfall as an example. We use an ensemble of 1669 realizations of Indian summer monsoon rainfall from selected seasonal prediction systems to estimate internal variability and show how it can exacerbate or alleviate forced climate change. Our estimates show that for the next decade there is a ?60\% chance of wetting trends, whereas the chance of drying is ?40\%. Wetting trends are systematically more favoured than drying with the increasing length of the period. However, internal variability can easily negate or overwhelm the wetting trends to give temporary drying trends in rainfall. This provides a quantitative explanation for the varying trends in the past observational record of rainfall over India. We also quantify the likelihood of extreme trends and show that there is at least a 1\% chance that monsoon rainfall could increase or decrease by one fifth over the next decade and that more extreme trends, though unlikely, are possible. We find that monsoon rainfall trends are influenced by trends in sea-surface temperatures over the Niño3.4 region and tropical Indian Ocean, and ?1.5° cooling or warming of these regions can approximately double or negate the influence of climate change on rainfall over the next two decades. We also investigate the time-of-emergence of climate change signals in rainfall trends and find that it is unlikely for a climate change signal to emerge by the year 2050 due to the large internal variability of monsoon rainfall. The estimates of extreme rainfall change provided here could be useful for governments to prepare for worst-case scenarios and therefore aid disaster preparedness and decision-making.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{2}
+      \field{number}{3}
+      \field{title}{How extreme could the near term evolution of the Indian Summer Monsoon rainfall be?}
+      \field{volume}{17}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{034009}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ac4655
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac4655
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac4655
+      \endverb
+    \endentry
+    \entry{Jain_S_chance_unprecedented_monsoon_rainfall}{article}{}
+      \name{author}{5}{}{%
+        {{hash=739f0342f7f8fbec9474374ffded0537}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={Shipra},
+           giveni={S\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=b89aaaccb4990e72dbdd1da360f33eb7}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Doug},
+           giveni={D\bibinitperiod}}}%
+        {{hash=da1787902a8697a3439d70faf0192ca9}{%
+           family={Mishra},
+           familyi={M\bibinitperiod},
+           given={Saroj\bibnamedelima K},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{9e16568fb0cdd82be144da5010add797}
+      \strng{fullhash}{6f2fd17c4a7caeba017d91d903ba8f37}
+      \strng{bibnamehash}{9e16568fb0cdd82be144da5010add797}
+      \strng{authorbibnamehash}{9e16568fb0cdd82be144da5010add797}
+      \strng{authornamehash}{9e16568fb0cdd82be144da5010add797}
+      \strng{authorfullhash}{6f2fd17c4a7caeba017d91d903ba8f37}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{In the past, India has suffered severe socio-economic losses due to recurring floods and droughts during boreal summer (June–August). In this analysis, we estimate the chance of extreme summer rainfall, i.e. flood and drought over India for the present climate using the UNprecedented Simulated Extremes using ENsembles (UNSEEN) method. This is the first application of the method to the hindcasts from multiple coupled atmosphere-ocean models. We first test individual models against the observed rainfall record over India and select models that are statistically indistinguishable from observations. We then calculate the chances of floods, droughts and unprecedented rainfall using 1669 realizations of summer precipitation from the selected set of models. It is found that the chance of drought is larger than the chance of flood in the present climate. There is a clear El Niño (La Niña) signal in dry (wet) summers and the occurrence of more frequent and intense droughts than floods in both models and observations is partly due to El Niño Southern Oscillation phase asymmetry. The chances of record-breaking drought and flood are 1.6\% and 2.6\%, respectively. There is also an estimated chance that a 30\% rainfall deficit could occur around once in two centuries, which is far beyond the record deficit over India.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{9}
+      \field{number}{9}
+      \field{title}{Current chance of unprecedented monsoon rainfall over India using dynamical ensemble simulations}
+      \field{volume}{15}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{094095}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ab7b98
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ab7b98
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ab7b98
+      \endverb
+    \endentry
+    \entry{Kay_A_UNSEEN_floods_droughts_England}{article}{}
+      \name{author}{5}{}{%
+        {{hash=c545ac835150bcf5f5065b532e181efd}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={A.\bibnamedelimi L.},
+           giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=5ae5b2d6dbed029b8c34a1e4d8d205b7}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=33c372e333bde088f54a0838b32519e3}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod}}}%
+        {{hash=85b8fc3c744d778204075513b20db187}{%
+           family={Bell},
+           familyi={B\bibinitperiod},
+           given={V.\bibnamedelimi A.},
+           giveni={V\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=556cbc31711ef8db21b99684f145a807}{%
+           family={Hannaford},
+           familyi={H\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{dfad47827a7759efb010a7f1e759e689}
+      \strng{fullhash}{a9a0440070ee77dbcb716a8817966ddd}
+      \strng{bibnamehash}{dfad47827a7759efb010a7f1e759e689}
+      \strng{authorbibnamehash}{dfad47827a7759efb010a7f1e759e689}
+      \strng{authornamehash}{dfad47827a7759efb010a7f1e759e689}
+      \strng{authorfullhash}{a9a0440070ee77dbcb716a8817966ddd}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Natural Hazards and Earth System Sciences}
+      \field{number}{9}
+      \field{title}{Demonstrating the use of UNSEEN climate data for hydrological applications: case studies for extreme floods and droughts in England}
+      \field{volume}{24}
+      \field{year}{2024}
+      \true{nocite}
+      \field{pages}{2953\bibrangedash 2970}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.5194/nhess-24-2953-2024
+      \endverb
+      \verb{urlraw}
+      \verb https://nhess.copernicus.org/articles/24/2953/2024/
+      \endverb
+      \verb{url}
+      \verb https://nhess.copernicus.org/articles/24/2953/2024/
+      \endverb
+    \endentry
+    \entry{Kay_G_chance_dry_N_Brazil_El_Nino}{article}{}
+      \name{author}{6}{}{%
+        {{hash=33c372e333bde088f54a0838b32519e3}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={G},
+           giveni={G\bibinitperiod}}}%
+        {{hash=aed261f2222470700ce9a11e86b963a0}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={N\bibnamedelima J},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=c00e41ee08e533a4f44150d37f143e90}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={D\bibnamedelima M},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=7b69862c7503e5012a4b8a86b23bd00b}{%
+           family={Betts},
+           familyi={B\bibinitperiod},
+           given={R\bibnamedelima A},
+           giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=fa5373b6673651c0ee609eb4ff84ae0e}{%
+           family={Cunningham},
+           familyi={C\bibinitperiod},
+           given={C},
+           giveni={C\bibinitperiod}}}%
+        {{hash=c70a7fdc1173bf4688ccd55ec2dc3441}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={A\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{ef7024994a8fa20ce4f050ee72da30a8}
+      \strng{fullhash}{b5b457b0b4388d149e4846a28aa0bc99}
+      \strng{bibnamehash}{ef7024994a8fa20ce4f050ee72da30a8}
+      \strng{authorbibnamehash}{ef7024994a8fa20ce4f050ee72da30a8}
+      \strng{authornamehash}{ef7024994a8fa20ce4f050ee72da30a8}
+      \strng{authorfullhash}{b5b457b0b4388d149e4846a28aa0bc99}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The strongest El Niño events of the past four decades were associated with large rainfall deficits in North Brazil during the December to February mature phase, leading to substantial societal and ecological impacts and influencing the global carbon cycle. While the teleconnection between El Niño and northern South America is well studied, the small number of El Niño events—and especially high magnitude ‘major’ El Niños—in the recent observational record make a robust characterisation of the response over North Brazil in today’s climate difficult. Here we use a large, initialised ensemble of global climate simulations to provide a much greater sample of North Brazil rainfall responses to recent El Niño events than is available from observations, and use this to form an assessment of the chance of unprecedented dry conditions during El Niño. We find that record low rainfall totals are possible during El Niño events in the current climate, and that as the magnitude of El Niño increases, so too does the chance of unprecedented low rainfall, reaching close to 60\% for major El Niños. However, during even the largest El Niños, when the observed North Brazil response has been similar and very dry, we find rainfall rates close to normal are still possible due to internal atmospheric variability. In addition to the predictable influence of the tropical Pacific, an unpredictable influence from the extratropics appears to play a role in modulating the North Brazil rainfall response via an equatorward wave-train that propagates down the western coast of North America and across to the Caribbean. Combining forecasts of El Niño with this improved information on the underlying chance of extremely low rainfall could feed into improved assessments of risk and preparedness for upcoming droughts in Brazil.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{5}
+      \field{number}{6}
+      \field{title}{Assessing the chance of unprecedented dry conditions over North Brazil during El Niño events}
+      \field{volume}{17}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{064016}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ac6df9
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac6df9
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac6df9
+      \endverb
+    \endentry
+    \entry{Kay_G_likelihood_dynamics_hot_summers_UK}{article}{}
+      \name{author}{6}{}{%
+        {{hash=9e4fa8707b41d98ccd58edf9e4aca5dc}{%
+           family={Kay},
+           familyi={K\bibinitperiod},
+           given={Gillian},
+           giveni={G\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=b89aaaccb4990e72dbdd1da360f33eb7}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Doug},
+           giveni={D\bibinitperiod}}}%
+        {{hash=3a2bcde6ffd66fed9dc0b059575d8273}{%
+           family={Dunbar},
+           familyi={D\bibinitperiod},
+           given={Tyrone},
+           giveni={T\bibinitperiod}}}%
+        {{hash=73fe14f7be514f697618f5c19c9853ca}{%
+           family={Eade},
+           familyi={E\bibinitperiod},
+           given={Rosie},
+           giveni={R\bibinitperiod}}}%
+        {{hash=fa00d388ac3e731619fc61b41f27fb2a}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{1852f7398a4290a715a1e47f5bbbb868}
+      \strng{fullhash}{53871983d0207032a65febe9b6305dd9}
+      \strng{bibnamehash}{1852f7398a4290a715a1e47f5bbbb868}
+      \strng{authorbibnamehash}{1852f7398a4290a715a1e47f5bbbb868}
+      \strng{authornamehash}{1852f7398a4290a715a1e47f5bbbb868}
+      \strng{authorfullhash}{53871983d0207032a65febe9b6305dd9}
+      \field{extraname}{3}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Summer 2018 in the United Kingdom (UK) was its joint hottest on record and the associated impacts raise questions over societal resilience to extremes of this magnitude or greater occurring in upcoming years. Better information on the current likelihood of extreme and unprecedented events feeds into improved understanding of risk, relevant for policy and contingency planning. However, making robust estimates of likelihood is difficult given that extremes in the historical record are few by definition. We overcome this by using a large ensemble of initialised climate model simulations to assess the chance of exceeding summer 2018 temperatures in the current climate and find it to be ∼11\% each year, although a weak circulation bias may mean this estimate is conservative. This likelihood has increased sharply over the last few decades. A one in 100-year event would bring summertime temperatures to the UK of approximately 1 °C above 2018, an anomaly similar to that of the notable hot summer of 1976. Subsetting the large ensemble enables characterisation of the dynamics around hot summers, and investigation of possible remote influences. Several circulation patterns bring warm temperatures to the UK, and it is likely that influences from different remote regions are active or dominant in different years. We present evidence suggesting roles for tropical precipitation anomalies via extratropical wave trains. Circulation anomalies associated with wet conditions in the Caribbean project particularly strongly onto the hot UK summer conditions, with a weaker signal from the tropical Pacific consistent with developing La Niña. We also highlight possible influence in some years from springtime high sea ice anomalies in the Sea of Okhotsk and low anomalies in the Barents/Kara seas. Building on this, we use new experiments that isolate the effects of opposing springtime sea ice anomalies in the two regions and find a causal relationship with the summertime circulation over the North Atlantic and northern Europe.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{9}
+      \field{number}{9}
+      \field{title}{Current likelihood and dynamics of hot summers in the UK}
+      \field{volume}{15}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{094099}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/abab32
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/abab32
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/abab32
+      \endverb
+    \endentry
+    \entry{Kelder_T_workflow_low_likelihood_impact_weather}{article}{}
+      \name{author}{7}{}{%
+        {{hash=f9154ccdaad3ee01929f04fff7f8acb1}{%
+           family={Kelder},
+           familyi={K\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=20fa746369b5fe17ec6c5815be41a4f0}{%
+           family={Marjoribanks},
+           familyi={M\bibinitperiod},
+           given={T.\bibnamedelimi I.},
+           giveni={T\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=01c78e1ca4f658ef7cc9c50c36b65c16}{%
+           family={Slater},
+           familyi={S\bibinitperiod},
+           given={L.\bibnamedelimi J.},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=09e9dbeb16676d7e67b61268c3ec44ce}{%
+           family={Prudhomme},
+           familyi={P\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=850582f2571d8699d8403034bc5c7b5e}{%
+           family={Wilby},
+           familyi={W\bibinitperiod},
+           given={R.\bibnamedelimi L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=53e6c39dc78f7a0cef8e48e560e262c5}{%
+           family={Wagemann},
+           familyi={W\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5ae5b2d6dbed029b8c34a1e4d8d205b7}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{fullhash}{a2c53b110124d51657f855bcf14d2193}
+      \strng{bibnamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authorbibnamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authornamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authorfullhash}{a2c53b110124d51657f855bcf14d2193}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract Low-likelihood weather events can cause dramatic impacts, especially when they are unprecedented. In 2020, amongst other high-impact weather events, UK floods caused more than £300 million damage, prolonged heat over Siberia led to infrastructure failure and permafrost thawing, while wildfires ravaged California. Such rare phenomena cannot be studied well from historical records or reanalysis data. One way to improve our awareness is to exploit ensemble prediction systems, which represent large samples of simulated weather events. This ‘UNSEEN’ method has been successfully applied in several scientific studies, but uptake is hindered by large data and processing requirements, and by uncertainty regarding the credibility of the simulations. Here, we provide a protocol to apply and ensure credibility of UNSEEN for studying low-likelihood high-impact weather events globally, including an open workflow based on Copernicus Climate Change Services (C3S) seasonal predictions. Demonstrating the workflow using European Centre for Medium-Range Weather Forecasts (ECMWF) SEAS5, we find that the 2020 March–May Siberian heatwave was predicted by one of the ensemble members; and that the record-shattering August 2020 California-Mexico temperatures were part of a strong increasing trend. However, each of the case studies exposes challenges with respect to the credibility of UNSEEN and the sensitivity of the outcomes to user decisions. We conclude that UNSEEN can provide new insights about low-likelihood weather events when the decisions are transparent, and the challenges and sensitivities are acknowledged. Anticipating plausible low-likelihood extreme events and uncovering unforeseen hazards under a changing climate warrants further research at the science-policy interface to manage high impacts.}
+      \field{journaltitle}{Meteorological Applications}
+      \field{number}{3}
+      \field{title}{An open workflow to gain insights about low-likelihood high-impact weather events from initialized predictions}
+      \field{volume}{29}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{e2065}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1002/met.2065
+      \endverb
+      \verb{eprint}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/met.2065
+      \endverb
+      \verb{urlraw}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/met.2065
+      \endverb
+      \verb{url}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/met.2065
+      \endverb
+      \keyw{climate change; climate model ensemble; climate risk; Copernicus Climate Change Services; seasonal predictions; Weather extremes}
+    \endentry
+    \entry{Kelder_T_UNSEEN_trends_decadal_changes_precipitation}{article}{}
+      \name{author}{9}{}{%
+        {{hash=f9154ccdaad3ee01929f04fff7f8acb1}{%
+           family={Kelder},
+           familyi={K\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=835b1fbb43107ab05d062477c10a3889}{%
+           family={Müller},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=01c78e1ca4f658ef7cc9c50c36b65c16}{%
+           family={Slater},
+           familyi={S\bibinitperiod},
+           given={L.\bibnamedelimi J.},
+           giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=20fa746369b5fe17ec6c5815be41a4f0}{%
+           family={Marjoribanks},
+           familyi={M\bibinitperiod},
+           given={T.\bibnamedelimi I.},
+           giveni={T\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=850582f2571d8699d8403034bc5c7b5e}{%
+           family={Wilby},
+           familyi={W\bibinitperiod},
+           given={R.\bibnamedelimi L.},
+           giveni={R\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=09e9dbeb16676d7e67b61268c3ec44ce}{%
+           family={Prudhomme},
+           familyi={P\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=927228c42418659c4c104bf886e3be7c}{%
+           family={Bohlinger},
+           familyi={B\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=6733a36984c0592bd00e6b0fe9c49f36}{%
+           family={Ferranti},
+           familyi={F\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=7279884c9fccbd346c179c83c794e52a}{%
+           family={Nipen},
+           familyi={N\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{fullhash}{645a0a119414c643527c13615f956eba}
+      \strng{bibnamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authorbibnamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authornamehash}{865916d069f48c85d1e60114ae1b9e40}
+      \strng{authorfullhash}{645a0a119414c643527c13615f956eba}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Sample sizes of observed climate extremes are typically too small to reliably constrain return period estimates when there is non-stationary behaviour. To increase the historical record 100-fold, we apply the UNprecedented Simulated Extreme ENsemble (UNSEEN) approach, by pooling ensemble members and lead times from the ECMWF seasonal prediction system SEAS5. We fit the GEV distribution to the UNSEEN ensemble with a time covariate to facilitate detection of changes in 100-year precipitation values over a period of 35 years (1981–2015). Applying UNSEEN trends to 3-day precipitation extremes over Western Norway substantially reduces uncertainties compared to estimates based on the observed record and returns no significant linear trend over time. For Svalbard, UNSEEN trends suggests there is a significant rise in precipitation extremes, such that the 100-year event estimated in 1981 occurs with a return period of around 40 years in 2015. We propose a suite of methods to evaluate UNSEEN and highlight paths for further developing UNSEEN trends to investigate non-stationarities in climate extremes.}
+      \field{issn}{2397-3722}
+      \field{journaltitle}{npj Climate and Atmospheric Science}
+      \field{number}{1}
+      \field{title}{Using UNSEEN trends to detect decadal changes in 100-year precipitation extremes}
+      \field{volume}{3}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{47}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41612-020-00149-4
+      \endverb
+    \endentry
+    \entry{Kelder_T_unseen_unrealistic_thesis}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=1128d74bb892a13d710ef9ad803ed732}{%
+           family={Kelder},
+           familyi={K\bibinitperiod},
+           given={Timo},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {Loughborough University}%
+      }
+      \strng{namehash}{1128d74bb892a13d710ef9ad803ed732}
+      \strng{fullhash}{1128d74bb892a13d710ef9ad803ed732}
+      \strng{bibnamehash}{1128d74bb892a13d710ef9ad803ed732}
+      \strng{authorbibnamehash}{1128d74bb892a13d710ef9ad803ed732}
+      \strng{authornamehash}{1128d74bb892a13d710ef9ad803ed732}
+      \strng{authorfullhash}{1128d74bb892a13d710ef9ad803ed732}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2}
+      \field{title}{Unseen or unrealistic? Using ensemble simulations to explore unseen weather extremes}
+      \field{type}{phdthesis}
+      \field{year}{2023}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.26174/thesis.lboro.21802488.v1
+      \endverb
+      \verb{urlraw}
+      \verb https://repository.lboro.ac.uk/articles/thesis/Unseen_or_unrealistic_Using_ensemble_simulations_to_explore_unseen_weather_extremes/21802488
+      \endverb
+      \verb{url}
+      \verb https://repository.lboro.ac.uk/articles/thesis/Unseen_or_unrealistic_Using_ensemble_simulations_to_explore_unseen_weather_extremes/21802488
+      \endverb
+    \endentry
+    \entry{Kelder_T_unseen_open_workflow}{misc}{}
+      \name{author}{7}{}{%
+        {{hash=1128d74bb892a13d710ef9ad803ed732}{%
+           family={Kelder},
+           familyi={K\bibinitperiod},
+           given={Timo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=9841486cc5c9e10df3ea0869b34c3fc1}{%
+           family={Marjoribanks},
+           familyi={M\bibinitperiod},
+           given={Tim},
+           giveni={T\bibinitperiod}}}%
+        {{hash=c9d1c9217283f1d525a132fd273f0d8f}{%
+           family={Slater},
+           familyi={S\bibinitperiod},
+           given={Louise},
+           giveni={L\bibinitperiod}}}%
+        {{hash=5eb02e47b58782667d86ef770925ddd8}{%
+           family={Prudhomme},
+           familyi={P\bibinitperiod},
+           given={Christel},
+           giveni={C\bibinitperiod}}}%
+        {{hash=8741b7cbf48d6391c54d25d03ae44e01}{%
+           family={Wilby},
+           familyi={W\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=8a465356252336627a00b837cc30a043}{%
+           family={Wagemann},
+           familyi={W\bibinitperiod},
+           given={Julia},
+           giveni={J\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{bd251191fe12a5eec07461410d63f82a}
+      \strng{fullhash}{baf2583fb0cb3ffd70c2debdbed035ef}
+      \strng{bibnamehash}{bd251191fe12a5eec07461410d63f82a}
+      \strng{authorbibnamehash}{bd251191fe12a5eec07461410d63f82a}
+      \strng{authornamehash}{bd251191fe12a5eec07461410d63f82a}
+      \strng{authorfullhash}{baf2583fb0cb3ffd70c2debdbed035ef}
+      \field{extraname}{3}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{09}
+      \field{title}{An open workflow for the study of unseen weather extremes}
+      \field{year}{2021}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.31223/X5T04C
+      \endverb
+    \endentry
+    \entry{Kent_C_drought_hazard_NE_China_farming}{article}{}
+      \name{author}{9}{}{%
+        {{hash=15ae7b3d1fa86fac46be21be0d5c8a33}{%
+           family={Kent},
+           familyi={K\bibinitperiod},
+           given={Chis},
+           giveni={C\bibinitperiod}}}%
+        {{hash=68e00e62ea31ef9ef2e807be10c00bc3}{%
+           family={Pope},
+           familyi={P\bibinitperiod},
+           given={Edward},
+           giveni={E\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=8c0ecf6ec2bed3f30931017670cd179f}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Zhan},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=16e2edf0bb6f573ff95adca7c379105b}{%
+           family={Clark},
+           familyi={C\bibinitperiod},
+           given={Robin},
+           giveni={R\bibinitperiod}}}%
+        {{hash=cc2e36f00f725b723902ed63824d79e4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Lixia},
+           giveni={L\bibinitperiod}}}%
+        {{hash=209c2bf127f41912b67fc0d926c6e03d}{%
+           family={Davie},
+           familyi={D\bibinitperiod},
+           given={Jemma},
+           giveni={J\bibinitperiod}}}%
+        {{hash=11389681bb3251d3bbb540296149e43d}{%
+           family={Lewis},
+           familyi={L\bibinitperiod},
+           given={Kirsty},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f836f16f0ce759ba092d8ae9efd11b2}
+      \strng{fullhash}{c70f4b47ea2704caf7b8826e722f4ceb}
+      \strng{bibnamehash}{0f836f16f0ce759ba092d8ae9efd11b2}
+      \strng{authorbibnamehash}{0f836f16f0ce759ba092d8ae9efd11b2}
+      \strng{authornamehash}{0f836f16f0ce759ba092d8ae9efd11b2}
+      \strng{authorfullhash}{c70f4b47ea2704caf7b8826e722f4ceb}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of App. Meteo. and Clima.}
+      \field{month}{10}
+      \field{number}{10}
+      \field{title}{{Maize drought hazard in the Northeast farming region of China: Unprecedented events in the current climate}}
+      \field{volume}{58}
+      \field{year}{2019}
+      \true{nocite}
+      \field{pages}{2247\bibrangedash 2258}
+      \range{pages}{12}
+      \verb{urlraw}
+      \verb https://doi.org/10.1175/JAMC-D-19-0096.s1
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1175/JAMC-D-19-0096.s1
+      \endverb
+    \endentry
+    \entry{Kent_C_extrem_UK_summer_rainfall}{article}{}
+      \name{author}{9}{}{%
+        {{hash=11acd7837e8bcc685af6af0ac25a148a}{%
+           family={Kent},
+           familyi={K\bibinitperiod},
+           given={Chris},
+           giveni={C\bibinitperiod}}}%
+        {{hash=c9da59f3faddc6df38f145bd67704595}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+        {{hash=28dff3db741ddf18b1590e714f60f7ca}{%
+           family={Tucker},
+           familyi={T\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=0653a11aad687a389587e0000e0f4a13}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0eecfe84c434abb289faa3565f2b02d6}{%
+           family={Kendon},
+           familyi={K\bibinitperiod},
+           given={Elizabeth\bibnamedelima J},
+           giveni={E\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=b89aaaccb4990e72dbdd1da360f33eb7}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Doug},
+           giveni={D\bibinitperiod}}}%
+        {{hash=0a0efe4d619165f2d46f374c5c8b75b0}{%
+           family={McLean},
+           familyi={M\bibinitperiod},
+           given={Lynsay},
+           giveni={L\bibinitperiod}}}%
+        {{hash=361fb969d7f6a0640008c0b1c1dfd623}{%
+           family={Greenwood},
+           familyi={G\bibinitperiod},
+           given={Shirley},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{4b23a579f90edf93580963ccb0a992d4}
+      \strng{fullhash}{cd1b003d013f2059909682afccc6f99a}
+      \strng{bibnamehash}{4b23a579f90edf93580963ccb0a992d4}
+      \strng{authorbibnamehash}{4b23a579f90edf93580963ccb0a992d4}
+      \strng{authornamehash}{4b23a579f90edf93580963ccb0a992d4}
+      \strng{authorfullhash}{cd1b003d013f2059909682afccc6f99a}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The UNSEEN (unprecedented simulated extremes using ensemble) method involves using a large ensemble of climate model simulations to increase the sample size of rare events. Here we extend UNSEEN to focus on intense summertime daily rainfall, estimating plausible rainfall extremes in the current climate. To address modelling limitations simulations from two climate models were used; an initialised 25 km global model that uses parameterised convection, and a dynamically downscaled 2.2 km model that uses explicit convection. In terms of the statistical characteristics that govern very rare return periods, the models are not significantly different from the observations across much of the UK. Our analysis provides more precise estimates of 1000 year return levels for extreme daily rainfall, reducing sampling uncertainty by 70\%–90\% compared to using observations alone. This framework enables observed daily storm profiles to be adjusted to more statistically robust estimates of extreme rainfall. For a damaging storm in July 2007 which led to surface water flooding, we estimate physically plausible increases in the total daily rainfall of 50\%–100\%. For much of the UK the annual chance of record-breaking daily summertime rainfall is estimated to be around 1\% per year in the present-day climate. Analysis of the dynamical states in our UNSEEN events indicates that heavy daily rainfall is associated with a southward displaced and meandering North Atlantic jet stream, increasing the advection of warm moist air from across Southern Europe and the Mediterranean, and intensifying extratropical storms. This work represents an advancement in the use of climate modelling for estimating present-day climate hazards and outlines a framework for applying UNSEEN at higher spatial and temporal resolutions.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{{Estimating unprecedented extremes in UK summer daily rainfall}}
+      \field{volume}{17}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{014041}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/ac42fb
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac42fb
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/ac42fb
+      \endverb
+    \endentry
+    \entry{Lavers_D_ECMWF_biases}{article}{}
+      \name{author}{3}{}{%
+        {{hash=071c60180aedf3aec6d75d9221f3ef53}{%
+           family={Lavers},
+           familyi={L\bibinitperiod},
+           given={David\bibnamedelima A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=90a8657776ba885b8eb6886b97775f8c}{%
+           family={Harrigan},
+           familyi={H\bibinitperiod},
+           given={Shaun},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5eb02e47b58782667d86ef770925ddd8}{%
+           family={Prudhomme},
+           familyi={P\bibinitperiod},
+           given={Christel},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \strng{fullhash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \strng{bibnamehash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \strng{authorbibnamehash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \strng{authornamehash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \strng{authorfullhash}{2b57dab7ee1c0d2d0695f51793dcaa86}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Hydrometeorology}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{{Precipitation Biases in the ECMWF Integrated Forecasting System}}
+      \field{volume}{22}
+      \field{year}{2021}
+      \true{nocite}
+      \field{pages}{1187\bibrangedash 1198}
+      \range{pages}{12}
+      \verb{urlraw}
+      \verb https://doi.org/10.1175/JHM-D-20-0308.1
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1175/JHM-D-20-0308.1
+      \endverb
+    \endentry
+    \entry{Lavers_D_extending_medium-range_predictability}{article}{}
+      \name{author}{3}{}{%
+        {{hash=071c60180aedf3aec6d75d9221f3ef53}{%
+           family={Lavers},
+           familyi={L\bibinitperiod},
+           given={David\bibnamedelima A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=e720bddb729a8b3e7dd4a679cce4eb3b}{%
+           family={Pappenberger},
+           familyi={P\bibinitperiod},
+           given={Florian},
+           giveni={F\bibinitperiod}}}%
+        {{hash=40f10ff90d554724aaee8f279b8fb6dc}{%
+           family={Zsoter},
+           familyi={Z\bibinitperiod},
+           given={Ervin},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \strng{fullhash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \strng{bibnamehash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \strng{authorbibnamehash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \strng{authornamehash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \strng{authorfullhash}{92e21de8a2b02c62f84e3e5a04a240dd}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Widespread flooding occurred across northwest Europe during the winter of 2013/14, resulting in large socioeconomic damages. In the historical record, extreme hydrological events have been connected with intense water vapour transport. Here we show that water vapour transport has higher medium-range predictability compared with precipitation in the winter 2013/14 forecasts from the European Centre for Medium-Range Weather Forecasts. Applying the concept of potential predictability, the transport is found to extend the forecast horizon by 3 days in some European regions. Our results suggest that the breakdown in precipitation predictability is due to uncertainty in the horizontal mass convergence location, an essential mechanism for precipitation generation. Furthermore, the predictability increases with larger spatial averages. Given the strong association between precipitation and water vapour transport, especially for extreme events, we conclude that the higher transport predictability could be used as a model diagnostic to increase preparedness for extreme hydrological events.}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{number}{1}
+      \field{title}{{Extending medium-range predictability of extreme hydrological events in Europe}}
+      \field{volume}{5}
+      \field{year}{2014}
+      \true{nocite}
+      \field{pages}{5382}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/ncomms6382
+      \endverb
+    \endentry
+    \entry{Lavers_D_eval_ERA5}{article}{}
+      \name{author}{4}{}{%
+        {{hash=071c60180aedf3aec6d75d9221f3ef53}{%
+           family={Lavers},
+           familyi={L\bibinitperiod},
+           given={David\bibnamedelima A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=b33a60e3fb8b7fd01be2c35be4fb1ef8}{%
+           family={Simmons},
+           familyi={S\bibinitperiod},
+           given={Adrian},
+           giveni={A\bibinitperiod}}}%
+        {{hash=970fdd810dea85f05165e9b332bb6edc}{%
+           family={Vamborg},
+           familyi={V\bibinitperiod},
+           given={Freja},
+           giveni={F\bibinitperiod}}}%
+        {{hash=fef902becf43e8b2b2967b8658510a0a}{%
+           family={Rodwell},
+           familyi={R\bibinitperiod},
+           given={Mark\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{00c723fd1cd4f72be3c20bd598c11a40}
+      \strng{fullhash}{0b57c5169f5b8d43141878ca4eb06be1}
+      \strng{bibnamehash}{00c723fd1cd4f72be3c20bd598c11a40}
+      \strng{authorbibnamehash}{00c723fd1cd4f72be3c20bd598c11a40}
+      \strng{authornamehash}{00c723fd1cd4f72be3c20bd598c11a40}
+      \strng{authorfullhash}{0b57c5169f5b8d43141878ca4eb06be1}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Abstract A key aim of climate monitoring is to place the current conditions of climate variables, such as surface air temperature and precipitation, in their historical context. In Europe, a leading provider of this information is the Copernicus Climate Change Service (C3S), which is implemented by the European Centre for Medium-Range Weather Forecasts (ECMWF) on behalf of the European Commission. To undertake this activity in close-to-real time, C3S predominantly uses the ECMWF ERA5 reanalysis, and ERA5 precipitation is widely used as a proxy for observed precipitation for hydrological monitoring. However, for there to be confidence in the ERA5 data, it is essential to evaluate its ability to capture observed precipitation. In this study, we therefore evaluate ERA5 precipitation against observations globally to inform C3S monitoring activities and the broader climate science community. Using 24 hr precipitation observations at 5,637 stations from 2001 to 2020, results show that the smallest ERA5 random errors occur in the winter Extratropics and the largest ERA5 errors are in the Tropics. The errors grow in the summer Extratropics and the errors in the Tropics move with the intertropical convergence zone. These findings are mirrored in the stable equitable error in probability space (SEEPS) score, with the SEEPS signifying that ERA5 is more able to discriminate between different precipitation events in the Extratropics. In general, an ERA5 wet bias is also found. The assessment of annual maximum 1 day (RX1) precipitation accumulations and four extreme events shows that ERA5 cannot model the highest observed precipitation totals but that it can generally capture their locations and patterns. Furthermore, an evaluation of monthly precipitation corroborated that ERA5 is more skilful in the Extratropics. These results imply that users can have confidence in ERA5 precipitation in extratropical regions, and therefore it is recommended that ERA5 is mostly used for extratropical precipitation monitoring.}
+      \field{journaltitle}{Quarterly Journal of the Royal Meteorological Society}
+      \field{number}{748}
+      \field{title}{{An evaluation of ERA5 precipitation for climate monitoring}}
+      \field{volume}{148}
+      \field{year}{2022}
+      \true{nocite}
+      \field{pages}{3152\bibrangedash 3165}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1002/qj.4351
+      \endverb
+      \verb{eprint}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.4351
+      \endverb
+      \verb{urlraw}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.4351
+      \endverb
+      \verb{url}
+      \verb https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.4351
+      \endverb
+      \keyw{climate monitoring; ERA5; precipitation evaluation; SYNOP observations}
+    \endentry
+    \entry{Merryfield_W_proba_extrem_events_Corpernicus}{article}{}
+      \name{author}{2}{}{%
+        {{hash=d1d0cc4828bf83958c163bb6e0a836d9}{%
+           family={Merryfield},
+           familyi={M\bibinitperiod},
+           given={William\bibnamedelima J.},
+           giveni={W\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=8464f5082d918329a3ad935fa6360fec}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Woo-Sung},
+           giveni={W\bibinithyphendelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \strng{fullhash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \strng{bibnamehash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \strng{authorbibnamehash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \strng{authornamehash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \strng{authorfullhash}{f813cc24d1fd57cb8b8b68e8d212da93}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Multi-system seasonal hindcasts supporting operational seasonal forecasts of the Copernicus Climate Change Service (C3S) are examined to estimate probabilities that El Niño and La Niña episodes more extreme than any in the reliable observational record could occur in the current climate. With 184 total ensemble members initialized each month from 1993 to 2016, this dataset greatly multiplies the realizations of ENSO variability during this period beyond the single observed realization, potentially enabling a detailed assessment of the chances of extreme ENSO events. The validity of such an assessment is predicated on model fidelity, which is examined through two-sample Cramér–von Mises tests. These do not detect differences between observed and modeled distributions of the Niño 3.4 index once multiplicative adjustments are applied to the latter to match the observed variance, although differences too small to be detected cannot be excluded. Statistics of variance-adjusted hindcast Niño 3.4 values imply that El Niño and La Niña extremes exceeding any that have been instrumentally observed would be expected to occur with a > 3\% chance per year on average across multiple realizations of the hindcast period. This estimation could also apply over the next several decades, provided ENSO variability remains statistically similar to the hindcast period.}
+      \field{issn}{1976-7951}
+      \field{journaltitle}{Asia-Pacific Journal of Atmospheric Sciences}
+      \field{number}{4}
+      \field{title}{{Estimating Probabilities of Extreme ENSO Events from Copernicus Seasonal Hindcasts}}
+      \field{volume}{59}
+      \field{year}{2023}
+      \true{nocite}
+      \field{pages}{479\bibrangedash 493}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1007/s13143-023-00328-2
+      \endverb
+    \endentry
+    \entry{Oldenborgh_G_extrem_event_attribution}{article}{}
+      \name{author}{11}{}{%
+        {{hash=a4c8ed3624c7cc4ec1c427d489d6b67b}{%
+           family={Oldenborgh},
+           familyi={O\bibinitperiod},
+           given={Geert\bibnamedelima Jan},
+           giveni={G\bibinitperiod\bibinitdelim J\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=5d64a3d611225f8d0a3ea9d875b1c164}{%
+           family={Wiel},
+           familyi={W\bibinitperiod},
+           given={Karin},
+           giveni={K\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=ee0915075b3636ff9af44fd2901deec7}{%
+           family={Kew},
+           familyi={K\bibinitperiod},
+           given={Sarah},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e43b7e332e56a081a0fb234e244a0821}{%
+           family={Philip},
+           familyi={P\bibinitperiod},
+           given={Sjoukje},
+           giveni={S\bibinitperiod}}}%
+        {{hash=568e45ebb7b75725f290c75b6bce5d76}{%
+           family={Otto},
+           familyi={O\bibinitperiod},
+           given={Friederike},
+           giveni={F\bibinitperiod}}}%
+        {{hash=6c4b66d6914e95bdfef2f11233e6a148}{%
+           family={Vautard},
+           familyi={V\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=b5c13c10fe4dce63e7e40e34d1efe87e}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+        {{hash=4cfe3118f7d2af3c034e04ff7a8cbfca}{%
+           family={Lott},
+           familyi={L\bibinitperiod},
+           given={Fraser},
+           giveni={F\bibinitperiod}}}%
+        {{hash=5b19f841de7f999123acdb71ba65f6f5}{%
+           family={Arrighi},
+           familyi={A\bibinitperiod},
+           given={Julie},
+           giveni={J\bibinitperiod}}}%
+        {{hash=dd08e824164ae5b4a706840a3169c703}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={Roop},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e80693058db93a8013cf181ff86ccc21}{%
+           family={Aalst},
+           familyi={A\bibinitperiod},
+           given={Maarten},
+           giveni={M\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \strng{namehash}{4f7dd59368b2ac6ea51ee33231f3dfa2}
+      \strng{fullhash}{7b53b8f6d789e0efa0729f2f6ef386a7}
+      \strng{bibnamehash}{4f7dd59368b2ac6ea51ee33231f3dfa2}
+      \strng{authorbibnamehash}{4f7dd59368b2ac6ea51ee33231f3dfa2}
+      \strng{authornamehash}{4f7dd59368b2ac6ea51ee33231f3dfa2}
+      \strng{authorfullhash}{7b53b8f6d789e0efa0729f2f6ef386a7}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The last few years have seen an explosion of interest in extreme event attribution, the science of estimating the influence of human activities or other factors on the probability and other characteristics of an observed extreme weather or climate event. This is driven by public interest, but also has practical applications in decision-making after the event and for raising awareness of current and future climate change impacts. The World Weather Attribution (WWA) collaboration has over the last 5 years developed a methodology to answer these questions in a scientifically rigorous way in the immediate wake of the event when the information is most in demand. This methodology has been developed in the practice of investigating the role of climate change in two dozen extreme events world-wide. In this paper, we highlight the lessons learned through this experience. The methodology itself is documented in a more extensive companion paper. It covers all steps in the attribution process: the event choice and definition, collecting and assessing observations and estimating probability and trends from these, climate model evaluation, estimating modelled hazard trends and their significance, synthesis of the attribution of the hazard, assessment of trends in vulnerability and exposure, and communication. Here, we discuss how each of these steps entails choices that may affect the results, the common problems that can occur and how robust conclusions can (or cannot) be derived from the analysis. Some of these developments also apply to other attribution methodologies and indeed to other problems in climate science.}
+      \field{issn}{1573-1480}
+      \field{journaltitle}{Climatic Change}
+      \field{number}{1}
+      \field{title}{{Pathways and pitfalls in extreme event attribution}}
+      \field{volume}{166}
+      \field{year}{2021}
+      \true{nocite}
+      \field{pages}{13}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1007/s10584-021-03071-7
+      \endverb
+    \endentry
+    \entry{Philip_S_protocol_proba_extrem_attribution}{article}{}
+      \name{author}{11}{}{%
+        {{hash=c16f26bf1c5072cfc3af2fc6d211613f}{%
+           family={Philip},
+           familyi={P\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=8114b97674c2de21f5e395a22fdc70d1}{%
+           family={Kew},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0da9c56ddf63b49edb23dd68c912eebc}{%
+           family={Oldenborgh},
+           familyi={O\bibinitperiod},
+           given={G.\bibnamedelimi J.},
+           giveni={G\bibinitperiod\bibinitdelim J\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=2e73a683965efe267d13d4b4e97b30b3}{%
+           family={Otto},
+           familyi={O\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=2c62a1aee89bb3c19d4d15ef89f6432c}{%
+           family={Vautard},
+           familyi={V\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=fd78bb94165c8ca1a040d3187bfe8c71}{%
+           family={Wiel},
+           familyi={W\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod},
+           prefix={van\bibnamedelima der},
+           prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=71dba03eb8615a9f16fd35ce92b19cc2}{%
+           family={King},
+           familyi={K\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=466ef15847d9f5d200740dfb6f87d5b2}{%
+           family={Lott},
+           familyi={L\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=e8a21ba5bdd9d3dff5641d3704b92354}{%
+           family={Arrighi},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=535b46081523fc5c5dcfaba2a621d930}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=349891f9cbdcd88e81ac0b6e8660513f}{%
+           family={Aalst},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \strng{namehash}{1df46c22d9d483973a7687498da18d95}
+      \strng{fullhash}{62594c6e22ee24efcf5a89179308a74c}
+      \strng{bibnamehash}{1df46c22d9d483973a7687498da18d95}
+      \strng{authorbibnamehash}{1df46c22d9d483973a7687498da18d95}
+      \strng{authornamehash}{1df46c22d9d483973a7687498da18d95}
+      \strng{authorfullhash}{62594c6e22ee24efcf5a89179308a74c}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in Statistical Climatology, Meteorology and Oceanography}
+      \field{number}{2}
+      \field{title}{{A protocol for probabilistic extreme event attribution analyses}}
+      \field{volume}{6}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{177\bibrangedash 203}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.5194/ascmo-6-177-2020
+      \endverb
+      \verb{urlraw}
+      \verb https://ascmo.copernicus.org/articles/6/177/2020/
+      \endverb
+      \verb{url}
+      \verb https://ascmo.copernicus.org/articles/6/177/2020/
+      \endverb
+    \endentry
+    \entry{Squire_D_drought_fire_Australia_2019}{article}{}
+      \name{author}{9}{}{%
+        {{hash=b3857f8c280e2439c2a3095bf1513fe3}{%
+           family={Squire},
+           familyi={S\bibinitperiod},
+           given={Dougal\bibnamedelima T.},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+        {{hash=b8a9fe845f5d85d32c50230552acafb3}{%
+           family={Richardson},
+           familyi={R\bibinitperiod},
+           given={Doug},
+           giveni={D\bibinitperiod}}}%
+        {{hash=d223d1f9b849b2ab50537bb7e2171f5b}{%
+           family={Risbey},
+           familyi={R\bibinitperiod},
+           given={James\bibnamedelima S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7634ae3dd9eb998c724f1e0a6ae94c96}{%
+           family={Black},
+           familyi={B\bibinitperiod},
+           given={Amanda\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=11f1c46de11f74bb8e64ff214ab2416b}{%
+           family={Kitsios},
+           familyi={K\bibinitperiod},
+           given={Vassili},
+           giveni={V\bibinitperiod}}}%
+        {{hash=8873c28d41f076ae4fb6457e9f986be2}{%
+           family={Matear},
+           familyi={M\bibinitperiod},
+           given={Richard\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=8e95fdae1215dbbefa939835bb37ebaa}{%
+           family={Monselesan},
+           familyi={M\bibinitperiod},
+           given={Didier},
+           giveni={D\bibinitperiod}}}%
+        {{hash=0924d4c475b02d5d6b071defc05f89a8}{%
+           family={Moore},
+           familyi={M\bibinitperiod},
+           given={Thomas\bibnamedelima S.},
+           giveni={T\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=c2b3bed51714a6bd3c2e7acb86c48541}{%
+           family={Tozer},
+           familyi={T\bibinitperiod},
+           given={Carly\bibnamedelima R.},
+           giveni={C\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec1542122eea1a67d186b37e314c7fc5}
+      \strng{fullhash}{6a1b58e45dda470408a6f306183edfb2}
+      \strng{bibnamehash}{ec1542122eea1a67d186b37e314c7fc5}
+      \strng{authorbibnamehash}{ec1542122eea1a67d186b37e314c7fc5}
+      \strng{authornamehash}{ec1542122eea1a67d186b37e314c7fc5}
+      \strng{authorfullhash}{6a1b58e45dda470408a6f306183edfb2}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Between June 2019 and March 2020, thousands of wildfires spread devastation across Australia at the tragic cost of many lives, vast areas of burnt forest, and estimated economic losses upward of AU$100 billion. Exceptionally hot and dry weather conditions, and preceding years of severe drought across Australia, contributed to the severity of the wildfires. Here we present analysis of a very large ensemble of initialized climate simulations to assess the likelihood of the concurrent drought and fire-weather conditions experienced at that time. We focus on a large region in southeast Australia where these fires were most widespread and define two indices to quantify the susceptibility to fire from drought and fire weather. Both indices were unprecedented in the observed record in 2019. We find that the likelihood of experiencing such extreme susceptibility to fire in the current climate was 0.5\%, equivalent to a 200 year return period. The conditional probability is many times higher than this when we account for the states of key climate modes that impact Australian weather and climate. Drought and fire-weather conditions more extreme than those experienced in 2019 are also possible in the current climate.}
+      \field{issn}{2397-3722}
+      \field{journaltitle}{npj Climate and Atmospheric Science}
+      \field{number}{1}
+      \field{title}{{Likelihood of unprecedented drought and fire weather during Australia’s 2019 megafires}}
+      \field{volume}{4}
+      \field{year}{2021}
+      \true{nocite}
+      \field{pages}{64}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41612-021-00220-8
+      \endverb
+    \endentry
+    \entry{Thompson_V_risk_UK_rainfall_current}{article}{}
+      \name{author}{7}{}{%
+        {{hash=8300a6d29e7ea7cafd67d693ef6f8091}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={Vikki},
+           giveni={V\bibinitperiod}}}%
+        {{hash=f52c6ca7e7153191a7be1926596c23f2}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick\bibnamedelima J.},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=98c11301c31af34a68eb829cc6807b21}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Doug\bibnamedelima M.},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=60ca5593547156d7aad3d0e874770451}{%
+           family={Slingo},
+           familyi={S\bibinitperiod},
+           given={Julia\bibnamedelima M.},
+           giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=0653a11aad687a389587e0000e0f4a13}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e04762b3244a034d7c5b4174a52ff8b5}{%
+           family={Belcher},
+           familyi={B\bibinitperiod},
+           given={Stephen\bibnamedelima E.},
+           giveni={S\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{fullhash}{16dcc86d05c37b32921de5620647cf3e}
+      \strng{bibnamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authorbibnamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authornamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authorfullhash}{16dcc86d05c37b32921de5620647cf3e}
+      \field{extraname}{1}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{In winter 2013/14 a succession of storms hit the UK leading to record rainfall and flooding in many regions including south east England. In the Thames river valley there was widespread flooding, with clean-up costs of over £1 billion. There was no observational precedent for this level of rainfall. Here we present analysis of a large ensemble of high-resolution initialised climate simulations to show that this event could have been anticipated, and that in the current climate there remains a high chance of exceeding the observed record monthly rainfall totals in many regions of the UK. In south east England there is a 7\% chance of exceeding the current rainfall record in at least one month in any given winter. Expanding our analysis to some other regions of England and Wales the risk increases to a 34\% chance of breaking a regional record somewhere each winter.}
+      \field{issn}{2041-1723}
+      \field{journaltitle}{Nature Communications}
+      \field{number}{1}
+      \field{title}{{High risk of unprecedented UK rainfall in the current climate}}
+      \field{volume}{8}
+      \field{year}{2017}
+      \true{nocite}
+      \field{pages}{107}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41467-017-00275-3
+      \endverb
+    \endentry
+    \entry{Thompson_V_risk_dynamics_hot_SE_China}{article}{}
+      \name{author}{8}{}{%
+        {{hash=8300a6d29e7ea7cafd67d693ef6f8091}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={Vikki},
+           giveni={V\bibinitperiod}}}%
+        {{hash=f52c6ca7e7153191a7be1926596c23f2}{%
+           family={Dunstone},
+           familyi={D\bibinitperiod},
+           given={Nick\bibnamedelima J.},
+           giveni={N\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=8137583a909a66ab9a426ad560df4ec4}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={Adam\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=98c11301c31af34a68eb829cc6807b21}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Doug\bibnamedelima M.},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=8831fe85c377fb723866e5b07d424265}{%
+           family={Hardiman},
+           familyi={H\bibinitperiod},
+           given={Steven\bibnamedelima C.},
+           giveni={S\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=a5e4f14659da85d348785838ae3a5f88}{%
+           family={Ren},
+           familyi={R\bibinitperiod},
+           given={Hong-Li},
+           giveni={H\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=05538947953e0fb65cf6de503c24f6af}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod}}}%
+        {{hash=e04762b3244a034d7c5b4174a52ff8b5}{%
+           family={Belcher},
+           familyi={B\bibinitperiod},
+           given={Stephen\bibnamedelima E.},
+           giveni={S\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{fullhash}{b77158fc4e51d5a290db11d211cb5d9c}
+      \strng{bibnamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authorbibnamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authornamehash}{dcdeab1bc4edf437ba6d49c1bde29c0b}
+      \strng{authorfullhash}{b77158fc4e51d5a290db11d211cb5d9c}
+      \field{extraname}{2}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The Yangtze region of South East China has experienced several extreme hot summer months in recent years. Such events can have devastating socio–economic impacts. We use a large ensemble of initialised climate simulations to assess the current chance of unprecedented hot summer months in the Yangtze River region. We find a 10\% chance of an unprecedented hot summer month each year. Our simulations suggest that monthly mean temperatures up to 3 °C hotter than the current record are possible. The dynamics of these unprecedented extremes highlights the occurrence of a stationary atmospheric wave, the Silk Road Pattern, in a significant number of extreme hot events. We present evidence that this atmospheric wave is driven by variability in the Indian summer monsoon. Other extreme events are associated with a westward shift in the western North Pacific subtropical high. The most extreme simulated events exhibit combined characteristics of both the Silk Road Pattern and the shifted western North Pacific subtropical high.}
+      \field{issn}{1432-0894}
+      \field{journaltitle}{Climate Dynamics}
+      \field{number}{5}
+      \field{title}{{Risk and dynamics of unprecedented hot months in South East China}}
+      \field{volume}{52}
+      \field{year}{2019}
+      \true{nocite}
+      \field{pages}{2585\bibrangedash 2596}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1007/s00382-018-4281-5
+      \endverb
+    \endentry
+    \entry{Wang_L_chance_stratospheric_warming_southern_hem}{article}{}
+      \name{author}{6}{}{%
+        {{hash=9a75ee293f2555f40976345739087998}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={L},
+           giveni={L\bibinitperiod}}}%
+        {{hash=7a75d90631b28b1b1c5f4213706768ce}{%
+           family={Hardiman},
+           familyi={H\bibinitperiod},
+           given={S\bibnamedelima C},
+           giveni={S\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=32d54823cfbfccb688188ed37770a039}{%
+           family={Bett},
+           familyi={B\bibinitperiod},
+           given={P\bibnamedelima E},
+           giveni={P\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=1806768611ac1cdb33fb987dff20f57b}{%
+           family={Comer},
+           familyi={C\bibinitperiod},
+           given={R\bibnamedelima E},
+           giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=924a95c2b412302a11824be8a3838313}{%
+           family={Kent},
+           familyi={K\bibinitperiod},
+           given={C},
+           giveni={C\bibinitperiod}}}%
+        {{hash=c70a7fdc1173bf4688ccd55ec2dc3441}{%
+           family={Scaife},
+           familyi={S\bibinitperiod},
+           given={A\bibnamedelima A},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IOP Publishing}%
+      }
+      \strng{namehash}{5af5ee7e60ec3528b59ab3d857ea6f93}
+      \strng{fullhash}{f45250d7c0c462d73a8a8d3c86ade337}
+      \strng{bibnamehash}{5af5ee7e60ec3528b59ab3d857ea6f93}
+      \strng{authorbibnamehash}{5af5ee7e60ec3528b59ab3d857ea6f93}
+      \strng{authornamehash}{5af5ee7e60ec3528b59ab3d857ea6f93}
+      \strng{authorfullhash}{f45250d7c0c462d73a8a8d3c86ade337}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Sudden stratospheric warmings (SSWs) are amongst the most dramatic events in the Earth’s atmosphere and they drive extreme surface weather conditions. They have been recently linked to the hot and dry weather conditions that favour wildfires over Australia. However, the chance of a southern hemisphere event is unknown because it has only been observed once. Legitimate estimation of the frequency of SSW events requires a large sample of realistic model simulations. Here we show that the chance of an event is close to 4\% per year, implying that an event will occur, on average, every 25 yr, using a state-of-the-art model that simulates SSWs accurately. It is thus not surprising that there was a near miss in the September prior to the Australian wildfire of 2019, given the 40 yr of comprehensive satellite records and just one observed Antarctic event. According to this new estimate, it would also not be surprising to see a second SSW event in the coming years in the southern hemisphere. Such a stratospheric warming event might bring further extreme surface weather conditions and natural hazards, as it may raise the risk of increased rainfall in the latitudinal band of 35–50°S. Meanwhile, the associated hot and dry weather conditions over austral subtropical continents might increase the risk of wildfires over these regions.}
+      \field{journaltitle}{Environmental Research Letters}
+      \field{month}{9}
+      \field{number}{10}
+      \field{title}{{What chance of a sudden stratospheric warming in the southern hemisphere?}}
+      \field{volume}{15}
+      \field{year}{2020}
+      \true{nocite}
+      \field{pages}{104038}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1088/1748-9326/aba8c1
+      \endverb
+      \verb{urlraw}
+      \verb https://dx.doi.org/10.1088/1748-9326/aba8c1
+      \endverb
+      \verb{url}
+      \verb https://dx.doi.org/10.1088/1748-9326/aba8c1
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

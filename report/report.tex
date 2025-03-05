@@ -2,8 +2,9 @@
 %2024-2025 S2 - NORCE %
 
 
-\documentclass[a4paper, 10pt]{article}
+\documentclass[a4paper, 10pt, twoside]{article}
 
+\usepackage[top = 145pt, left = 120pt, right = 120pt, bottom = 120pt]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[french,english]{babel}
 \usepackage[T1]{fontenc}
@@ -11,8 +12,15 @@
 \usepackage[scaled=0.875]{helvet}
 \usepackage{courier}
 
+\usepackage{csquotes}
+\MakeOuterQuote{"}     % this is an important 2 lines, don`t forget them
+\MakeInnerQuote{´}		% see   http://tex.stackexchange.com/questions/268651/initial-single-quote-is-backwards-csquotes
+
+\usepackage{biblatex}
+\bibliography{biblio.bib}
 
 \usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
 \usepackage{fancyhdr}
 
 \pagestyle{fancy}
@@ -48,7 +56,9 @@
 
     \AddToShipoutPicture*{%
     \unitlength=1cm
-    \put(3.5,19){\includegraphics[width=14cm]{img/norce_logo.jpeg}}}
+    \put(3.5,16){\includegraphics[width=14cm]{img/norce_logo.jpeg}}
+    \put(7,7.5){\includegraphics[width=7cm]{img/ENS_-_PSL.png}}
+    }
 
 
     \thispagestyle{empty}
@@ -56,7 +66,9 @@
 
     \begin{minipage}{0.9\textwidth}
         \centering
-        \textbf{\huge Détermination statistique de la fréquence des tempêtes majeures en Norvège par la méthode UNSEEN}
+        \textbf{\huge Détermination statistique de la fréquence des tempêtes majeures en Norvège par la méthode UNSEEN \\ 
+        - \vspace{0.37cm} \\ 
+        Rapport de stage}
         \vspace{4cm}
     \end{minipage}
     
@@ -70,7 +82,7 @@
                 \textit{Encadrement :} & \textit{Sigrid Passano Hellan} \\
                 & \textit{Étienne Dunn-Sigouin} \\
                 & \textit{Erik Kolstad} \\
-                \textit{Contact :} & \href{mailto:sipa@norceresearch.no}{\texttt{sipa@norceresearch.no}}
+                \textit{Contact :} & \href{mailto:emile.sauvat@ens.psl.eu}{\texttt{emile.sauvat@ens.psl.eu}}
             \end{tabular}
         \end{table}
         }
@@ -85,6 +97,10 @@
     
     \section*{Introduction}
 
+
+    \newpage
+    \nocite{*}
+    \printbibliography[title = Bibliographie]
 
     
 \end{document}
