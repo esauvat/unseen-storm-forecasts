@@ -199,7 +199,7 @@ def draw(pathToFile:str) :
     elif 'forecast' in pathScatter:
         dataType = 'forecast'
     elif 'hindcast' in pathScatter:
-        dataType = 'hindcast'
+        dataType = 'hindcast_'+hindcastYear
     fileName = pathScatter[-1][4:-3]
     typeName = "_" + type
     if timeSpan:
