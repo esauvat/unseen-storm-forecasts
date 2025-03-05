@@ -3,6 +3,8 @@
 
 import maps as mp
 
+from classes import composite_dataset as compo
+
 import numpy as np
 import xarray as xr
 from netCDF4 import Dataset
@@ -226,3 +228,7 @@ def mosaic_split(nbFig:int):
         if nbColumn-nbRow <= 1:
             return nbRow, nbColumn
         nbRow += 1
+
+
+
+###   
