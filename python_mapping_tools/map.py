@@ -136,8 +136,6 @@ if dayBegin :
     days = wd.np.arange(dayBegin, dayEnd+1)
 else :
     days = wd.np.array([int(num) for num in dayList])
-nbMap = len(days)
-nbRow, nbColumn = wd.mosaic_split(len(days))
 
 totalPrecipitation = None
     
@@ -183,6 +181,9 @@ def draw(pathToFile:str) :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
     effectDays = wd.np.arange(firstDay, lastDay+1)
+
+    nbMap = len(effectDays)
+    nbRow, nbColumn = wd.mosaic_split(len(effectDays))
 
     totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 

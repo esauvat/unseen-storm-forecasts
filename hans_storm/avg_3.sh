@@ -1,7 +1,14 @@
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc,/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc --title "Total precipitations" -b 219 -e 223 -y 2023 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 1"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/forecast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 2"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 -hindcast 2022 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 3"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 -hindcast 2021 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 4"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 -hindcast 2020 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 5"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 -hindcast 2019 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 6"
 python3 /nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping_tools/map.py create --file /nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24/ --title "Total precipitations" -b 219 -e 223 -y 2023 -hindcast 2018 --type time_avg -s 3 --size large -d /nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/avg3_tp/
+echo "step 7"
