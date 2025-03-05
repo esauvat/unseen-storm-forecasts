@@ -18,8 +18,7 @@ bound_values = {
 
 def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
     
-    assert(size in bound_values.keys())
-    ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
+    assert (size in bound_values.keys()), ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
 
     s, n, w, e = bound_values[size]
 
@@ -39,7 +38,6 @@ def showcase_data(data:xr.DataArray,
                   nbMap:int,
                   fig:mp.plt.Figure, axgr:mp.AxesGrid) -> tuple :
 
-    assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
     effectSample = select_sample(data, boundaries, timesIndex)
 
     vmin, vmax = effectSample.min(), effectSample.max()

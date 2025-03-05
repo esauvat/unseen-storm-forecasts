@@ -29,8 +29,7 @@ sizes = {
 # def map(n=1, p=1, x=1, boundaries = None, proj=projMerc) -> plt.Axes :
 def map_background(ax:GeoAxes, boundaries=[]) :
 
-    assert(len(boundaries)==4 or boundaries.size==0)
-    ("The boundaries must be an array of 4 values")
+    assert (len(boundaries)==4 or boundaries.size==0), ("The boundaries must be an array of 4 values")
 
     # ax = plt.subplot(n, p, x, projection = proj)
     if not boundaries.size==0 :
@@ -47,7 +46,7 @@ def map_background(ax:GeoAxes, boundaries=[]) :
 
 def map(n=1, p=1, nbMap=1, size='medium', boundaries = None, proj=projPlane) :
 
-    assert((size in sizes.keys()))
+    assert ((size in sizes.keys())), ("The size argument must be in " + str(sizes.keys()))
 
     figSize = sizes[size]
     

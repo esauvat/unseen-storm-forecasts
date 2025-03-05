@@ -91,39 +91,31 @@ for opt, arg in opts:
     elif opt in ['-h', '--hindcast']:
         hindcastYear = arg
     elif opt in ['-T', '--type'] :
-        assert(arg in typeDict.keys())
-        ("The type argument must be of " + str(typeDict.keys()))
+        assert  (arg in typeDict.keys()), ("The type argument must be in " + str(typeDict.keys()))
         type = arg
     elif opt in ['-w', '--time-span'] :
         timeSpan = int(arg)
     elif opt in ['-s', '--size'] :
-        assert(arg in mp.sizes.keys())
-        ("The size argument must be in " + str(mp.sizes.keys()))
+        assert (arg in mp.sizes.keys()), ("The size argument must be in " + str(mp.sizes.keys()))
         size = arg
     elif opt in ['g', '--geo-area'] :
-        assert(arg in wd.bound_values.keys())
-        ("The coordinate range argument must be in " + str(wd.bound_values.keys()))
+        assert (arg in wd.bound_values.keys()), ("The coordinate range argument must be in " + str(wd.bound_values.keys()))
         coordsRange = arg
     elif opt in ['-d', '--dir'] :
         dir = arg
 
 
-# Some test to assert the relevance of the arguments
+# Some test to assert  the relevance of the arguments
 
-assert((dayBegin==None) == (dayEnd==None))
-("Missing begin or end day value")
+assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
 
-assert(((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None)))
-("Use either a day list or a begin-end day couple")
+assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
-assert(len(pathToFileList)>0)
-("Missing file argument")
+assert (len(pathToFileList)>0), ("Missing file argument")
 
-assert((type!="daily") == (timeSpan>0))
-("Missing time span argument")
+assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
 
-assert(dir!=None)
-("Missing directory argument")
+assert (dir!=None), ("Missing directory argument")
 
 if not dir.endswith('/'):
     dir += "/"
