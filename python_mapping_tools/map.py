@@ -215,6 +215,8 @@ def draw(pathToFile:str) :
 
     fig.savefig(dir + dataType + fileName + typeName + ".png")
 
+    mp.plt.close()
+
     
 
 ###   Execution
