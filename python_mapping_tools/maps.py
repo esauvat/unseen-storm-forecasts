@@ -19,8 +19,7 @@ projLCon = ccrs.LambertConformal()
 sizes = {
     'small':(8,5),
     'medium':(15,10),
-    'large':(20,15),
-    'huge':(60,45)
+    'large':(20,15)
 }
 
 

@@ -190,7 +190,10 @@ def draw(pathToFile:str) :
     for i in range(nbMap):
         axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))
     if title:
-        fig.suptitle(title+typeDict[type][0]+str(timeSpan)+typeDict[type][1])
+        if type=='daily':
+            fig.suptitle(title)
+        else:
+            fig.suptitle(title+typeDict[type][0]+str(timeSpan)+typeDict[type][1])
 
     pathScatter = pathToFile.split('/')
     dataType = 'test'
@@ -199,7 +202,7 @@ def draw(pathToFile:str) :
     elif 'forecast' in pathScatter:
         dataType = 'forecast'
     elif 'hindcast' in pathScatter:
-        dataType = 'hindcast_'+hindcastYear
+        dataType = 'hindcast_'+ hindcastYear
     fileName = pathScatter[-1][4:-3]
     typeName = "_" + type
     if timeSpan:
