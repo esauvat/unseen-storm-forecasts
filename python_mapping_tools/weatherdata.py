@@ -138,7 +138,7 @@ def sum_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
     )
     totalTime = len(data['time'])
     for t in range(totalTime):
-        begin, end = t-span//2, t+(span+1)//2
+        begin, end = t-(span-1)//2, t+1+span//2
         if begin>=0 & end <= totalTime :
             res[t,:,:]=data[begin:end, :, :].sum(dim="time")
         else :
@@ -153,7 +153,7 @@ def mean_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
     )
     totalTime = len(data['time'])
     for t in range(totalTime):
-        begin, end = t-span//2, t+(span+1)//2
+        begin, end = t-(span-1)//2, t+1+span//2
         res[t,:,:]=data[max(0,begin):min(totalTime,end), :, :].mean(dim="time")
     return res
 

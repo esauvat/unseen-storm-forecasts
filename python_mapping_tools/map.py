@@ -25,9 +25,10 @@ import weatherdata as wd
 ###     --directory
 
 try: 
-    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:g:d:", 
+    opts, args = getopt.getopt(sys.argv[2:], "f:r:t:b:e:l:y:h:T:w:s:g:d:", 
                                [
-                                   "file=", 
+                                   "file=",
+                                   "resolution=",
                                    "title=",
                                    "day-begin=",
                                    "day-end=",
@@ -46,7 +47,8 @@ except getopt.GetoptError as err:
     sys.exit(1)
 
 
-pathToFileList = []
+pathToData = None
+resolution = ('0.25', '0.5')
 title=None
 dayBegin = None
 dayEnd = None
@@ -68,16 +70,9 @@ typeDict = {
 
 for opt, arg in opts:
     if opt in ['-f', '--file']:
-        if arg.endswith('.txt'):
-            paths = open(arg, 'r')
-            pathToFileList = paths.read().split('\n')
-            if len(pathToFileList[-1])==0:
-                pathToFileList.pop()
-        elif arg.endswith('/'):
-            for filename in os.listdir(arg):
-                pathToFileList.append(arg+filename)
-        else:
-            pathToFileList = arg.split(',')
+        pathToData = arg
+    elif opt in ['-r', '--resolution']:
+        resolution = (arg, arg)
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
@@ -105,13 +100,26 @@ for opt, arg in opts:
         dir = arg
 
 
+assert (pathToData), ("Missing file argument")
+pathToFileList = []
+if pathToData.endswith('.txt'):
+    paths = open(pathToData, 'r')
+    pathToFileList = paths.read().split('\n')
+    if len(pathToFileList[-1])==0:
+        pathToFileList.pop()
+elif pathToData.endswith('/'):
+    for filename in os.listdir(pathToData):
+        if resolution[0] in filename or resolution[1] in filename:
+            pathToFileList.append(os.path.join(pathToData, filename))
+else:
+    pathToFileList = pathToData.split(',')
+
+
 # Some test to assert  the relevance of the arguments
 
 assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
 
 assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
-
-assert (len(pathToFileList)>0), ("Missing file argument")
 
 assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
 
@@ -148,6 +156,7 @@ def draw(pathToFile:str) :
 
     dataDate = pathToFile.split('_')[-1]
     if not dataDate.startswith(year):
+        print(pathToFile)
         return
 
     global totalPrecipitation
@@ -165,6 +174,10 @@ def draw(pathToFile:str) :
     else:
         hindcastDate = None
 
+    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
+
+    get_data()
+
     firstDay, lastDay = days[0]-startingDate, days[-1]-startingDate
     firstData, lastData = ncData['time'][0], ncData['time'][-1]
     if lastDay<firstData or firstDay>lastData :
@@ -172,19 +185,23 @@ def draw(pathToFile:str) :
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    effectDays = wd.np.arange(firstDay, lastDay+1)
+    effectDays = list(wd.np.arange(firstDay, lastDay+1))
+
+    n = len(effectDays)
+    for i in range(n):
+        if not totalPrecipitation.sel(time=effectDays[n-1-i]).all():
+            del effectDays[n-1-i]
+    if effectDays==[]:
+        return
+    effectDays = wd.np.array(effectDays)
 
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
-
-    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
     projection = mp.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
     fig, axis = mp.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
-
-    get_data()
 
     fig, axis = wd.showcase_data(totalPrecipitation, boundaries, effectDays, nbMap, fig, axis)
     for i in range(nbMap):
