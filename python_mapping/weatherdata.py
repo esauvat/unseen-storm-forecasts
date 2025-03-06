@@ -3,12 +3,11 @@
 
 import maps as mp
 
-from classes import composite_dataset as compo
-
 import numpy as np
 import xarray as xr
 from netCDF4 import Dataset
 from datetime import datetime
+import os
 
 bound_values = {
     'centerNo':(59.7, 62.1, 6.6, 11.5),
@@ -231,4 +230,28 @@ def mosaic_split(nbFig:int):
 
 
 
-###   
+###   Datasets
+
+def make_dataset(pathToData:str, isDirectory:bool=False):
+    paths = {}
+    if isDirectory or pathToData.endswith('/'):
+        for filename in os.listdir(pathToData):
+            paths[os.path.join(pathToData, filename)] = filename
+    else:
+        mem = None
+        for path in open(pathToData, 'r').read().split('\n'):
+            paths[path] = path.split('/')[-1]
+            mem = path
+        if len(paths[mem]) == 0:
+            del paths[mem]
+    
+    dataarrays = []
+
+    for path in paths.keys():
+        data = xr.open_dataset(path).to_dataarray()
+        data = data.drop_vars("number", errors="ignore").squeeze()
+        dataarrays.append(data.expand_dims(dim={"filename":[paths[path]]}))
+
+    res = xr.concat(dataarrays, dim="filename")
+
+    return res
