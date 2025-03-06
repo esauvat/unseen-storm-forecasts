@@ -174,6 +174,10 @@ def draw(pathToFile:str) :
     else:
         hindcastDate = None
 
+    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
+
+    get_data()
+
     firstDay, lastDay = days[0]-startingDate, days[-1]-startingDate
     firstData, lastData = ncData['time'][0], ncData['time'][-1]
     if lastDay<firstData or firstDay>lastData :
@@ -181,19 +185,23 @@ def draw(pathToFile:str) :
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    effectDays = wd.np.arange(firstDay, lastDay+1)
+    effectDays = range(firstDay, lastDay+1)
+
+    n = len(effectDays)
+    for i in range(n):
+        if totalPrecipitation[effectDays[n-1-i],:,:]==None:
+            del effectDays[n-1-i]
+    if effectDays==[]:
+        return
+    effectDays = wd.np.array(effectDays)
 
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
-
-    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
     projection = mp.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
     fig, axis = mp.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
-
-    get_data()
 
     fig, axis = wd.showcase_data(totalPrecipitation, boundaries, effectDays, nbMap, fig, axis)
     for i in range(nbMap):
