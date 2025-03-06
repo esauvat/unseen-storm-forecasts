@@ -7,7 +7,7 @@ import os
 """ sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping_tools')
 sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools') """
 
-import maps as mp
+import geographics as geo
 import weatherdata as wd
 
 ###     The passed arguments are the following : 
@@ -97,8 +97,8 @@ for opt, arg in opts:
     elif opt in ['-w', '--time-span'] :
         timeSpan = int(arg)
     elif opt in ['-s', '--size'] :
-        assert(arg in mp.sizes.keys())
-        ("The size argument must be in " + str(mp.sizes.keys()))
+        assert(arg in geo.sizes.keys())
+        ("The size argument must be in " + str(geo.sizes.keys()))
         size = arg
     elif opt in ['g', '--geo-area'] :
         assert(arg in wd.bound_values.keys())
@@ -188,9 +188,9 @@ def draw(pathToFile:str) :
     totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
-    projection = mp.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
+    projection = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
-    fig, axis = mp.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
+    fig, axis = geo.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
     get_data()
 
@@ -215,7 +215,7 @@ def draw(pathToFile:str) :
 
     fig.savefig(dir + dataType + fileName + typeName + ".png")
 
-    mp.plt.close()
+    geo.plt.close()
 
     
 

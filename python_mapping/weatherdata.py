@@ -1,7 +1,8 @@
 
 ''' Function to use the dataset properly '''
 
-import maps as mp
+import geographics as geo
+from classes import composite_dataset as ds
 
 import numpy as np
 import xarray as xr
@@ -38,7 +39,7 @@ def showcase_data(data:xr.DataArray,
                   boundaries:np.ndarray, 
                   timesIndex:np.ndarray, 
                   nbMap:int,
-                  fig:mp.plt.Figure, axgr:mp.AxesGrid) -> tuple :
+                  fig:geo.plt.Figure, axgr:geo.AxesGrid) -> tuple :
 
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
     effectSample = select_sample(data, boundaries, timesIndex)
@@ -50,7 +51,7 @@ def showcase_data(data:xr.DataArray,
         p = axgr[i].pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
                           vmin=vmin,
                           vmax=vmax,
-                          transform=mp.projPlane)
+                          transform=geo.projPlane)
 
     axgr.cbar_axes[0].colorbar(p)
 
