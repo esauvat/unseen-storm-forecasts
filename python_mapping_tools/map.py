@@ -25,9 +25,10 @@ import weatherdata as wd
 ###     --directory
 
 try: 
-    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:g:d:", 
+    opts, args = getopt.getopt(sys.argv[2:], "f:r:t:b:e:l:y:h:T:w:s:g:d:", 
                                [
-                                   "file=", 
+                                   "file=",
+                                   "resolution=",
                                    "title=",
                                    "day-begin=",
                                    "day-end=",
@@ -46,7 +47,8 @@ except getopt.GetoptError as err:
     sys.exit(1)
 
 
-pathToFileList = []
+pathToData = None
+resolution = ('0.25', '0.5')
 title=None
 dayBegin = None
 dayEnd = None
@@ -68,16 +70,9 @@ typeDict = {
 
 for opt, arg in opts:
     if opt in ['-f', '--file']:
-        if arg.endswith('.txt'):
-            paths = open(arg, 'r')
-            pathToFileList = paths.read().split('\n')
-            if len(pathToFileList[-1])==0:
-                pathToFileList.pop()
-        elif arg.endswith('/'):
-            for filename in os.listdir(arg):
-                pathToFileList.append(arg+filename)
-        else:
-            pathToFileList = arg.split(',')
+        pathToData = arg
+    elif opt in ['-r', '--resolution']:
+        resolution = (arg, arg)
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
@@ -105,13 +100,26 @@ for opt, arg in opts:
         dir = arg
 
 
+assert (pathToData), ("Missing file argument")
+pathToFileList = []
+if pathToData.endswith('.txt'):
+    paths = open(arg, 'r')
+    pathToFileList = paths.read().split('\n')
+    if len(pathToFileList[-1])==0:
+        pathToFileList.pop()
+elif arg.endswith('/'):
+    for filename in os.listdir(arg):
+        if resolution[0] in filename or resolution[1] in filename:
+            pathToFileList.append(os.path.join(arg, filename))
+else:
+    pathToFileList = arg.split(',')
+
+
 # Some test to assert  the relevance of the arguments
 
 assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
 
 assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
-
-assert (len(pathToFileList)>0), ("Missing file argument")
 
 assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
 
