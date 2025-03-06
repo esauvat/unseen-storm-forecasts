@@ -185,7 +185,7 @@ def draw(pathToFile:str) :
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    effectDays = range(firstDay, lastDay+1)
+    effectDays = list(wd.np.arange(firstDay, lastDay+1))
 
     n = len(effectDays)
     for i in range(n):
