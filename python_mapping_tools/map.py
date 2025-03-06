@@ -103,16 +103,16 @@ for opt, arg in opts:
 assert (pathToData), ("Missing file argument")
 pathToFileList = []
 if pathToData.endswith('.txt'):
-    paths = open(arg, 'r')
+    paths = open(pathToData, 'r')
     pathToFileList = paths.read().split('\n')
     if len(pathToFileList[-1])==0:
         pathToFileList.pop()
-elif arg.endswith('/'):
-    for filename in os.listdir(arg):
+elif pathToData.endswith('/'):
+    for filename in os.listdir(pathToData):
         if resolution[0] in filename or resolution[1] in filename:
-            pathToFileList.append(os.path.join(arg, filename))
+            pathToFileList.append(os.path.join(pathToData, filename))
 else:
-    pathToFileList = arg.split(',')
+    pathToFileList = pathToData.split(',')
 
 
 # Some test to assert  the relevance of the arguments
@@ -156,6 +156,7 @@ def draw(pathToFile:str) :
 
     dataDate = pathToFile.split('_')[-1]
     if not dataDate.startswith(year):
+        print(pathToFile)
         return
 
     global totalPrecipitation
