@@ -189,7 +189,7 @@ def draw(pathToFile:str) :
 
     n = len(effectDays)
     for i in range(n):
-        if totalPrecipitation[effectDays[n-1-i],:,:]==None:
+        if totalPrecipitation[effectDays[n-1-i],:,:].all():
             del effectDays[n-1-i]
     if effectDays==[]:
         return
