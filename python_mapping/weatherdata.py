@@ -2,7 +2,7 @@
 ''' Function to use the dataset properly '''
 
 import geographics as geo
-from classes import composite_dataset as ds
+from classes import composite_dataset as Weatherset
 
 import numpy as np
 import xarray as xr
@@ -231,28 +231,16 @@ def mosaic_split(nbFig:int):
 
 
 
-###   Datasets
+###   Handle Directories
 
-def make_dataset(pathToData:str, isDirectory:bool=False):
-    paths = {}
-    if isDirectory or pathToData.endswith('/'):
-        for filename in os.listdir(pathToData):
-            paths[os.path.join(pathToData, filename)] = filename
-    else:
-        mem = None
-        for path in open(pathToData, 'r').read().split('\n'):
-            paths[path] = path.split('/')[-1]
-            mem = path
-        if len(paths[mem]) == 0:
-            del paths[mem]
-    
-    dataarrays = []
-
-    for path in paths.keys():
-        data = xr.open_dataset(path).to_dataarray()
-        data = data.drop_vars("number", errors="ignore").squeeze()
-        dataarrays.append(data.expand_dims(dim={"filename":[paths[path]]}))
-
-    res = xr.concat(dataarrays, dim="filename")
-
-    return res
+def extract_files(dir:str, pathsToFiles:list):
+    type = ''
+    pathScatter = dir.split('/')
+    while pathScatter!=[]:
+        subDir = pathScatter.pop()
+        if subDir == 'daily':
+            type = pathScatter[-1].split('-')[0]
+            break
+    assert type!='' , "Wrong directory"
+    for filename in os.listdir(dir):
+        pathsToFiles[(type, filename[:-3])] = os.path.join(dir, filename)
