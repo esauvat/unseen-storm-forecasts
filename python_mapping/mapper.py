@@ -16,7 +16,7 @@ import weatherdata as wd
 ###     --day-begin
 ###     --day-end
 ###     --day-list
-###     --year
+###     --years
 ###     --hindcast date
 ###     --type    (must be one of "time_avg" or "time_sum")
 ###     --time-span (mandatory went not using --result)
@@ -25,14 +25,15 @@ import weatherdata as wd
 ###     --directory
 
 try: 
-    opts, args = getopt.getopt(sys.argv[2:], "f:t:b:e:l:y:h:T:w:s:g:d:", 
+    opts, args = getopt.getopt(sys.argv[2:], "f:r:t:b:e:l:y:h:T:w:s:g:d:", 
                                [
-                                   "file=", 
+                                   "file=",
+                                   "resolution=",
                                    "title=",
                                    "day-begin=",
                                    "day-end=",
                                    "day-list=",
-                                   "year=",
+                                   "years=",
                                    "hindcast=",
                                    "type=",
                                    "time-span=",
@@ -46,7 +47,8 @@ except getopt.GetoptError as err:
     sys.exit(1)
 
 
-pathToFileList = []
+pathListToData = []
+resolution = ('0.25', '0.5')
 title=None
 dayBegin = None
 dayEnd = None
@@ -56,7 +58,7 @@ type = "daily"
 timeSpan = 0
 size = 'medium'
 coordsRange = 'largeNo'
-year = "2023"
+years = None
 dir=None
 
 typeDict = {
@@ -68,16 +70,9 @@ typeDict = {
 
 for opt, arg in opts:
     if opt in ['-f', '--file']:
-        if arg.endswith('.txt'):
-            paths = open(arg, 'r')
-            pathToFileList = paths.read().split('\n')
-            if len(pathToFileList[-1])==0:
-                pathToFileList.pop()
-        elif arg.endswith('/'):
-            for filename in os.listdir(arg):
-                pathToFileList.append(arg+filename)
-        else:
-            pathToFileList = arg.split(',')
+        pathListToData = arg
+    elif opt in ['-r', '--resolution']:
+        resolution = (arg, arg)
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
@@ -86,44 +81,36 @@ for opt, arg in opts:
         dayEnd = int(arg)
     elif opt in ['-l', '--day-list'] :
         dayList = arg.split()
-    elif opt in ['-y', '--year'] :
-        year = arg
+    elif opt in ['-y', '--years'] :
+        years = arg.split(',')
     elif opt in ['-h', '--hindcast']:
         hindcastYear = arg
     elif opt in ['-T', '--type'] :
-        assert(arg in typeDict.keys())
-        ("The type argument must be of " + str(typeDict.keys()))
+        assert  (arg in typeDict.keys()), ("The type argument must be in " + str(typeDict.keys()))
         type = arg
     elif opt in ['-w', '--time-span'] :
         timeSpan = int(arg)
     elif opt in ['-s', '--size'] :
-        assert(arg in geo.sizes.keys())
-        ("The size argument must be in " + str(geo.sizes.keys()))
+        assert (arg in geo.sizes.keys()), ("The size argument must be in " + str(geo.sizes.keys()))
         size = arg
     elif opt in ['g', '--geo-area'] :
-        assert(arg in wd.bound_values.keys())
-        ("The coordinate range argument must be in " + str(wd.bound_values.keys()))
+        assert (arg in wd.bound_values.keys()), ("The coordinate range argument must be in " + str(wd.bound_values.keys()))
         coordsRange = arg
     elif opt in ['-d', '--dir'] :
         dir = arg
 
 
-# Some test to assert the relevance of the arguments
+# Some test to assert  the relevance of the arguments
 
-assert((dayBegin==None) == (dayEnd==None))
-("Missing begin or end day value")
+assert (pathListToData!=[]), ("Missing file argument")
 
-assert(((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None)))
-("Use either a day list or a begin-end day couple")
+assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
 
-assert(len(pathToFileList)>0)
-("Missing file argument")
+assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
-assert((type!="daily") == (timeSpan>0))
-("Missing time span argument")
+assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
 
-assert(dir!=None)
-("Missing directory argument")
+assert (dir!=None), ("Missing directory argument")
 
 if not dir.endswith('/'):
     dir += "/"
@@ -155,7 +142,7 @@ def get_data():
 def draw(pathToFile:str) :
 
     dataDate = pathToFile.split('_')[-1]
-    if not dataDate.startswith(year):
+    if years and not any(dataDate.startswith(y) for y in years):
         return
 
     global totalPrecipitation
@@ -173,6 +160,10 @@ def draw(pathToFile:str) :
     else:
         hindcastDate = None
 
+    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
+
+    get_data()
+
     firstDay, lastDay = days[0]-startingDate, days[-1]-startingDate
     firstData, lastData = ncData['time'][0], ncData['time'][-1]
     if lastDay<firstData or firstDay>lastData :
@@ -180,25 +171,32 @@ def draw(pathToFile:str) :
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    effectDays = wd.np.arange(firstDay, lastDay+1)
+    effectDays = list(wd.np.arange(firstDay, lastDay+1))
+
+    n = len(effectDays)
+    for i in range(n):
+        if not totalPrecipitation.sel(time=effectDays[n-1-i]).all():
+            del effectDays[n-1-i]
+    if effectDays==[]:
+        return
+    effectDays = wd.np.array(effectDays)
 
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
-
-    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
 
     boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
     projection = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
     fig, axis = geo.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
-    get_data()
-
-    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, effectDays, nbMap, fig, axis)
+    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, nbMap, fig, axis, timesIndex=effectDays)
     for i in range(nbMap):
-        axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))
+        axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))                            #### TODO : need to be updated to conform to the multi years selection possibility
     if title:
-        fig.suptitle(title+typeDict[type][0]+str(timeSpan)+typeDict[type][1])
+        if type=='daily':
+            fig.suptitle(title)
+        else:
+            fig.suptitle(title+typeDict[type][0]+str(timeSpan)+typeDict[type][1])
 
     pathScatter = pathToFile.split('/')
     dataType = 'test'
@@ -207,7 +205,7 @@ def draw(pathToFile:str) :
     elif 'forecast' in pathScatter:
         dataType = 'forecast'
     elif 'hindcast' in pathScatter:
-        dataType = 'hindcast'
+        dataType = 'hindcast_'+ hindcastYear
     fileName = pathScatter[-1][4:-3]
     typeName = "_" + type
     if timeSpan:
@@ -217,11 +215,70 @@ def draw(pathToFile:str) :
 
     geo.plt.close()
 
+
+
+def map_of_max():
+
+    dataset = wd.Weatherset(pathListToData, resolution=resolution, years=years)
+    nbRows, nbColumns, nbMaps =  1, 1, 1
+    if years:
+        dataarrays = []
+        for y in years:
+            data_max = dataset.max('time', time_sel=y)
+            data_max = data_max.rename({"variable":"time"}).reindex(time=[y])
+            dataarrays.append(data_max.transpose("time", "latitude", "longitude"))
+        max_simulated = wd.xr.concat(dataarrays, dim="time")
+        nbMaps = len(years)
+        nbRows, nbColumns = wd.mosaic_split(nbMaps)
+    else:
+        max_simulated = dataset.max('time').to_dataarray()
+        max_simulated = max_simulated.rename({"variable":"time"}).reindex(time=[0])
+
+    boundaries = wd.boundaries(dataset, size=coordsRange)
+
+    fig, axis = geo.map(n=nbRows, p=nbColumns, nbMap=nbMaps, size=size, boundaries=boundaries)
+
+    fig, axis = wd.showcase_data(max_simulated, boundaries, nbMaps, fig, axis)
+
+    if years:
+        for i in range(nbMaps):
+            axis[i].set_title(years[i])
+    if title:
+        fig.suptitle('Maximum simulated total precipitations')
+
+    timeReference, resReference = '_all-time', '_all-resolution'
+    if years : 
+        timeReference = '_' + years[0] + '-' + years[-1]
+    if resolution[0]==resolution[1]:
+        resReference = '_' + resolution[0] + 'x' + resolution[0]
+
+    fig.savefig(dir+'tp24-max_' + resReference + timeReference + '.png')
+
+    geo.plt.close()
+
     
 
 ###   Execution
 
 def create():
+
+    pathToFileList = []
+
+    for loc in pathListToData:
+        if loc.endswith('/'):
+            for filename in os.listdir(loc):
+                if any(res in filename for res in resolution):
+                    pathToFileList.append(os.path.join(loc, filename))
+        elif loc.endswith('.txt'):
+            paths = open(loc, 'r').read().split('\n')
+            if paths[-1]=='':
+                pathToFileList.pop()
+            for path in paths:
+                pathToFileList.append(path)
+        else:
+            for path in loc.split(','):
+                pathToFileList.append(path)
+
     for pathToFile in pathToFileList:
         draw(pathToFile)
 

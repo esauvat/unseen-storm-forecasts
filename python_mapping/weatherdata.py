@@ -7,7 +7,7 @@ from classes import composite_dataset as Weatherset
 import numpy as np
 import xarray as xr
 from netCDF4 import Dataset
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import os
 
 bound_values = {
@@ -18,12 +18,12 @@ bound_values = {
 
 ###   Defining map size   ###
 
-def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
+def boundaries(data:Dataset, coords_range:str = 'largeNo') -> tuple :
     
-    assert(size in bound_values.keys())
+    assert(coords_range in bound_values.keys())
     ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
 
-    s, n, w, e = bound_values[size]
+    s, n, w, e = bound_values[coords_range]
 
     latS = max(s, data['latitude'][-1])
     latN = min(n, data['latitude'][0])
@@ -37,10 +37,11 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
 
 def showcase_data(data:xr.DataArray, 
                   boundaries:np.ndarray, 
-                  timesIndex:np.ndarray, 
                   nbMap:int,
-                  fig:geo.plt.Figure, axgr:geo.AxesGrid) -> tuple :
+                  fig:geo.plt.Figure, axgr:geo.AxesGrid,
+                  **kwargs:np.ndarray) -> tuple :
 
+    timesIndex = kwargs.get('timesIndex', data['time'])
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
     effectSample = select_sample(data, boundaries, timesIndex)
 
@@ -219,12 +220,12 @@ def getDayNumber(date):
 
 ###   Mosaic Split : give the best mosaic for a given day list
 
-def mosaic_split(nbFig:int):
+def mosaic_split(nbMaps:int) -> tuple[int,int] :
     nbRow = 1
     while True :
         ''' The loop ends because nbRow grows strictly and 
-        for nbRow==nbFig the condition is valid'''
-        nbColumn = nbFig//nbRow + (nbFig%nbRow > 0)
+        for nbRow==nbMaps the condition is valid'''
+        nbColumn = nbMaps//nbRow + (nbMaps%nbRow > 0)
         if nbColumn-nbRow <= 1:
             return nbRow, nbColumn
         nbRow += 1

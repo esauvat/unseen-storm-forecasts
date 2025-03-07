@@ -81,10 +81,10 @@ class composite_dataset :
         return pathsToFiles
 
 
-    def max(self, *args, **kwargs:np.float64) -> xr.DataArray :
-        latitude = kwargs.get('latitude', None)
-        longitude = kwargs.get('longitude', None)
-        time = kwargs.get('time', None)
+    def max(self, *args:str, **kwargs:np.float64) -> xr.DataArray :
+        latitude = kwargs.get('latitude_sel', None)
+        longitude = kwargs.get('longitude_sel', None)
+        time = kwargs.get('time_sel', None)
 
         res = self.data
 
@@ -98,4 +98,4 @@ class composite_dataset :
         if time:
             res = res.sel(time=time)
         
-        return res.max(dim=["referene"]+list(args))
+        return res.max(dim=["reference"]+list(args))
