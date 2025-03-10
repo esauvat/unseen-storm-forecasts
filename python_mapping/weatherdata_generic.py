@@ -252,9 +252,12 @@ def reindex_hindcasts(da:xr.DataArray):
     da = da.transpose("variable","latitude","longitude","hdate","time")
     da = da.stack(fullTime=["hdate","time"])
     timeValues = []
-    for (hdate,time)in da['fullTime'].values:
-        print(str(hdate) + ' ' + str(time))
-        timeValues.append(time.replace(year=hdate//10000))
+    for (hdate,time) in da['fullTime'].values:
+        hyear = hdate//10000
+        if time.month==2 and time.day==29 and (time.year-hyear)%4!=0:
+            timeValues.append(time.replace(day=1, month=3, year=hyear))
+        else:
+            timeValues.append(time.replace(year=hyear))
     timeValues = np.array(timeValues)
     res = xr.DataArray(
         da.values,
