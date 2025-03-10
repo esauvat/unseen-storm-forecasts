@@ -4,6 +4,7 @@
 ###
 
 from weatherdata import *
+import numpy as np, xarray as xr
 
 
 class composite_dataset :
