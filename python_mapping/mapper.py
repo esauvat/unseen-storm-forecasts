@@ -49,7 +49,7 @@ except getopt.GetoptError as err:
 
 
 pathListToData = []
-resolution = ('0.25', '0.5')
+resolution = None
 title=None
 dayBegin = None
 dayEnd = None
@@ -74,7 +74,7 @@ for opt, arg in opts:
     if opt in ['-f', '--file']:
         pathListToData = arg
     elif opt in ['-r', '--resolution']:
-        resolution = (arg, arg)
+        resolution = arg
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
@@ -259,8 +259,8 @@ def map_of_max():
     timeReference, resReference = '_all-time', '_all-resolution'
     if years : 
         timeReference = '_' + years[0] + '-' + years[-1]
-    if resolution[0]==resolution[1]:
-        resReference = '_' + resolution[0] + 'x' + resolution[0]
+    if resolution:
+        resReference = '_' + resolution + 'x' + resolution
 
     fig.savefig(dir+'tp24-max_' + resReference + timeReference + '.png')
 
@@ -277,7 +277,7 @@ def create():
     for loc in pathListToData:
         if loc.endswith('/'):
             for filename in os.listdir(loc):
-                if any(res in filename for res in resolution):
+                if not resolution or resolution in filename:
                     pathToFileList.append(os.path.join(loc, filename))
         elif loc.endswith('.txt'):
             paths = open(loc, 'r').read().split('\n')
