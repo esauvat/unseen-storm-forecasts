@@ -17,7 +17,7 @@ class composite_dataset :
         years = np.array(kwargs.get('years', None))
 
             # Dict of (fileType,fileName) keys with pathToFile values
-        pathsToFiles = self.get_paths(self, pathListToData, onlyDirectory, resolution, years)
+        pathsToFiles = self.get_paths(pathListToData, onlyDirectory, resolution, years)
             # List of tuple (fileType,fileName)
         self.fileList = pathsToFiles.keys()
 
@@ -44,6 +44,7 @@ class composite_dataset :
     def get_paths(self, pathListToData, onlyDirectory, resolution, years):
 
         pathsToFiles = {}       # Dict with self.fileList as keys and paths to files as values
+        pathListToData = pathListToData.split(',')
 
         if onlyDirectory:
             for dir in pathListToData:
