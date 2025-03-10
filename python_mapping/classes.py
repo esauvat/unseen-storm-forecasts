@@ -97,10 +97,11 @@ class composite_dataset :
 
         res = self.data
 
-        if latitude!=None & longitude!=None :
-            res = res.sel(latitude=latitude, longitude=longitude).max(dim="reference")
-        elif latitude:
-            res = res.sel(latitude=latitude).max(dim="reference")
+        if latitude:
+            if longitude:
+                res = res.sel(latitude=latitude, longitude=longitude).max(dim="reference")
+            else:
+                res = res.sel(latitude=latitude).max(dim="reference")
         elif longitude:
             res = res.sel(longitude=longitude).max(dim="reference")
 

@@ -251,6 +251,11 @@ def extract_files(dir:str, pathsToFiles:list):
 def reindex_hindcasts(da:xr.DataArray):
     da = da.transpose("variable","latitude","longitude","hdate","time")
     da = da.stack(fullTime=["hdate","time"])
+    timeValues = []
+    for (hdate,time)in da['fullTime'].values:
+        print(str(hdate, time))
+        timeValues.append(time.replace(year=hdate//10000))
+    timeValues = np.array(timeValues)
     res = xr.DataArray(
         da.values,
         dims=("variable","latitude","longitude","time"),
@@ -258,7 +263,8 @@ def reindex_hindcasts(da:xr.DataArray):
             "variable":da['variable'],
             "latitude":da['latitude'],
             "longitude":da['longitude'],
-            "time":np.array([time.replace(year=hdate//10000) for (hdate,time) in da['fullTime'].values])
+            """ "time":np.array([time.replace(year=hdate//10000) for (hdate,time) in da['fullTime'].values]) """
+            "time":timeValues
         }
     )
     return res.to_dataset(dim="variable")
