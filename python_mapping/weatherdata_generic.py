@@ -236,6 +236,7 @@ def mosaic_split(nbMaps:int) -> tuple[int,int] :
 def extract_files(dir:str, pathsToFiles:list):
     type = ''
     pathScatter = dir.split('/')
+    print(pathScatter)
     while pathScatter!=[]:
         subDir = pathScatter.pop()
         if subDir == 'daily':
