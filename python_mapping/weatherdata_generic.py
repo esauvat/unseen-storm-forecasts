@@ -258,7 +258,7 @@ def reindex_hindcasts(da:xr.DataArray):
             "variable":da['variable'],
             "latitude":da['latitude'],
             "longitude":da['longitude'],
-            "time":np.array([t.replace(year=d//10000) for (d,t) in da['fullTime'].values])
+            "time":np.array([time.replace(year=hdate//10000) for (hdate,time) in da['fullTime'].values])
         }
     )
     return res.to_dataset(dim="variable")
