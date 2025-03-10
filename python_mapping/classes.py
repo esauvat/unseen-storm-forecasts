@@ -79,7 +79,7 @@ class composite_dataset :
             for key in keysToDel:
                 del pathsToFiles[key]
         
-        if years!=[]:
+        if len(years)!=0:
             keysToDel = []
             for key in pathsToFiles.keys():
                 if not any(y in key[1] for y in years):
