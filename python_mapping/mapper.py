@@ -110,7 +110,7 @@ if type in ["daily","time_avg","time_sum"]:
     assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
     assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
-assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
+assert ((type in ["time_avg","time_sum"]) == (timeSpan>0)), ("Missing time span argument")
 
 assert (dir!=None), ("Missing directory argument")
 
@@ -120,11 +120,12 @@ if not dir.endswith('/'):
 
 ###   Program
 
-days = []
+""" days = []
 if dayBegin :
     days = wd.np.arange(dayBegin, dayEnd+1)
 else :
-    days = wd.np.array([int(num) for num in dayList])
+    days = wd.np.array([int(num) for num in dayList]) """
+# This has been moved in the draw function in an other branch
 
 totalPrecipitation = None
     
