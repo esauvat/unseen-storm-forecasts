@@ -253,7 +253,7 @@ def reindex_hindcasts(da:xr.DataArray):
     da = da.stack(fullTime=["hdate","time"])
     res = xr.DataArray(
         da.values,
-        dims=da.dims,
+        dims=("variable","latitude","longitude","time"),
         coords={
             "variable":da['variable'],
             "latitude":da['latitude'],
