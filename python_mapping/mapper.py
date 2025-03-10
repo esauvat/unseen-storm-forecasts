@@ -110,7 +110,8 @@ if type in ["daily","time_avg","time_sum"]:
     assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
     assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
-assert ((type in ["time_avg","time_sum"]) == (timeSpan>0)), ("Missing time span argument")
+if type in ["time_avg","time_sum"]:
+    assert timeSpan>0, ("Missing time span argument")
 
 assert (dir!=None), ("Missing directory argument")
 
