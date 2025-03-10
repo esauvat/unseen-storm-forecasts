@@ -239,6 +239,7 @@ def extract_files(dir:str, pathsToFiles:list):
     while pathScatter!=[]:
         subDir = pathScatter.pop()
         if subDir == 'daily':
+            print(pathScatter)
             type = pathScatter[-1].split('-')[0]
             break
     assert type!='' , "Wrong directory"
