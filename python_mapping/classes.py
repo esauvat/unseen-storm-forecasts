@@ -25,10 +25,11 @@ class composite_dataset :
             ds = xr.open_dataset(pathsToFiles[(fileType,fileName)])
             ds = ds.drop_vars("number", errors="ignore")
             ds = ds.squeeze()
-            if fileType != 'hindcast':
-                ds = ds.expand_dims(dim={"hdate":[np.nan]})
+            if fileType == 'hindcast':
+                da = ds.to_dataarray()
+                ds = reindex_hindcasts(da)
             ds = ds.expand_dims(dim={"fileType":[fileType], "fileName":[fileName]})
-            ds = ds.stack(reference = ("fileType", "fileName", "hdate"))
+            ds = ds.stack(reference = ("fileType", "fileName"))
             datasets.append(ds)
 
         self.data = xr.concat(datasets, dim="reference")

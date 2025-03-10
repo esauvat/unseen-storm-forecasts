@@ -12,6 +12,7 @@ import weatherdata as wd
 
 ###     The passed arguments are the following : 
 ###     --file   (can be multiple inputs separated by a comma)
+###     --resolution
 ###     --title
 ###     --day-begin
 ###     --day-end
@@ -220,11 +221,17 @@ def draw(pathToFile:str) :
 def map_of_max():
 
     dataset = wd.Weatherset(pathListToData, resolution=resolution, years=years)
+
     nbRows, nbColumns, nbMaps =  1, 1, 1
+    
     if years:
         dataarrays = []
         for y in years:
-            data_max = dataset.max('time', time_sel=y)
+            if timeSpan:
+                yearsSample = [str(i) for i in range(int(y), int(y)+timeSpan)]
+                data_max = dataset.max('time', time_sel=yearsSample)
+            else:
+                data_max = dataset.max('time', time_sel=y)
             data_max = data_max.rename({"variable":"time"}).reindex(time=[y])
             dataarrays.append(data_max.transpose("time", "latitude", "longitude"))
         max_simulated = wd.xr.concat(dataarrays, dim="time")
@@ -243,8 +250,8 @@ def map_of_max():
     if years:
         for i in range(nbMaps):
             axis[i].set_title(years[i])
-    if title:
-        fig.suptitle('Maximum simulated total precipitations')
+    elif title:
+        fig.suptitle(title)
 
     timeReference, resReference = '_all-time', '_all-resolution'
     if years : 

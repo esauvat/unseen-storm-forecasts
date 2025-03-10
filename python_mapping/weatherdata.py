@@ -245,3 +245,21 @@ def extract_files(dir:str, pathsToFiles:list):
     assert type!='' , "Wrong directory"
     for filename in os.listdir(dir):
         pathsToFiles[(type, filename[:-3])] = os.path.join(dir, filename)
+
+
+###   Reindexing hindcasts
+
+def reindex_hindcasts(da:xr.DataArray):
+    da = da.transpose("variable","latitude","longitude","hdate","time")
+    da = da.stack(wtime=["hdate","time"]).rename({"time":"otime","wtime":"time"})
+    res = xr.DataArray(
+        da.values,
+        dims=da.dims,
+        coords={
+            "variable":da['variable'],
+            "latitude":da['latitude'],
+            "longitude":da['longitude'],
+            "time":np.array([t.replace(year=d//10000) for (d,t) in da['time'].values])
+        }
+    )
+    return res.to_dataset(dim="variable")
