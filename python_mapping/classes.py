@@ -74,12 +74,12 @@ class composite_dataset :
         if resolution:
             for key in pathsToFiles.keys():
                 if not resolution in key[1]:
-                    del pathListToData[key]
+                    del pathsToFiles[key]
         
         if years:
             for key in pathsToFiles.keys():
                 if not any(y in key[1] for y in years):
-                    del pathListToData[key]
+                    del pathsToFiles[key]
         
         return pathsToFiles
 

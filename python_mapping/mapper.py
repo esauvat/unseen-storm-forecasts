@@ -59,7 +59,7 @@ type = None
 timeSpan = 0
 size = 'medium'
 coordsRange = 'largeNo'
-years = None
+years = []
 dir=None
 
 typeDict = {
@@ -146,7 +146,7 @@ def get_data():
 def draw(pathToFile:str) :
 
     dataDate = pathToFile.split('_')[-1]
-    if years and not any(dataDate.startswith(y) for y in years):
+    if years!=[] and not any(dataDate.startswith(y) for y in years):
         return
 
     global totalPrecipitation
@@ -227,7 +227,7 @@ def map_of_max():
 
     nbRows, nbColumns, nbMaps =  1, 1, 1
     
-    if years:
+    if years!=[]:
         dataarrays = []
         for y in years:
             if timeSpan:
@@ -250,14 +250,14 @@ def map_of_max():
 
     fig, axis = wd.showcase_data(max_simulated, boundaries, nbMaps, fig, axis)
 
-    if years:
+    if years!=[]:
         for i in range(nbMaps):
             axis[i].set_title(years[i])
     elif title:
         fig.suptitle(title)
 
     timeReference, resReference = '_all-time', '_all-resolution'
-    if years : 
+    if years!=[]: 
         timeReference = '_' + years[0] + '-' + years[-1]
     if resolution:
         resReference = '_' + resolution + 'x' + resolution

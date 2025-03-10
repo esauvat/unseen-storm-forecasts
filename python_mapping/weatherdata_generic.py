@@ -236,11 +236,9 @@ def mosaic_split(nbMaps:int) -> tuple[int,int] :
 def extract_files(dir:str, pathsToFiles:list):
     type = ''
     pathScatter = dir.split('/')
-    print(pathScatter)
     while pathScatter!=[]:
         subDir = pathScatter.pop()
         if subDir == 'daily':
-            print(pathScatter)
             type = pathScatter[-1].split('-')[0]
             break
     assert type!='' , "Wrong directory"
@@ -252,7 +250,7 @@ def extract_files(dir:str, pathsToFiles:list):
 
 def reindex_hindcasts(da:xr.DataArray):
     da = da.transpose("variable","latitude","longitude","hdate","time")
-    da = da.stack(wtime=["hdate","time"]).rename({"time":"otime","wtime":"time"})
+    da = da.stack(fullTime=["hdate","time"])
     res = xr.DataArray(
         da.values,
         dims=da.dims,
@@ -260,7 +258,7 @@ def reindex_hindcasts(da:xr.DataArray):
             "variable":da['variable'],
             "latitude":da['latitude'],
             "longitude":da['longitude'],
-            "time":np.array([t.replace(year=d//10000) for (d,t) in da['time'].values])
+            "time":np.array([t.replace(year=d//10000) for (d,t) in da['fullTime'].values])
         }
     )
     return res.to_dataset(dim="variable")
