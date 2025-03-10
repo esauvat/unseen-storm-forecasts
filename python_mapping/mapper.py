@@ -55,7 +55,7 @@ dayBegin = None
 dayEnd = None
 dayList = None
 hindcastYear = None
-type = "daily"
+type = None
 timeSpan = 0
 size = 'medium'
 coordsRange = 'largeNo'
@@ -65,7 +65,8 @@ dir=None
 typeDict = {
     "daily":['',''],
     "time_avg":[' - Mean on ',' days'],
-    "time_sum":[' - Sum on ', ' days']
+    "time_sum":[' - Sum on ', ' days'],
+    "max_map":[]
 }
 
 
@@ -105,9 +106,9 @@ for opt, arg in opts:
 
 assert (pathListToData!=[]), ("Missing file argument")
 
-assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
-
-assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
+if type in ["daily","time_avg","time_sum"]:
+    assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
+    assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
 assert ((type!="daily") == (timeSpan>0)), ("Missing time span argument")
 
