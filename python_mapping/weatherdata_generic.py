@@ -4,6 +4,7 @@
 import geographics as geo
 
 import numpy as np
+import pandas as pd
 import xarray as xr
 from netCDF4 import Dataset
 from datetime import datetime, date, timedelta
@@ -248,25 +249,24 @@ def extract_files(dir:str, pathsToFiles:list):
 
 ###   Reindexing hindcasts
 
-def reindex_hindcasts(da:xr.DataArray):
-    da = da.transpose("variable","latitude","longitude","hdate","time")
-    da = da.stack(fullTime=["hdate","time"])
-    timeValues = []
-    for (hdate,time) in da['fullTime'].values:
-        hyear = hdate//10000
-        if time.month==2 and time.day==29 and (time.year-hyear)%4!=0:
-            timeValues.append(time.replace(day=1, month=3, year=hyear))
+def reindex_hindcast(da:xr.DataArray):
+    ''' Reindexing the ('hdate','time') dimension for hincast files '''
+    da = da.stack(fullTime=["hdate","time"])                                                # Combining the 2 time related coordinates
+    newIndexes = []
+    for (hdate,time) in da['fullTime'].values:                                              # Creating the new indexes
+        hyear = hdate // 10000
+        isLeapYearCase = (time.day==29) and (time.month==2) and ((time.year-hyear)%4!=0)    # Checking if the date exists if the hindcast is started at hdate
+        if isLeapYearCase:
+            newIndexes.append(time.replace(day=1,month=3,year=hyear))
         else:
-            timeValues.append(time.replace(year=hyear))
-    timeValues = np.array(timeValues)
-    res = xr.DataArray(
+            newIndexes.append(time.replace(year=hyear))
+    reindexed_da = xr.DataArray(
         da.values,
-        dims=("variable","latitude","longitude","time"),
+        dims=("latitude","longitude","time"),
         coords={
-            "variable":da['variable'],
             "latitude":da['latitude'],
             "longitude":da['longitude'],
-            "time":timeValues
+            "time":np.array(newIndexes)
         }
     )
-    return res.to_dataset(dim="variable")
+    return reindexed_da

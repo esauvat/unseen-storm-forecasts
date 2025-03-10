@@ -19,6 +19,18 @@ class composite_dataset :
         self.fileList = self.pathsToFiles.keys()                                                    # List of tuple (fileType,fileName)
         self.dims = ("latitude","longitude","time")                                                 # Tuple of dataset's dimension
         
+        sample = xr.open_dataarray(self.pathsToFiles[self.fileList[0]])
+
+        self.grid = (sample['latitude'].values, sample['longitude'].values)
+
+        self.compute = xr.Dataset(
+            coords=dict(
+                latitude = self.grid[0],
+                longitude = self.grid[1],
+                time = pd.date_range(start='1941-01-01', end='2024-12-31').to_numpy()
+            )
+        )
+        
         pass
 
 
@@ -68,8 +80,31 @@ class composite_dataset :
                 del pathsToFiles[key]
         
         return pathsToFiles
+    
+
+    def open_data(self, key:tuple[str,str]) -> xr.DataArray:
+        ''' Open "file" as DataArray and reshape it to fit the class attributes '''
+        fileType, _ = key
+        da = xr.open_dataarray(self.pathsToFiles[key])
+        da = da.drop_vars(names="number", errors="ignore")
+        if fileType == 'hindcast':                                                                  # Reindexing the ('hdate','time') dimension for hincast files
+            da = reindex_hindcast(da)
+        da = da.name = key
+        return da
 
 
-
-    def max(self, *args:str, **kwargs:np.float64) -> xr.Dataset :
-        # TODO
+    def compute_time_max(self) -> None :
+        ''' Compute the maximum in every files of the dataset and create a max dataset '''
+        self.compute['time_max'] = (
+            ('latitude','longitude'), 
+            np.zeros((len(self.grid[0]),len(self.grid[1])))
+        )
+        max_per_file = []
+        for key in self.fileList:
+            data = self.open_data(self.pathsToFiles[key])
+            max_per_file.append(data.max(dim='time').values)
+        max_array = xr.DataArray(
+            np.array(max_per_file),
+            dims=("file","latitude","longitude")
+        )
+        self.compute['time_max'].values = max_array.max(dim='file').values
