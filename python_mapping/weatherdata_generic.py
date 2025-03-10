@@ -253,7 +253,7 @@ def reindex_hindcasts(da:xr.DataArray):
     da = da.stack(fullTime=["hdate","time"])
     timeValues = []
     for (hdate,time)in da['fullTime'].values:
-        print(str(hdate, time))
+        print(str(hdate) + ' ' + str(time))
         timeValues.append(time.replace(year=hdate//10000))
     timeValues = np.array(timeValues)
     res = xr.DataArray(
