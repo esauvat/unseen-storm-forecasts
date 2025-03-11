@@ -18,17 +18,17 @@ bound_values = {
 
 ###   Defining map size   ###
 
-def boundaries(data:Dataset, coords_range:str = 'largeNo') -> tuple :
+def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
     
-    assert(coords_range in bound_values.keys())
+    assert(size in bound_values.keys())
     ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
 
-    s, n, w, e = bound_values[coords_range]
+    s, n, w, e = bound_values[size]
 
-    latS = max(s, data['latitude'][-1])
-    latN = min(n, data['latitude'][0])
-    lonW = max(w, data['longitude'][0])
-    lonE = min(e, data['longitude'][-1])
+    latS = max(s, data.coords['latitude'][-1])
+    latN = min(n, data.coords['latitude'][0])
+    lonW = max(w, data.coords['longitude'][0])
+    lonE = min(e, data.coords['longitude'][-1])
 
     return np.array([lonW, lonE, latS, latN]), (latS + latN) / 2, (lonW + lonE) / 2
 
@@ -37,10 +37,13 @@ def boundaries(data:Dataset, coords_range:str = 'largeNo') -> tuple :
 
 def showcase_data(data:xr.DataArray, 
                   boundaries:np.ndarray, 
-                  nbMap:int,
                   fig:geo.plt.Figure, axgr:geo.AxesGrid,
+                  nbMap:int=1,
                   **kwargs:np.ndarray) -> tuple :
-
+    
+    if not 'time' in data.dims:
+        data = data.expand_dims({"time":[0]}).transpose("time","latitude","longitude")
+        
     timesIndex = kwargs.get('timesIndex', data['time'])
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
     effectSample = select_sample(data, boundaries, timesIndex)

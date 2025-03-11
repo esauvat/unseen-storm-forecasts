@@ -187,12 +187,12 @@ def draw(pathToFile:str) :
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
 
-    boundaries, cLat, cLon = wd.boundaries(ncData, coordsRange)
+    boundaries, cLat, cLon = wd.boundaries(data=ncData, size=coordsRange)
     projection = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
     fig, axis = geo.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
-    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, nbMap, fig, axis, timesIndex=effectDays)
+    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, fig, axis, nbMap, timesIndex=effectDays)
     for i in range(nbMap):
         axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))                            #### TODO : need to be updated to conform to the multi years selection possibility
     if title:
@@ -220,9 +220,9 @@ def draw(pathToFile:str) :
 
 
 
-def map_of_max():
+def map_of_max(tpSet:wd.Weatherset):
 
-    dataset = wd.Weatherset(pathListToData, resolution=resolution, years=years)
+    tpSet = wd.Weatherset(pathListToData, resolution=resolution, years=years)
 
     nbRows, nbColumns, nbMaps =  1, 1, 1
     
@@ -231,24 +231,23 @@ def map_of_max():
         for y in years:
             if timeSpan:
                 yearsSample = [str(i) for i in range(int(y), int(y)+timeSpan)]
-                data_max = dataset.max('time', time_sel=yearsSample)
+                data_max = tpSet.compute_time_max(timeSelec=yearsSample)
             else:
-                data_max = dataset.max('time', time_sel=y)
-            data_max = data_max.to_dataarray()
-            data_max = data_max.rename({"variable":"time"}).reindex(time=[y])
+                data_max = tpSet.compute_time_max(timeSelec=[y])
+            data_max = data_max.expand_dims({"time":[y]})
             dataarrays.append(data_max.transpose("time", "latitude", "longitude"))
         max_simulated = wd.xr.concat(dataarrays, dim="time")
         nbMaps = len(years)
         nbRows, nbColumns = wd.mosaic_split(nbMaps)
     else:
-        max_simulated = dataset.max('time').to_dataarray()
-        max_simulated = max_simulated.rename({"variable":"time"}).reindex(time=[0])
+        tpSet.compute_time_max()
+        max_simulated = tpSet.compute['time_max']
 
-    boundaries = wd.boundaries(dataset, size=coordsRange)
+    boundaries = wd.boundaries(tpSet, size=coordsRange)[0]
 
     fig, axis = geo.map(n=nbRows, p=nbColumns, nbMap=nbMaps, size=size, boundaries=boundaries)
 
-    fig, axis = wd.showcase_data(max_simulated, boundaries, nbMaps, fig, axis)
+    fig, axis = wd.showcase_data(max_simulated, boundaries, fig, axis, nbMaps)
 
     if len(years)!=0:
         for i in range(nbMaps):
@@ -262,7 +261,7 @@ def map_of_max():
     if resolution:
         resReference = '_' + resolution + 'x' + resolution
 
-    fig.savefig(dir+'tp24-max_' + resReference + timeReference + '.png')
+    fig.savefig(dir+'tp24-max' + resReference + timeReference + '.png')
 
     geo.plt.close()
 

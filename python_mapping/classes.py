@@ -16,17 +16,46 @@ class composite_dataset :
         years = np.array(kwargs.get('years', None))
 
         self.pathsToFiles = self.get_paths(pathListToData, onlyDirectory, resolution, years)        # Dict of (fileType,fileName) keys with pathToFile values
-        self.fileList = self.pathsToFiles.keys()                                                    # List of tuple (fileType,fileName)
+        self.fileList = [key for key in self.pathsToFiles.keys()]                                   # List of tuple (fileType,fileName)
         self.dims = ("latitude","longitude","time")                                                 # Tuple of dataset's dimension
         
         sample = xr.open_dataarray(self.pathsToFiles[self.fileList[0]])
 
-        self.grid = (sample['latitude'].values, sample['longitude'].values)
+        latitudeOfFirstGridPoint = sample['latitude'].values[0]
+        latitudeOfLastGridPoint = sample['latitude'].values[-1]
+        longitudeOfFirstGridPoint = sample['longitude'].values[0]
+        longitudeOfLastGridPoint = sample['longitude'].values[-1]
+        if '0.25x0.25' in self.fileList[0][1]:
+            nbLat = len(sample['latitude'].values)
+            nbLon = len(sample['longitude'].values)
+        else:
+            nbLat = 2*len(sample['latitude'].values)-1
+            nbLon = 2*len(sample['longitude'].values)-1
+
+        self.coords = xr.DataArray(
+            dims = ("latitude","longitude"),
+            coords = dict(
+                latitude = np.linspace(
+                    latitudeOfFirstGridPoint, latitudeOfLastGridPoint, nbLat
+                ),
+                longitude = np.linspace(
+                    longitudeOfFirstGridPoint, longitudeOfLastGridPoint, nbLon
+                )
+            ),
+            attrs=dict(
+                latitudeOfFirstGridPoint=latitudeOfFirstGridPoint,
+                latitudeOfLastGridPoint=latitudeOfLastGridPoint,
+                longitudeOfFirstGridPoint=longitudeOfFirstGridPoint,
+                longitudeOfLastGridPoint=longitudeOfLastGridPoint,
+                nbLat=nbLat,
+                nbLon=nbLon
+            )
+        )
 
         self.compute = xr.Dataset(
             coords=dict(
-                latitude = self.grid[0],
-                longitude = self.grid[1],
+                latitude = self.coords['latitude'].values,
+                longitude = self.coords['longitude'].values,
                 time = pd.date_range(start='1941-01-01', end='2024-12-31').to_numpy()
             )
         )
@@ -84,27 +113,33 @@ class composite_dataset :
 
     def open_data(self, key:tuple[str,str]) -> xr.DataArray:
         ''' Open "file" as DataArray and reshape it to fit the class attributes '''
-        fileType, _ = key
+        fileType = key[0]
         da = xr.open_dataarray(self.pathsToFiles[key])
         da = da.drop_vars(names="number", errors="ignore")
         if fileType == 'hindcast':                                                                  # Reindexing the ('hdate','time') dimension for hincast files
             da = reindex_hindcast(da)
-        da = da.name = key
+        da.name = key
         return da
 
 
-    def compute_time_max(self) -> None :
+    def compute_time_max(self, **kwargs:str) -> None :
         ''' Compute the maximum in every files of the dataset and create a max dataset '''
-        self.compute['time_max'] = (
-            ('latitude','longitude'), 
-            np.zeros((len(self.grid[0]),len(self.grid[1])))
-        )
-        max_per_file = []
+
+        timeSelec = kwargs.get('timeSelec', None)
+
+        max_datasets = []
         for key in self.fileList:
-            data = self.open_data(self.pathsToFiles[key])
-            max_per_file.append(data.max(dim='time').values)
-        max_array = xr.DataArray(
-            np.array(max_per_file),
-            dims=("file","latitude","longitude")
-        )
-        self.compute['time_max'].values = max_array.max(dim='file').values
+            data = self.open_data(key)
+            if timeSelec:
+                yearsList = np.array([pd.Timestamp(date).year for date in data['time'].values])
+                if all(
+                    any(y==yearsList) for y in timeSelec
+                ):
+                    data = data.sel(time=timeSelec)
+                    max_datasets.append(data.max(dim='time').expand_dims('ref'))
+            else:
+                max_datasets.append(data.max(dim='time').expand_dims('ref'))
+            data.close()
+
+        max_array = xr.concat(max_datasets, dim='ref')
+        return max_array.max(dim='ref', skipna=True)
