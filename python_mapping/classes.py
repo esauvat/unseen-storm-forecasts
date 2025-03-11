@@ -9,11 +9,11 @@ class composite_dataset :
 
 
 
-    def __init__(self, pathListToData:str, **kwargs):
+    def __init__(self, pathListToData:list[str], **kwargs):
         
         onlyDirectory = kwargs.get('onlyDir', None)
         resolution = kwargs.get('resolution', None)
-        years = np.array(kwargs.get('years', None))
+        years = np.array(kwargs.get('years', []))
 
         self.pathsToFiles = self.get_paths(pathListToData, onlyDirectory, resolution, years)        # Dict of (fileType,fileName) keys with pathToFile values
         self.fileList = [key for key in self.pathsToFiles.keys()]                                   # List of tuple (fileType,fileName)
@@ -67,7 +67,6 @@ class composite_dataset :
     def get_paths(self, pathListToData, onlyDirectory, resolution, years):
 
         pathsToFiles = {}                                                                           # Dict with self.fileList as keys and paths to files as values
-        pathListToData = pathListToData.split(',')
 
         if onlyDirectory:
             for dir in pathListToData:
@@ -122,7 +121,7 @@ class composite_dataset :
         return da
 
 
-    def compute_time_max(self, **kwargs:str) -> None :
+    def compute_time_max(self, **kwargs:str) -> xr.DataArray :
         ''' Compute the maximum in every files of the dataset and create a max dataset '''
 
         timeSelec = kwargs.get('timeSelec', None)

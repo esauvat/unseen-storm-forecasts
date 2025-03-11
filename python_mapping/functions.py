@@ -38,14 +38,14 @@ def map_of_max(data:classes.composite_dataset, name:str, **kwargs):
             nbMaps = len(max_simulated['time'].values)
             nbRows, nbColumns = weatherdata_generic.mosaic_split(nbMaps)
         else:
-            max_simulated = data.compute_time_max(name)
-        data[name] = max_simulated
+            max_simulated = data.compute_time_max()
+        data.compute[name] = max_simulated
 
     boundaries = weatherdata_generic.boundaries(data, size=coordsRange)[0]
 
     fig, axis = geo.map(n=nbRows, p=nbColumns, nbMap=nbMaps, size=figSize, boundaries=boundaries)
 
-    fig, axis = weatherdata_generic.showcase_data(max_simulated, boundaries, fig, axis, nbMaps)
+    fig, axis = weatherdata_generic.showcase_data(max_simulated, fig, axis, nbMaps, boundaries=boundaries)
 
     if len(years)!=0:
         for i in range(nbMaps):
