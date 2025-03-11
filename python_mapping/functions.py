@@ -32,6 +32,7 @@ def map_of_max(data:classes.composite_dataset, name:str, **kwargs):
                     data_max = data.compute_time_max(timeSelec=yearsSample)
                 else:
                     data_max = data.compute_time_max(timeSelec=[y])
+                    return data_max
                 data_max = data_max.expand_dims({"time":[y]})
                 dataarrays.append(data_max.transpose("time", "latitude", "longitude"))
             max_simulated = xr.concat(dataarrays, dim="time")
@@ -45,7 +46,7 @@ def map_of_max(data:classes.composite_dataset, name:str, **kwargs):
 
     fig, axis = geo.map(n=nbRows, p=nbColumns, nbMap=nbMaps, size=figSize, boundaries=boundaries)
 
-    fig, axis = weatherdata_generic.showcase_data(max_simulated, fig, axis, nbMaps, boundaries=boundaries)
+    fig, axis = weatherdata_generic.showcase_data(max_simulated, boundaries, fig, axis, nbMaps)
 
     if len(years)!=0:
         for i in range(nbMaps):

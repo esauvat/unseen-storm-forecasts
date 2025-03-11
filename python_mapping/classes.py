@@ -112,11 +112,16 @@ class composite_dataset :
 
     def open_data(self, key:tuple[str,str]) -> xr.DataArray:
         ''' Open "file" as DataArray and reshape it to fit the class attributes '''
-        fileType = key[0]
+        fileType, fileName = key
         da = xr.open_dataarray(self.pathsToFiles[key])
         da = da.drop_vars(names="number", errors="ignore")
         if fileType == 'hindcast':                                                                  # Reindexing the ('hdate','time') dimension for hincast files
             da = reindex_hindcast(da)
+        if '0.5' in fileName:
+            da = da.reindex(dict(
+                latitude=self.coords['latitude'],
+                longitude=self.coords['longitude']
+            ))
         da.name = key
         return da
 
@@ -130,13 +135,8 @@ class composite_dataset :
         for key in self.fileList:
             data = self.open_data(key)
             if timeSelec:
-                yearsList = np.array([pd.Timestamp(date).year for date in data['time'].values])
-                if all(
-                    any(y==yearsList) for y in timeSelec
-                ):
-                    data = data.sel(time=timeSelec)
-                    max_datasets.append(data.max(dim='time').expand_dims('ref'))
-            else:
+                data = data.sel(time=slice(timeSelec[0],timeSelec[-1]))
+            if data['time'].shape!= (0,):
                 max_datasets.append(data.max(dim='time').expand_dims('ref'))
             data.close()
 

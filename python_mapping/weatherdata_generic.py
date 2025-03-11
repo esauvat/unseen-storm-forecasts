@@ -36,23 +36,17 @@ def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
 ###   Showcasing the data   ###
 
 def showcase_data(data:xr.DataArray, 
+                  boundaries:np.ndarray, 
                   fig:geo.plt.Figure, axgr:geo.AxesGrid,
                   nbMap:int=1,
                   **kwargs:np.ndarray) -> tuple :
     
-    timesIndex = kwargs.get('timesIndex', None)
-    boundaries = kwargs.get('boundaries', None)
-
+    if not 'time' in data.dims:
+        data = data.expand_dims("time").transpose("time","latitude","longitude")
+        
+    timesIndex = kwargs.get('timesIndex', data['time'])
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
-
-    effectSample = data.copy()
-    if timesIndex:
-        effectSample = select_time(effectSample, timesIndex)
-    else:
-        data.expand_dims({"time":[0]})
-        timesIndex = [0]
-    if boundaries:
-        effectSample = select_area(effectSample, boundaries)
+    effectSample = select_sample(data, boundaries, timesIndex)
 
     vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)
     _, Y, X = data.dims
