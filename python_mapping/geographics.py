@@ -42,7 +42,7 @@ def map_background(ax:GeoAxes, boundaries:list[int]=[]) -> GeoAxes:
     return ax
 
 
-def map(n=1, p=1, nbMap=1, size='medium', boundaries = None, proj=projPlane) :
+def map(n=1, p=1, nbMap=1, size='medium', boundaries = None, proj=projMerc) :
 
     assert (size in sizes.keys()), "The size is incorrect"
 

@@ -38,7 +38,7 @@ def draw_map(data:xr.DataArray, **kwargs) :
     return fig, axis
 
 
-def map_of_max(data:classes.composite_dataset, name:str, **kwargs):
+def map_of_max(data:classes.composite_dataset, **kwargs):
     ''' Create a map of the the maximum recorded tp values '''
 
     years = kwargs.get('years', [])                                                             # Get the list of years on which to compute the max

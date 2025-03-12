@@ -26,7 +26,7 @@ def all_res_all_time():
             fig, axis = wd.draw_map(inp, title=title)
             fig.savefig(endDir+'tp24_all-res_all-time.png')
     else:
-        res = wd.map_of_max(data=tpSet, name=name, title=title, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
@@ -47,7 +47,7 @@ def all_res_annual():
             fig, axis = wd.draw_map(inp, title=title, years=years)
             fig.savefig(endDir+'tp24_all-res_2019-2024.png')
     else:
-        res = wd.map_of_max(data=tpSet, name=name, title=title, years=years, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, years=years, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
@@ -64,7 +64,7 @@ def all_res_annual():
             fig, axis = wd.draw_map(inp, title=title, years=years)
             fig.savefig(endDir+'tp24_all-res_2013-2018.png')
     else:
-        res = wd.map_of_max(data=tpSet, name=name, title=title, years=years, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, years=years, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
@@ -81,7 +81,7 @@ def all_res_annual():
             fig, axis = wd.draw_map(inp, title=title, years=years)
             fig.savefig(endDir+'tp24_all-res_2007-2012.png')
     else:
-        res = wd.map_of_max(data=tpSet, name=name, title=title, years=years, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, years=years, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
@@ -103,7 +103,7 @@ def all_res_decadal():
             fig.savefig(endDir+'tp24_all-res_1941-2024-dec.png')
     else:
         timeSpan = 10
-        res = wd.map_of_max(data=tpSet, name=name, title=title, years=years, timeSpan=timeSpan, sizeMap=sizeMap, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, years=years, timeSpan=timeSpan, sizeMap=sizeMap, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
