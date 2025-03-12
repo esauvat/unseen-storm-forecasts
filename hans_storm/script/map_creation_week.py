@@ -4,8 +4,8 @@
 
 import sys
 
-sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping_tools')
-sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools')
+sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping')
+sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping')
 
 import weatherdata as wd
 import maps as mp

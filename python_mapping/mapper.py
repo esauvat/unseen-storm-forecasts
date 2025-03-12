@@ -47,7 +47,6 @@ except getopt.GetoptError as err:
     sys.exit(1)
 
 
-
 pathListToData = []
 resolution = None
 title=None
@@ -100,7 +99,6 @@ for opt, arg in opts:
         coordsRange = arg
     elif opt in ['-d', '--dir'] :
         dir = arg
-
 
 
 # Some test to assert  the relevance of the arguments
