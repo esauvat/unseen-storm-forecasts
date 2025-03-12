@@ -6,12 +6,10 @@ import sys
 sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')
 
 import weatherdata as wd
+import pickle
 
-dir1 = '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24'
-dir2 = '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/forecast/daily/values/tp24'
-dir3 = '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/s2s-model-format/hindcast/daily/values/tp24'
-
-tpSet = wd.Weatherset(pathListToData=[dir1,dir2,dir3], onlyDir=True)
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl', 'w') as inp:
+    tpSet = pickle.load(inp)
 
 
 

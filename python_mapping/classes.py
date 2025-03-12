@@ -10,9 +10,9 @@ class composite_dataset :
     ''' A python class to simplify operation on a multi-file dataset '''
 
 
-    def __init__(self, pathListToData:list[str], reanalysis=True, **kwargs):
+    def __init__(self, pathListToData:list[str], reanalysis=True, resolution:str=None):
         
-        self.resolution = kwargs.get('resolution', None)                                            # Resolution of the data, if None, all resolutions are selected
+        self.resolution = resolution                                                                # Resolution of the data, if None, all resolutions are selected
         self.reanalysis = reanalysis
 
         self.pathsToFiles = self.get_paths(pathListToData, self.resolution)                         # Dict of (fileType,fileName) keys with pathToFile values
