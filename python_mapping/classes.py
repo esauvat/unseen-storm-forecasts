@@ -53,19 +53,13 @@ class composite_dataset :
             )
         )
 
-        self.compute = xr.Dataset(                                                                  # compute Dataset exist to store computed values like the maximum over some time, 
-            coords=dict(                                                                            # to be filled later
-                latitude = self.coords['latitude'].values,
-                longitude = self.coords['longitude'].values,
-                time = pd.date_range(start='1941-01-01', end='2024-12-31').to_numpy()
-            )
-        )
+        self.compute = dict()                                                                       # compute dict links already computed arrays such as max over time to pkl file's addresses
         
         pass
 
 
 
-    def get_paths(self, pathListToData, onlyDirectory, resolution, years):
+    def get_paths(self, pathListToData, resolution):
         ''' Creating the pathsToFiles dict to store paths to access the datas '''
 
         pathsToFiles = {}                                                                           # Initiating dict
@@ -135,8 +129,13 @@ class composite_dataset :
             if timeSelec:
                 data = data.sel(time=slice(timeSelec[0],timeSelec[-1]))                             # If needed, select the requested time range
             if data['time'].shape!= (0,):                                                           # Check if the previous selection is not empty
-                max_datasets.append(data.max(dim='time').expand_dims('ref'))                        # If not, compute the maximum and add it the tho max_datasets list
+                max_datasets.append(data.max(dim='time').expand_dims({'ref':[key]}))                        # If not, compute the maximum and add it the tho max_datasets list
             data.close()                                                                            # Close each data file after computation to free the memory
 
         max_array = xr.concat(max_datasets, dim='ref')                                              # Concatenate the max_arrays 
-        return max_array.max(dim='ref', skipna=True)                                                # to compute the max over all the dataset
+        del max_datasets
+        res = max_array.max(dim='ref', skipna=True)                                                 # to compute the max over all the dataset
+        print(str(res.coords.values))
+        print(str(res.dims))
+        print(str(res.size * 32))
+        return res
