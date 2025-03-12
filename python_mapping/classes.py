@@ -7,32 +7,33 @@ import numpy as np, xarray as xr
 
 class composite_dataset :
 
+    ''' A python class to simplify operation on a multi-file dataset '''
 
 
-    def __init__(self, pathListToData:list[str], **kwargs):
+    def __init__(self, pathListToData:list[str], reanalysis=True, **kwargs):
         
-        onlyDirectory = kwargs.get('onlyDir', None)
-        resolution = kwargs.get('resolution', None)
-        years = np.array(kwargs.get('years', []))
+        self.resolution = kwargs.get('resolution', None)                                            # Resolution of the data, if None, all resolutions are selected
+        self.reanalysis = reanalysis
 
-        self.pathsToFiles = self.get_paths(pathListToData, onlyDirectory, resolution, years)        # Dict of (fileType,fileName) keys with pathToFile values
+        self.pathsToFiles = self.get_paths(pathListToData, self.resolution)                         # Dict of (fileType,fileName) keys with pathToFile values
         self.fileList = [key for key in self.pathsToFiles.keys()]                                   # List of tuple (fileType,fileName)
         self.dims = ("latitude","longitude","time")                                                 # Tuple of dataset's dimension
         
-        sample = xr.open_dataarray(self.pathsToFiles[self.fileList[0]])
+        sample = xr.open_dataarray(self.pathsToFiles[self.fileList[0]])                             # Openning any data file to acces informations like the coordinates
 
-        latitudeOfFirstGridPoint = sample['latitude'].values[0]
-        latitudeOfLastGridPoint = sample['latitude'].values[-1]
-        longitudeOfFirstGridPoint = sample['longitude'].values[0]
-        longitudeOfLastGridPoint = sample['longitude'].values[-1]
-        if '0.25x0.25' in self.fileList[0][1]:
-            nbLat = len(sample['latitude'].values)
-            nbLon = len(sample['longitude'].values)
+        latitudeOfFirstGridPoint = sample['latitude'].values[0]                                     # Highest latitude  (Latitudes are stored in decreasing order)
+        latitudeOfLastGridPoint = sample['latitude'].values[-1]                                     # Lowest latitude
+        longitudeOfFirstGridPoint = sample['longitude'].values[0]                                   # Lowest longitude
+        longitudeOfLastGridPoint = sample['longitude'].values[-1]                                   # Highest longitude
+
+        if (not self.resolution=='0.5') and '0.5x0.5' in self.fileList[0][1]:                       # Checking if the sample file is in 0.5 resolution while other in the Dataset are in 0.25 resolution
+            nbLat = 2*len(sample['latitude'].values)-1                                              # If so, we want the coordinates resolution to be twice as much as in the sample file
+            nbLon = 2*len(sample['longitude'].values)-1                                             # to fit with all format in the dataset (through reindexing for the 0.5 resolution files)
         else:
-            nbLat = 2*len(sample['latitude'].values)-1
-            nbLon = 2*len(sample['longitude'].values)-1
+            nbLat = len(sample['latitude'].values)                                                  # Id not, we just copy the coordinates for the dataset
+            nbLon = len(sample['longitude'].values)
 
-        self.coords = xr.DataArray(
+        self.coords = xr.DataArray(                                                                 # coords Array for quicker access to the dataset's properties
             dims = ("latitude","longitude"),
             coords = dict(
                 latitude = np.linspace(
@@ -52,8 +53,8 @@ class composite_dataset :
             )
         )
 
-        self.compute = xr.Dataset(
-            coords=dict(
+        self.compute = xr.Dataset(                                                                  # compute Dataset exist to store computed values like the maximum over some time, 
+            coords=dict(                                                                            # to be filled later
                 latitude = self.coords['latitude'].values,
                 longitude = self.coords['longitude'].values,
                 time = pd.date_range(start='1941-01-01', end='2024-12-31').to_numpy()
@@ -65,46 +66,35 @@ class composite_dataset :
 
 
     def get_paths(self, pathListToData, onlyDirectory, resolution, years):
+        ''' Creating the pathsToFiles dict to store paths to access the datas '''
 
-        pathsToFiles = {}                                                                           # Dict with self.fileList as keys and paths to files as values
+        pathsToFiles = {}                                                                           # Initiating dict
 
-        if onlyDirectory:
-            for dir in pathListToData:
-                extract_files(dir, pathsToFiles)
-        else:
-            for loc in pathListToData:
-                if loc.endswith('/'):
-                    extract_files(loc, pathsToFiles)
-                else:
-                    txtAsList = open(loc, 'r').read().split('\n')
-                    if txtAsList[-1] == '':
-                        del txtAsList[-1]
-                    for fileLoc in txtAsList:
-                        fileLocScatter = fileLoc.split('/')
-                        filename = fileLocScatter.pop()
-                        type = ''
-                        while fileLocScatter != []:
-                            dir = fileLocScatter.pop()
-                            if dir == 'daily':
-                                type = fileLocScatter[-1]
-                                break
-                        assert type != '', "Wrong file path in the document"
-                        pathsToFiles[(type, filename[:-3])] = fileLoc
+        for loc in pathListToData:                                                                  # Loop over all the addresses passed as arguments
+            if loc.endswith('/'):                                                                   # Check if the address is a directory
+                extract_files(loc, pathsToFiles)                                                    
+            else:                                                                                   # or if it's a txt file with paths on it
+                txtAsList = open(loc, 'r').read().split('\n')
+                if txtAsList[-1] == '':                                                             # Remove the last line if it's empty    
+                    del txtAsList[-1]
+                for fileLoc in txtAsList:
+                    fileLocScatter = fileLoc.split('/')                                             # Get the directories tree above the data
+                    filename = fileLocScatter.pop()                                                 # Store the name of the file
+                    type = ''
+                    while fileLocScatter != []:                                                     # Iterate over the path tree's nodes to find the file type
+                        dir = fileLocScatter.pop()
+                        if dir in ['forecast','hindcast','continuous-format','continuous']:         # Detect if a type corresponding directory is in the path tree
+                            type = dir                                                              # If so store the type of the file
+                            break
+                    assert type != '', "Wrong file path in the document"                            # Assert that a type as been found
+                    pathsToFiles[(type, filename[:-3])] = fileLoc                                   # Create the key-value instance (NB: We remove the .nc in the file name)
 
-        if resolution:                                                                              # Optionnal parameters
+        if resolution:                                                                              # Remove the unwanted files if a resolution is specified
             keysToDel = []
             for key in pathsToFiles.keys():
-                if not resolution in key[1]:
-                    keysToDel.append(key)
-            for key in keysToDel:
-                del pathsToFiles[key]
-        
-        if len(years)!=0:
-            keysToDel = []
-            for key in pathsToFiles.keys():
-                if not any(y in key[1] for y in years):
-                    keysToDel.append(key)
-            for key in keysToDel:
+                if not resolution in key[1]:                                                        # Check if the file as the right resolution
+                    keysToDel.append(key)                                                           
+            for key in keysToDel:                                                                   # If not remove the corresponding key-value
                 del pathsToFiles[key]
         
         return pathsToFiles
@@ -112,33 +102,41 @@ class composite_dataset :
 
     def open_data(self, key:tuple[str,str]) -> xr.DataArray:
         ''' Open "file" as DataArray and reshape it to fit the class attributes '''
-        fileType, fileName = key
+
+        """ # Relevant when the 'if fileType=='hindcast' part will have been reworked
+        fileType, fileName = key """
+        
+        fileName = key[1]
         da = xr.open_dataarray(self.pathsToFiles[key])
-        da = da.drop_vars(names="number", errors="ignore")
+        if self.reanalysis:
+            da = da.drop_vars(names="number", errors="ignore")                                      # If the dataset is a reanalysis' one, remove the "number" dimension if it exists
+
+        """ # This needs to be reworked 
         if fileType == 'hindcast':                                                                  # Reindexing the ('hdate','time') dimension for hincast files
-            da = reindex_hindcast(da)
-        if '0.5' in fileName:
-            da = da.reindex(dict(
+            da = reindex_hindcast(da) """
+        
+        if (not self.resolution=='0.5') and '0.5' in fileName:                                      # Checking if the data is with 0.5 resolution while the dataset is with 0.25 one
+            da = da.reindex(dict(                                                                   # If so, reindex (the missing values are filled with np.nan)
                 latitude=self.coords['latitude'],
                 longitude=self.coords['longitude']
             ))
-        da.name = key
+        da.name = key                                                                               # Change DataArray name for (fileType,fileName) tuple
         return da
 
 
     def compute_time_max(self, **kwargs:str) -> xr.DataArray :
         ''' Compute the maximum in every files of the dataset and create a max dataset '''
 
-        timeSelec = kwargs.get('timeSelec', None)
+        timeSelec = kwargs.get('timeSelec', None)                                                   # Check if a specific time range is asked
 
-        max_datasets = []
+        max_datasets = []                                                                           # Initiate a list to store the max_datasets before concatenation
         for key in self.fileList:
-            data = self.open_data(key)
+            data = self.open_data(key)                                                              # Open each data file
             if timeSelec:
-                data = data.sel(time=slice(timeSelec[0],timeSelec[-1]))
-            if data['time'].shape!= (0,):
-                max_datasets.append(data.max(dim='time').expand_dims('ref'))
-            data.close()
+                data = data.sel(time=slice(timeSelec[0],timeSelec[-1]))                             # If needed, select the requested time range
+            if data['time'].shape!= (0,):                                                           # Check if the previous selection is not empty
+                max_datasets.append(data.max(dim='time').expand_dims('ref'))                        # If not, compute the maximum and add it the tho max_datasets list
+            data.close()                                                                            # Close each data file after computation to free the memory
 
-        max_array = xr.concat(max_datasets, dim='ref')
-        return max_array.max(dim='ref', skipna=True)
+        max_array = xr.concat(max_datasets, dim='ref')                                              # Concatenate the max_arrays 
+        return max_array.max(dim='ref', skipna=True)                                                # to compute the max over all the dataset

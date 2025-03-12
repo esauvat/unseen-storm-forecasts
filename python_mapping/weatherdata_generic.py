@@ -19,14 +19,15 @@ bound_values = {
 ###   Defining map size   ###
 
 def boundaries(data:Dataset, size:str = 'largeNo') -> tuple :
+    ''' Correcting, if needed, a wanted value for the coordinates range
+    to make sure it fits the data '''
     
-    assert(size in bound_values.keys())
-    ("The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'")
+    assert (size in bound_values.keys()), "The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'"
 
-    s, n, w, e = bound_values[size]
+    s, n, w, e = bound_values[size]                                                         # Accessing the wanted values for the boundaries
 
-    latS = max(s, data.coords['latitude'][-1])
-    latN = min(n, data.coords['latitude'][0])
+    latS = max(s, data.coords['latitude'][-1])                                              # Correcting each value if necessary to make sure the map 
+    latN = min(n, data.coords['latitude'][0])                                               # does not outrange the data 
     lonW = max(w, data.coords['longitude'][0])
     lonE = min(e, data.coords['longitude'][-1])
 
@@ -42,26 +43,28 @@ def showcase_data(data:xr.DataArray,
                   **kwargs:np.ndarray) -> tuple :
     
     if not 'time' in data.dims:
-        data = data.expand_dims("time").transpose("time","latitude","longitude")
+        data = data.expand_dims("time").transpose("time","latitude","longitude")            # If no time dimension, reshape the array to fit the data access later
         
-    timesIndex = kwargs.get('timesIndex', data['time'])
-    assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))
-    effectSample = select_sample(data, boundaries, timesIndex)
+    timesIndex = kwargs.get('timesIndex', data['time'])                                     # Setting the default value for the time selection to all the dataset
+    assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))      # Checking if the time selection does not get out of range for the dataset's dimension
 
-    vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)
+    effectSample = select_sample(data, boundaries, timesIndex)                              # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
+    vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)               # Computing the range of the colorbar
+    
     _, Y, X = data.dims
-
     for i in range(nbMap):
-        p = axgr[i].pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
+        p = axgr[i].pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],                   # Plotting each set of value on the corresponding subplot
                           vmin=vmin,
                           vmax=vmax,
                           transform=geo.projPlane)
 
-    axgr.cbar_axes[0].colorbar(p)
+    axgr.cbar_axes[0].colorbar(p)                                                           # Adding the colorbar
 
     return fig, axgr
 
 
+
+""" # Outdated
 
 ###   Dataset to Xarray   ###
 
@@ -92,37 +95,46 @@ def dataset_to_xr(data:Dataset, hindcastDate) :
             "longitude":data['longitude'][:]
         }
     )
-    return res
+    return res """
 
 
 ###   Select echantillon   ###
 
 def select_area(data:xr.DataArray, boundaries:np.ndarray) :
+    ''' Select the data in the geographic range that will be plotted '''
+
     [lonW, lonE, latS, latN] = boundaries
 
-    iLonW = np.where(np.isclose(data['longitude'], lonW))[0][0]
-    iLonE = np.where(np.isclose(data['longitude'], lonE))[0][0]
+    iLonW = np.where(np.isclose(data['longitude'], lonW))[0][0]                             # Getting the index for each of the extreme 
+    iLonE = np.where(np.isclose(data['longitude'], lonE))[0][0]                             # values of the latitude and longitude
     iLatS = np.where(np.isclose(data['latitude'], latS))[0][0]
     iLatN = np.where(np.isclose(data['latitude'], latN))[0][0]
 
+    ''' # Remark
+    The following part can probably be inproved using xr.DataArray.copy() '''
+
     res = xr.DataArray(
-        data[:, iLatN:iLatS+1, iLonW:iLonE+1],
+        data[:, iLatN:iLatS+1, iLonW:iLonE+1],                                              # Selecting the wanted data
         dims=data.dims,
         coords={
             "time":data['time'],
-            "latitude":data['latitude'][iLatN:iLatS+1],
-            "longitude":data['longitude'][iLonW:iLonE+1]
+            "latitude":data['latitude'][iLatN:iLatS+1],                                     # Adjusting latitude coordinate
+            "longitude":data['longitude'][iLonW:iLonE+1]                                    # Adjusting longitude coordinate
         }
     )
-
     return res
 
 def select_time(data:xr.DataArray, timesIndex:np.ndarray) -> xr.DataArray :
+    ''' Select the data in the time range that will be plotted '''
+
+    ''' # Remark
+    As above, probable improvment '''
+
     res = xr.DataArray(
-        data.loc[timesIndex, :, :],
+        data.loc[timesIndex, :, :],                                                         # Selecting the wanted data
         dims=data.dims,
         coords={
-            "time":timesIndex,
+            "time":timesIndex,                                                              # Adjusting time coordinate
             "latitude":data['latitude'],
             "longitude":data['longitude']
         }
@@ -139,47 +151,37 @@ def select_sample(data:xr.DataArray, boundaries:np.ndarray, timesIndex:np.ndarra
 ###   Xarray Operations   ###
 
 def sum_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.DataArray(
-        np.zeros_like(data.values),
-        dims=data.dims,
-        coords=data.coords
-    )
+    res = xr.full_like(data, 0)                                                             # Creating an empty copy
     totalTime = len(data['time'])
     for t in range(totalTime):
-        begin, end = t-span//2, t+(span+1)//2
-        if begin>=0 & end <= totalTime :
+        begin, end = t-span//2, t+(span+1)//2                                               # Setting the time range for the sum
+        if begin>=0 & end <= totalTime :                                                    # Checking if all the time to sum exist
             res[t,:,:]=data[begin:end, :, :].sum(dim="time")
         else :
             res[t,:,:]=None
     return res
 
 def mean_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.DataArray(
-        np.zeros_like(data.values),
-        dims=data.dims,
-        coords=data.coords
-    )
+    res = xr.full_like(data, 0)                                                             # Creating an empty copy
     totalTime = len(data['time'])
     for t in range(totalTime):
-        begin, end = t-span//2, t+(span+1)//2
+        begin, end = t-span//2, t+(span+1)//2                                               # Setting the time range for the mean
         res[t,:,:]=data[max(0,begin):min(totalTime,end), :, :].mean(dim="time")
     return res
 
 def sum_over_space(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.DataArray(
-        np.zeros_like(data.values),
-        dims=data.dims,
-        coords=data.coords
-    )
+    res = xr.full_like(data, 0)                                                             # Creating an empty copy
     nbLat = len(data['latitude'])
     nbLon = len(data['longitude'])
     for y in range(nbLat):
-        yBegin, yEnd = y-span//2, y+(span+1)//2
-        if yBegin>=0 & yEnd<=nbLat:
+        yBegin, yEnd = y-span//2, y+(span+1)//2                                             # Creating the latitude range for the sum
+        if yBegin>=0 & yEnd<=nbLat:                                                         # Checking if all the latitude indexes to sum exist
             for x in range(nbLon):
-                xBegin, xEnd = x-span//2, x+(span+1)//2
-                if xBegin>=0 & xEnd<=nbLon:
-                    res[:,y,x] = data[:, yBegin:yEnd, xBegin:xEnd].sum(dim=["latitude","longitude"])
+                xBegin, xEnd = x-span//2, x+(span+1)//2                                     # Creating the longitude range for the sum
+                if xBegin>=0 & xEnd<=nbLon:                                                 # Checking if all the longitude indexes to sum exist
+                    res[:,y,x] = data[:, yBegin:yEnd, xBegin:xEnd].sum(
+                        dim=["latitude","longitude"]
+                    )
                 else:
                     res[:,y,x] = None
         else:
@@ -187,18 +189,16 @@ def sum_over_space(data:xr.DataArray, span:int) -> xr.DataArray :
     return res
 
 def mean_over_space(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.DataArray(
-        np.zeros_like(data.values),
-        dims=data.dims,
-        coords=data.coords
-    )
+    res = xr.full_like(data, 0)                                                             # Creating an empty copy
     nbLat = len(data['latitude'])
     nbLon = len(data['longitude'])    
     for y in range(nbLat):
-        yBegin, yEnd = y-span//2, y+(span+1)//2
+        yBegin, yEnd = y-span//2, y+(span+1)//2                                             # Creating the latitude range for the mean
         for x in range(nbLon):
-            xBegin, xEnd = x-span//2, x+(span+1)//2
-            res[:,y,x]=data[:, yBegin:yEnd, xBegin:xEnd].mean(dim=["latitude", "longitude"])
+            xBegin, xEnd = x-span//2, x+(span+1)//2                                         # Creating the longitude range for the mean
+            res[:,y,x]=data[:, yBegin:yEnd, xBegin:xEnd].mean(
+                dim=["latitude", "longitude"]
+            )
     return res
 
 ###   Day number to date   ###
