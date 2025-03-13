@@ -152,7 +152,7 @@ def draw(pathToFile:str) :
 
     global totalPrecipitation
 
-    totalPrecipitation = wd.xr.open_dataarray(pathToFile)
+    totalPrecipitation = wd.xr.open_dataarray(pathToFile).drop_vars("number", errors="ignore")
 
     get_data()
 
@@ -168,16 +168,16 @@ def draw(pathToFile:str) :
     else :
         firstDay = max(firstDay, firstData)
         lastDay = min(lastDay, lastData)
-    effectDays = list(wd.np.arange(firstDay, lastDay+1))
+    effectDays = list(wd.np.arange(firstDay, lastDay+wd.np.timedelta64(1, 'D')))
 
     n = len(effectDays)
     for i in range(n):
-        if not totalPrecipitation.sel(time=effectDays[n-1-i]).all():
+        if wd.np.any(totalPrecipitation.sel(time=effectDays[n-1-i]).values == None):
             del effectDays[n-1-i]
     if effectDays==[]:
         return
     effectDays = wd.np.array(effectDays)
-
+    
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
 
@@ -197,7 +197,7 @@ def draw(pathToFile:str) :
 
     pathScatter = pathToFile.split('/')
     dataType = 'test'
-    if 'continuous' in pathScatter or 'continuous-format' in pathScatter:
+    if'continuous-format' in pathScatter:
         dataType = 'continuous'
     elif 'forecast' in pathScatter:
         dataType = 'forecast'
