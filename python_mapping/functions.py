@@ -7,14 +7,12 @@ import classes
 import numpy as np, xarray as xr, pandas as pd
 import geographics as geo
 
-import sys
-
 
 def draw_map(data:xr.DataArray, **kwargs) :
     ''' Given a set of data, draw the map(s) '''
 
     title = kwargs.get('title', None)
-    years = kwargs.get('years', []) 
+    times = kwargs.get('times', []) 
     coordsRange = kwargs.get('mapSize', "largeNo")                                              # The boundaries of the map in terms of geographic coordinates (default is all center and south of Norway)
     figSize = kwargs.get('figSize', "medium")
 
@@ -28,9 +26,9 @@ def draw_map(data:xr.DataArray, **kwargs) :
     fig, axis = geo.map(nbRows, nbColumns, nbMaps, figSize, boundaries)                         # Create the map with proper size and geographical background
     fig, axis = weatherdata_generic.showcase_data(data, boundaries, fig, axis, nbMaps) # Plot the data
 
-    if len(years)!=0:
+    if len(times)!=0:
         for i in range(nbMaps):                                                                 # If years have been specified
-            axis[i].set_title(years[i])                                                         # Put the year as title for each subplot
+            axis[i].set_title(times[i])                                                         # Put the year as title for each subplot
 
     if title:
         fig.suptitle(title)                                                                     # If specified, set the figure title
@@ -41,12 +39,17 @@ def draw_map(data:xr.DataArray, **kwargs) :
 def map_of_max(data:classes.composite_dataset, **kwargs):
     ''' Create a map of the the maximum recorded tp values '''
 
+    months = kwargs.get('months', [])                                                           # Get the list of months ov which to compute the max
+    splitYears = kwargs.get('splitYears', False)                                                # Choose if you want to plot each years in the years list, can't be use with months
     years = kwargs.get('years', [])                                                             # Get the list of years on which to compute the max
     timeSpan = kwargs.get('timeSpan', None)                                                     # And the number of years each sample last
     title = kwargs.get('title', None)                                                           # Title of the map (plt variable)
     coordsRange = kwargs.get('mapSize', "largeNo")                                              # The boundaries of the map in terms of geographic coordinates (default is all center and south of Norway)
     figSize = kwargs.get('figSize', "medium")                                                   # Size of the plt figure 
-    directory = kwargs.get('dir', None)                                                         # Directory to store the map, is None the map is just shown 
+    directory = kwargs.get('dir', None)                                                         # Directory to store the map, is None the map is just shown
+    splitPlot = kwargs.get('splitPlot', False) 
+
+    assert len(months)==0 or not splitYears, " Can't plot annual and monthly at the same time "
 
     resolution = data.resolution                                                                # Get the dataset's resolution
     
@@ -55,43 +58,96 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
         nbMaps = len(max_simulated['time'].values)                                              # And set the number of subplot and grid dimensions to fit the data
         nbRows, nbColumns = weatherdata_generic.mosaic_split(nbMaps)
     else: """                                                                                       # If no compute the data
-    if len(years)!=0:                                                                           # First case is if a set of years has been specified
+    if splitYears:                                                                           # First case is if a set of years has been specified
         dataarrays = []                                                                             # Create a list to store the DataArrays before concatenation
         for y in years: 
             if timeSpan:                                                                            # If a timeSpan is specified
                 yearsSample = [str(i) for i in range(int(y), int(y)+timeSpan)]                      # Create the list of years on which compute the max
-                data_max = data.compute_time_max(timeSelec=yearsSample)                             # And create the max DataArray
+                data_max = data.compute_time_max(timeRange=yearsSample)                             # And create the max DataArray
             else:   
-                data_max = data.compute_time_max(timeSelec=[y])                                     # If not just create the max DataArray for the specified year
-            data_max = data_max.expand_dims({"time":[np.datetime64(y+'-01-01')]})                   # Create a time dimension with label the specified year's first day to use as alignment when concatenating
+                data_max = data.compute_time_max(timeRange=[y])                                     # If not just create the max DataArray for the specified year
+            data_max = data_max.expand_dims({"time":[y]})                   # Create a time dimension with label the specified year's first day to use as alignment when concatenating
                                                                                                     # the time is set as the year's first day to fit the data.compute coordinates when storing
             dataarrays.append(data_max.transpose("time", "latitude", "longitude"))  
             data_max.close()    
         max_simulated = xr.concat(dataarrays, dim="time")
-        del dataarrays   
-    else:                                                                                       # Second case is when no set of years is specified, ie we compute the max over all time
-        max_simulated = data.compute_time_max()
+        del dataarrays  
+    elif len(months)!=0:                                                                        # Second case is when a set of months is specified
+        dataarrays = []
+        for m in months:
+            if type(m) is list:
+                data_max = data.compute_time_max(years, monthSelec=m)
+            else:
+                data_max = data.compute_time_max(years, monthSelec=[m])
+            data_max = data_max.expand_dims({"time":[str(m)]})
+            dataarrays.append(data_max.transpose("time","latitude","longitude"))
+            data_max.close()
+        max_simulated = xr.concat(dataarrays, "time")
+        del dataarrays
+    else:                                                                                       # Third case is when no set of years is specified, ie we compute the max over all time
+        max_simulated = data.compute_time_max(years)
 
-    fig, axis = draw_map(
-        max_simulated, 
-        title=title, 
-        years=years, 
-        mapSize=coordsRange, 
-        figSize=figSize
-    )
 
-    if directory:                                                                               # If a directory is specified, we want to save the map in it, hence we create the map's file name
-        timeReference, resReference = '_all-time', '_all-resolution'                            # Initiate a time and resolution reference to insert in the name
-        if len(years)!=0:
-            timeReference = '_' + years[0] + '-' + years[-1]                                    # If needed change the time reference as the years selected
-        if resolution:
-            resReference = '_' + resolution + 'x' + resolution                                  # If needed specify the resolution
+    if not splitPlot:
+        fig, _ = draw_map(
+            max_simulated, 
+            title=title, 
+            times=max_simulated['time'], 
+            mapSize=coordsRange, 
+            figSize=figSize
+        )
 
-        fig.savefig(directory+'tp24-max' + resReference + timeReference + '.png')               # Save the map(s)
+        if directory:                                                                           # If a directory is specified, we want to save the map in it, hence we create the map's file name
+            timeReference, resReference = '', '_all-resolution'                                 # Initiate a time and resolution reference to insert in the name
+            timeRangeReference = '_all-time'
+            if not splitYears and len(months)!=0 and len(years)!=0:
+                timeRangeReference = '_range-' + years[0] + '-' + years[-1]
+                beginMonth = weatherdata_generic.alphaMonths[months[0]]
+                endMonth = weatherdata_generic.alphaMonths[months[-1]]
+                timeReference = '_' + beginMonth + '-' + endMonth
+            elif not splitYears and len(years)!=0:
+                timeRangeReference = '_range' + years[0] + '-' + years[-1]                      # If needed change the time reference as the years selected
+            elif splitYears and len(years)!=0:
+                timeRangeReference = ''
+                timeReference = '_' + years[0] + '-' + years[-1]
+            elif len(months)!=0:
+                beginMonth = weatherdata_generic.alphaMonths[months[0]]
+                endMonth = weatherdata_generic.alphaMonths[months[-1]]
+                timeRangeReference = '_' + beginMonth + '-' + endMonth
+            if resolution:
+                resReference = '_' + resolution + 'x' + resolution                              # If needed specify the resolution
+
+            fig.savefig(directory+'tp24-max' + resReference + timeReference + timeRangeReference + '.png')
     
-    else:
-        geo.plt.show()                                                                          # If no directory was given, just show the map
+        else:
+            geo.plt.show()                                                                      # If no directory was given, just show the map
 
-    geo.plt.close()
+        geo.plt.close()
+    
+    else:                                                                                       # Repeat the previous step for all times                                             
+        for time in max_simulated['time'].values:
+            alphaTime = time
+            if type(time) is int:
+                alphaTime = weatherdata_generic.alphaMonths[time]
+            fig, _ = draw_map(
+                max_simulated.sel(time=time),
+                title=title+' : '+alphaTime,
+                mapSize=coordsRange,
+                figSize=figSize
+            )
 
+            if directory:
+                timeReference, resReference, timeRangeReference = '', '_all-resolution', '_all-time'
+                if not splitYears and len(years)!=0: 
+                    timeRangeReference = '_range-' + years[0] + '-' + years[-1]
+                if splitYears or len(months)!=0:
+                    timeReference = '_' + alphaTime
+                if resolution:
+                    resReference = '_' + resolution + 'x' + resolution
+
+                fig.savefig(directory+'tp24-max' + resReference + timeReference + timeRangeReference + '.png')
+        
+            else:
+                geo.plt.show()
+    
     return max_simulated

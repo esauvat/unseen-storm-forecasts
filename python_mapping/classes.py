@@ -118,16 +118,21 @@ class composite_dataset :
         return da
 
 
-    def compute_time_max(self, **kwargs:str) -> xr.DataArray :
+    def compute_time_max(self, timeRange, **kwargs:str) -> xr.DataArray :
         ''' Compute the maximum in every files of the dataset and create a max dataset '''
 
-        timeSelec = kwargs.get('timeSelec', None)                                                   # Check if a specific time range is asked
+        yearSelec = kwargs.get('yearSelec', None)                                                   # Check if a specific years list is asked
+        monthSelec = kwargs.get('monthSelec', None)                                                 # Check if a specific years list is asked
 
         max_datasets = []                                                                           # Initiate a list to store the max_datasets before concatenation
         for key in self.fileList:
             data = self.open_data(key)                                                              # Open each data file
-            if timeSelec:
-                data = data.sel(time=slice(timeSelec[0],timeSelec[-1]))                             # If needed, select the requested time range
+            if timeRange:
+                data = data.sel(time=timeRange)                                                     # Select the time range
+            if yearSelec:
+                data = data.sel(time=(data['time.year'] in yearSelec))                              # If needed, select the requested time list
+            if monthSelec:                                                                          # Same for months
+                data = data.sel(time=(data['time.month'] in monthSelec))
             if data['time'].shape!= (0,):                                                           # Check if the previous selection is not empty
                 max_datasets.append(data.max(dim='time').expand_dims({'ref':[key]}))                        # If not, compute the maximum and add it the tho max_datasets list
             data.close()                                                                            # Close each data file after computation to free the memory
