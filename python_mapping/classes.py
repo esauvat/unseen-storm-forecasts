@@ -130,9 +130,12 @@ class composite_dataset :
             if timeRange:
                 data = data.sel(time=timeRange)                                                     # Select the time range
             if yearSelec:
-                data = data.sel(time=(data['time.year'] in yearSelec))                              # If needed, select the requested time list
+                data = data.sel(time=slice(yearSelec[0],yearSelec[-1]))                              # If needed, select the requested time list
             if monthSelec:                                                                          # Same for months
-                data = data.sel(time=(data['time.month'] in monthSelec))
+                def choose_month(m:int):
+                    first, last = monthSelec[0], monthSelec[-1]
+                    return (m>=first) & (m<=last)
+                data = data.sel(time=choose_month(data['time.month']))
             if data['time'].shape!= (0,):                                                           # Check if the previous selection is not empty
                 max_datasets.append(data.max(dim='time').expand_dims({'ref':[key]}))                        # If not, compute the maximum and add it the tho max_datasets list
             data.close()                                                                            # Close each data file after computation to free the memory

@@ -129,7 +129,7 @@ def all_res_monthly():
                 fig, _ = wd.draw_map(data.sel[month], title=title+' : '+alphaMonth)
                 fig.savefig(endDir+'tp24_all-res_'+alphaMonth)
     else:
-        res = wd.map_of_max(data=tpSet, title=title, months=months, dir=endDir)
+        res = wd.map_of_max(data=tpSet, title=title, months=months, splitPlot=True, dir=endDir)
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)

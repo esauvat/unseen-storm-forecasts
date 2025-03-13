@@ -79,7 +79,7 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
                 data_max = data.compute_time_max(years, monthSelec=m)
             else:
                 data_max = data.compute_time_max(years, monthSelec=[m])
-            data_max = data_max.expand_dims({"time":[str(m)]})
+            data_max = data_max.expand_dims({"time":[m]})
             dataarrays.append(data_max.transpose("time","latitude","longitude"))
             data_max.close()
         max_simulated = xr.concat(dataarrays, "time")
@@ -89,10 +89,14 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
 
 
     if not splitPlot:
+        if not splitYears:
+            times = months
+        else:
+            times = years
         fig, _ = draw_map(
             max_simulated, 
             title=title, 
-            times=max_simulated['time'], 
+            times=times, 
             mapSize=coordsRange, 
             figSize=figSize
         )
@@ -126,15 +130,26 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
     
     else:                                                                                       # Repeat the previous step for all times                                             
         for time in max_simulated['time'].values:
-            alphaTime = time
-            if type(time) is int:
+            if not type(time) is str:
                 alphaTime = weatherdata_generic.alphaMonths[time]
-            fig, _ = draw_map(
-                max_simulated.sel(time=time),
-                title=title+' : '+alphaTime,
-                mapSize=coordsRange,
-                figSize=figSize
-            )
+                data = max_simulated.sel(time=time)
+                data = data.drop_vars("time").expand_dims({"time":[0]})
+                fig, _ = draw_map(
+                    data,
+                    title=title+' : '+alphaTime,
+                    mapSize=coordsRange,
+                    figSize=figSize
+                )
+            else:
+                alphaTime=time
+                data = max_simulated.sel(time=time)
+                data = data.drop_vars("time").expand_dims({"time":[0]})
+                fig, _ = draw_map(
+                    data,
+                    title=title+' : '+alphaTime,
+                    mapSize=coordsRange,
+                    figSize=figSize
+                )
 
             if directory:
                 timeReference, resReference, timeRangeReference = '', '_all-resolution', '_all-time'
