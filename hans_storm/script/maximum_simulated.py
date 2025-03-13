@@ -120,6 +120,7 @@ def all_res_monthly():
     name = 'continuous_max_all-res_monthly'
     title = "Monthly maximum recorded precipitations"
     months = [i for i in range(1,13)]
+    endDir += 'monthly/'
 
     if name in tpSet.compute.keys():
         with open(tpSet.compute[name], 'rb') as inp:

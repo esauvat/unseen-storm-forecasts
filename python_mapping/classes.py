@@ -142,8 +142,4 @@ class composite_dataset :
 
         max_array = xr.concat(max_datasets, dim='ref')                                              # Concatenate the max_arrays 
         del max_datasets
-        res = max_array.max(dim='ref', skipna=True)                                                 # to compute the max over all the dataset
-        print(str(res.coords.values))
-        print(str(res.dims))
-        print(str(res.size * 32))
-        return res
+        return max_array.max(dim='ref', skipna=True)                                                # to return the max over all the dataset
