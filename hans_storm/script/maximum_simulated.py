@@ -117,7 +117,7 @@ def all_res_decadal():
 def all_res_monthly():
     """ Map with full resolution and monthly maximum """
 
-    name = 'continuous_max_all-res_monthly '
+    name = 'continuous_max_all-res_monthly'
     title = "Monthly maximum recorded precipitations"
     months = [i for i in range(1,13)]
 

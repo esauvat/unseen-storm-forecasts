@@ -71,15 +71,15 @@ typeDict = {
 
 for opt, arg in opts:
     if opt in ['-f', '--file']:
-        pathListToData = arg
+        pathListToData = arg.split(',')
     elif opt in ['-r', '--resolution']:
         resolution = arg
     elif opt in ['-t', '--title']:
         title = arg
     elif opt in ['-b', '--day-begin'] :
-        dayBegin = int(arg)
+        dayBegin = arg
     elif opt in ['-e', '--day-end'] :
-        dayEnd = int(arg)
+        dayEnd = arg
     elif opt in ['-l', '--day-list'] :
         dayList = arg.split()
     elif opt in ['-y', '--years'] :
@@ -106,7 +106,9 @@ for opt, arg in opts:
 assert (pathListToData!=[]), ("Missing file argument")
 
 if type in ["daily","time_avg","time_sum"]:
-    assert ((dayBegin==None) == (dayEnd==None)), ("Missing begin or end day value")
+    assert dayBegin, ("Missing begin or end day value")
+    if not dayEnd:
+        dayEnd=dayBegin
     assert (((dayList==None) != (dayBegin==None)) & ((dayList==None) != (dayEnd==None))), ("Use either a day list or a begin-end day couple")
 
 if type in ["time_avg","time_sum"]:
@@ -150,25 +152,17 @@ def draw(pathToFile:str) :
 
     global totalPrecipitation
 
-    ncData = wd.Dataset(pathToFile, 'r')
-
-    startingDate = 0
-
-    if 'hindcast' in pathToFile:
-        fileDate = pathToFile[-8:-3].split('-')
-        hindcastDate = int(
-            hindcastYear + fileDate[0] + fileDate[1]
-        )
-        startingDate = wd.getDayNumber(pathToFile[-13:-3])
-    else:
-        hindcastDate = None
-
-    totalPrecipitation = wd.dataset_to_xr(ncData, hindcastDate)
+    totalPrecipitation = wd.xr.open_dataarray(pathToFile)
 
     get_data()
 
-    firstDay, lastDay = days[0]-startingDate, days[-1]-startingDate
-    firstData, lastData = ncData['time'][0], ncData['time'][-1]
+    if dayBegin: 
+        days = wd.np.arange(wd.np.datetime64(dayBegin), wd.np.datetime64(dayEnd)+wd.np.timedelta64(1,'D'))
+    else:
+        days = wd.np.array([wd.np.datetime64(day) for day in dayList])
+
+    firstDay, lastDay = days[0], days[-1]
+    firstData, lastData = totalPrecipitation['time'][0], totalPrecipitation['time'][-1]
     if lastDay<firstData or firstDay>lastData :
         return
     else :
@@ -187,14 +181,14 @@ def draw(pathToFile:str) :
     nbMap = len(effectDays)
     nbRow, nbColumn = wd.mosaic_split(len(effectDays))
 
-    boundaries, cLat, cLon = wd.boundaries(data=ncData, size=coordsRange)
+    boundaries, cLat, cLon = wd.boundaries(data=totalPrecipitation, size=coordsRange)
     projection = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
     fig, axis = geo.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
     fig, axis = wd.showcase_data(totalPrecipitation, boundaries, fig, axis, nbMap, timesIndex=effectDays)
     for i in range(nbMap):
-        axis[i].set_title(wd.nbToDate(effectDays[i]+startingDate, year))                            #### TODO : need to be updated to conform to the multi years selection possibility
+        axis[i].set_title(wd.np.datetime_as_string(effectDays[i]))
     if title:
         if type=='daily':
             fig.suptitle(title)
@@ -203,18 +197,24 @@ def draw(pathToFile:str) :
 
     pathScatter = pathToFile.split('/')
     dataType = 'test'
-    if 'continuous-format' in pathScatter:
+    if 'continuous' in pathScatter or 'continuous-format' in pathScatter:
         dataType = 'continuous'
     elif 'forecast' in pathScatter:
         dataType = 'forecast'
     elif 'hindcast' in pathScatter:
         dataType = 'hindcast_'+ hindcastYear
-    fileName = pathScatter[-1][4:-3]
+    if resolution:
+        resRef = '_' + resolution + 'x' + resolution
+    else:
+        resRef = '_all-res'
     typeName = "_" + type
     if timeSpan:
         typeName += "_" + str(timeSpan)
+    date = '_' + str(firstDay)
+    if lastDay != firstDay:
+        date += '-' + str(lastDay)
 
-    fig.savefig(dir + dataType + fileName + typeName + ".png")
+    fig.savefig(dir + dataType + resRef + date + typeName + ".png")
 
     geo.plt.close()
     
