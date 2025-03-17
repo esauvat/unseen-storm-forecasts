@@ -46,8 +46,9 @@ endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/ha
 
 for dailyData in hansData:
     res = dailyData / data
-    title = "Total precipitations relative to August's max : "+wd.np.datetime_as_string(res['time'].values[0])
-    fileName = "tp24_relative-max-august_all-res_"+wd.np.datetime_as_string(res['time'].values[0])
+    date = wd.np.datetime_as_string(dailyData['time'].values)[:10]
+    title = "Total precipitations relative to August's max : " + date
+    fileName = "tp24_relative-max-august_all-res_" + date
     fig, axis = wd.draw_map(res, title=title)
     fig.savefig(endDir+fileName+'.png')
     wd.geo.plt.close()
