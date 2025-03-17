@@ -118,19 +118,20 @@ class composite_dataset :
         return da
 
 
-    def compute_time_max(self, timeRange, **kwargs:str) -> xr.DataArray :
+    def compute_time_max(self, **kwargs:str) -> xr.DataArray :
         ''' Compute the maximum in every files of the dataset and create a max dataset '''
 
         yearSelec = kwargs.get('yearSelec', None)                                                   # Check if a specific years list is asked
-        monthSelec = kwargs.get('monthSelec', None)                                                 # Check if a specific years list is asked
+        monthSelec = kwargs.get('monthSelec', None)                                                 # Check if a specific months list is asked
+        meanSpan = kwargs.get('meanSpan', None)                                                     # Check if a mean length is asked
 
         max_datasets = []                                                                           # Initiate a list to store the max_datasets before concatenation
         for key in self.fileList:
             data = self.open_data(key)                                                              # Open each data file
-            if timeRange:
-                data = data.sel(time=timeRange)                                                     # Select the time range
-            if yearSelec:
-                data = data.sel(time=slice(yearSelec[0],yearSelec[-1]))                              # If needed, select the requested time list
+            if meanSpan:
+                data = mean_over_time(data, meanSpan)                                               # Turn the data into means, did at this time to avoid most edge effects, but takes more time. 
+            if yearSelec:                                                                               # Care for edge effects at early Januar and end of December.
+                data = data.sel(time=slice(yearSelec[0],yearSelec[-1]))                             # If needed, select the requested time list
             if monthSelec:                                                                          # Same for months
                 def choose_month(m:int):
                     first, last = monthSelec[0], monthSelec[-1]
