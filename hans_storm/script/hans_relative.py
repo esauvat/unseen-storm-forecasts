@@ -8,14 +8,16 @@ sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapp
 import weatherdata as wd
 import pickle
 
-path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+
 endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/hans_era5/'
 
 
-with open(path, 'rb') as inp:
-    tpSet = pickle.load(inp)
-
 def relative_august():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+
     name = 'continuous_max_all-res_monthly'
 
     if name in tpSet.compute.keys():
@@ -100,6 +102,11 @@ def relative_august():
 
 
 def relative_all_year():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+     
     name = 'continuous_max_all-res_all-time'
 
     if name in tpSet.compute.keys():
@@ -185,6 +192,11 @@ def relative_all_year():
 
 
 def relative_mean2():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+     
     name = 'continuous_max-mean2_0.25_all-time'
     assert name in  tpSet.compute.keys()
     with open(tpSet.compute[name], 'rb') as inp:
@@ -213,6 +225,11 @@ def relative_mean2():
 
 
 def relative_mean3():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+     
     name = 'continuous_max-mean3_0.25_all-time'
     assert name in  tpSet.compute.keys()
     with open(tpSet.compute[name], 'rb') as inp:
@@ -241,6 +258,11 @@ def relative_mean3():
 
 
 def relative_mean2_monthly():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+     
     name = 'continuous_max-mean2_0.25_monthly'
     assert name in  tpSet.compute.keys()
     with open(tpSet.compute[name], 'rb') as inp:
@@ -258,7 +280,6 @@ def relative_mean2_monthly():
         2).sel(time=wd.np.datetime64('2023-08-08'))
 
     res = hansMean / data
-    res = res.drop_vars("time")
     title = "Hans mean precipitations relative to August's mean maximum"
     fileName = "tp24_relative-mean-max-august_0.25_hans-07-08"
     fig, axis = wd.draw_map(res, title=title, extent=(0,1))
@@ -269,6 +290,11 @@ def relative_mean2_monthly():
 
 
 def relative_mean3_monthly():
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+
+    with open(path, 'rb') as inp:
+        tpSet = pickle.load(inp)
+     
     name = 'continuous_max-mean3_0.25_monthly'
     assert name in  tpSet.compute.keys()
     with open(tpSet.compute[name], 'rb') as inp:
@@ -286,7 +312,6 @@ def relative_mean3_monthly():
         3).sel(time=wd.np.datetime64('2023-08-08'))
 
     res = hansMean / data
-    res = res.drop_vars("time")
     title = "Hans mean precipitations relative to August's mean maximum"
     fileName = "tp24_relative-mean-max-august_0.25_hans-07-09"
     fig, axis = wd.draw_map(res, title=title, extent=(0,1))
