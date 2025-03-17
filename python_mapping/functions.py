@@ -66,7 +66,7 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
                 data_max = data.compute_time_max(timeRange=yearsSample)                             # And create the max DataArray
             else:   
                 data_max = data.compute_time_max(timeRange=[y])                                     # If not just create the max DataArray for the specified year
-            data_max = data_max.expand_dims({"time":[y]})                   # Create a time dimension with label the specified year's first day to use as alignment when concatenating
+            data_max = data_max.expand_dims({"time":[y]})                                           # Create a time dimension with label the specified year's first day to use as alignment when concatenating
                                                                                                     # the time is set as the year's first day to fit the data.compute coordinates when storing
             dataarrays.append(data_max.transpose("time", "latitude", "longitude"))  
             data_max.close()    
