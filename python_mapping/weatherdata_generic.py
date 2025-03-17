@@ -48,14 +48,19 @@ def showcase_data(data:xr.DataArray,
                   nbMap:int=1,
                   **kwargs:np.ndarray) -> tuple :
     
+    extent = kwargs.get('extent', None)
+
     if not 'time' in data.dims:
         data = data.expand_dims("time").transpose("time","latitude","longitude")            # If no time dimension, reshape the array to fit the data access later
         
     timesIndex = kwargs.get('timesIndex', data['time'])                                     # Setting the default value for the time selection to all the dataset
     assert((timesIndex.min()>=data['time'][0]) & (timesIndex.max()<=data['time'][-1]))      # Checking if the time selection does not get out of range for the dataset's dimension
-
-    effectSample = select_sample(data, boundaries, timesIndex)                              # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
-    vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)               # Computing the range of the colorbar
+    
+    if extent:
+        vmin, vmax = extent
+    else:
+        effectSample = select_sample(data, boundaries, timesIndex)                          # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
+        vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)           # Computing the range of the colorbar
     
     _, Y, X = data.dims
     for i in range(nbMap):

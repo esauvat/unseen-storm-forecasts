@@ -15,6 +15,7 @@ def draw_map(data:xr.DataArray, **kwargs) :
     times = kwargs.get('times', []) 
     coordsRange = kwargs.get('mapSize', "largeNo")                                              # The boundaries of the map in terms of geographic coordinates (default is all center and south of Norway)
     figSize = kwargs.get('figSize', "medium")
+    extent = kwargs.get('extent', None)
 
     if 'time' in data.coords:
         nbMaps = len(data['time'].values)                                                       # Set the number of subplots and the grid dimension to fit the DataArrays
@@ -24,7 +25,7 @@ def draw_map(data:xr.DataArray, **kwargs) :
 
     boundaries = weatherdata_generic.boundaries(data, size=coordsRange)[0]                      # Compute the map's boundaries to fit the dataset
     fig, axis = geo.map(nbRows, nbColumns, nbMaps, figSize, boundaries)                         # Create the map with proper size and geographical background
-    fig, axis = weatherdata_generic.showcase_data(data, boundaries, fig, axis, nbMaps) # Plot the data
+    fig, axis = weatherdata_generic.showcase_data(data, boundaries, fig, axis, nbMaps, extent=extent) # Plot the data
 
     if len(times)!=0:
         for i in range(nbMaps):                                                                 # If years have been specified

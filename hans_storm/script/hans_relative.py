@@ -38,7 +38,8 @@ else:
 
 tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
 
-hansData = [tp2023.sel(time=wd.np.datetime64('2023-08-07')),
+hansData = [tp2023.sel(time=wd.np.datetime64('2023-08-06')),
+            tp2023.sel(time=wd.np.datetime64('2023-08-07')),
             tp2023.sel(time=wd.np.datetime64('2023-08-08')),
             tp2023.sel(time=wd.np.datetime64('2023-08-09'))]
 
@@ -49,20 +50,20 @@ for dailyData in hansData:
     date = wd.np.datetime_as_string(dailyData['time'].values)[:10]
     title = "Total precipitations relative to August's max : " + date
     fileName = "tp24_relative-max-august_all-res_" + date
-    fig, axis = wd.draw_map(res, title=title)
+    fig, axis = wd.draw_map(res, title=title, extent=(0,1))
     fig.savefig(endDir+fileName+'.png')
     wd.geo.plt.close()
 
 hansMean = wd.mean_over_time(
     tp2023.sel(time=slice(
-        wd.np.datetime64('2023-08-07'),
+        wd.np.datetime64('2023-08-06'),
         wd.np.datetime64('2023-08-09')
     )), 
     3).sel(time=wd.np.datetime64('2023-08-08'))
 
 res = hansMean / data
 title = "Hans mean precipitations relative to August's max"
-fileName = "tp24_relative-max-august_all-res_hans"
-fig, axis = wd.draw_map(res, title=title)
+fileName = "tp24_relative-max-august_all-res_hans-06-09"
+fig, axis = wd.draw_map(res, title=title, extent=(0,1))
 fig.savefig(endDir+fileName+'.png')
 wd.geo.plt.close()
