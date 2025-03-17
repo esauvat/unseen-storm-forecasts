@@ -64,9 +64,9 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
         for y in years: 
             if timeSpan:                                                                            # If a timeSpan is specified
                 yearsSample = [str(i) for i in range(int(y), int(y)+timeSpan)]                      # Create the list of years on which compute the max
-                data_max = data.compute_time_max(timeRange=yearsSample)                             # And create the max DataArray
+                data_max = data.compute_time_max(yearSelec=yearsSample)                             # And create the max DataArray
             else:   
-                data_max = data.compute_time_max(timeRange=[y])                                     # If not just create the max DataArray for the specified year
+                data_max = data.compute_time_max(yearSelec=[y])                                     # If not just create the max DataArray for the specified year
             data_max = data_max.expand_dims({"time":[y]})                                           # Create a time dimension with label the specified year's first day to use as alignment when concatenating
                                                                                                     # the time is set as the year's first day to fit the data.compute coordinates when storing
             dataarrays.append(data_max.transpose("time", "latitude", "longitude"))  
@@ -77,16 +77,16 @@ def map_of_max(data:classes.composite_dataset, **kwargs):
         dataarrays = []
         for m in months:
             if type(m) is list:
-                data_max = data.compute_time_max(years, monthSelec=m)
+                data_max = data.compute_time_max(yearSelec=years, monthSelec=m)
             else:
-                data_max = data.compute_time_max(years, monthSelec=[m])
+                data_max = data.compute_time_max(yearSelec=years, monthSelec=[m])
             data_max = data_max.expand_dims({"time":[m]})
             dataarrays.append(data_max.transpose("time","latitude","longitude"))
             data_max.close()
         max_simulated = xr.concat(dataarrays, "time")
         del dataarrays
     else:                                                                                       # Third case is when no set of years is specified, ie we compute the max over all time
-        max_simulated = data.compute_time_max(years)
+        max_simulated = data.compute_time_max()
 
 
     if not splitPlot:

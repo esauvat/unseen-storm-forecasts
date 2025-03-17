@@ -9,6 +9,7 @@ import weatherdata as wd
 import pickle
 
 path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/hans_era5/'
 
 
 with open(path, 'rb') as inp:
@@ -41,8 +42,6 @@ def relative_august():
                 tp2023.sel(time=wd.np.datetime64('2023-08-07')),
                 tp2023.sel(time=wd.np.datetime64('2023-08-08')),
                 tp2023.sel(time=wd.np.datetime64('2023-08-09'))]
-
-    endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/hans_era5/'
 
     for dailyData in hansData:
         res = dailyData / data
@@ -125,8 +124,6 @@ def relative_all_year():
                 tp2023.sel(time=wd.np.datetime64('2023-08-08')),
                 tp2023.sel(time=wd.np.datetime64('2023-08-09'))]
 
-    endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/hans_era5/'
-
     for dailyData in hansData:
         res = dailyData / data
         res = res.drop_vars("time")
@@ -183,6 +180,118 @@ def relative_all_year():
     fig, axis = wd.draw_map(res, title=title, extent=(0,1))
     fig.savefig(endDir+fileName+'.png')
     del hansMean4
+    wd.geo.plt.close()
+
+
+
+def relative_mean2():
+    name = 'continuous_max-mean2_0.25_all-time'
+    assert name in  tpSet.compute.keys()
+    with open(tpSet.compute[name], 'rb') as inp:
+        data = pickle.load(inp)
+
+    resolution = '0.25x0.25'
+
+    tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
+
+    hansMean = wd.mean_over_time(
+        tp2023.sel(time=slice(
+            wd.np.datetime64('2023-08-07'),
+            wd.np.datetime64('2023-08-08')
+        )), 
+        2).sel(time=wd.np.datetime64('2023-08-08'))
+
+    res = hansMean / data
+    res = res.drop_vars("time")
+    title = "Hans mean precipitations relative to yearly mean maximum"
+    fileName = "tp24_relative-mean-max-year_0.25_hans-07-08"
+    fig, axis = wd.draw_map(res, title=title, extent=(0,1))
+    fig.savefig(endDir+fileName+'.png')
+    del hansMean
+    wd.geo.plt.close()
+
+
+
+def relative_mean3():
+    name = 'continuous_max-mean3_0.25_all-time'
+    assert name in  tpSet.compute.keys()
+    with open(tpSet.compute[name], 'rb') as inp:
+        data = pickle.load(inp)
+
+    resolution = '0.25x0.25'
+
+    tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
+
+    hansMean = wd.mean_over_time(
+        tp2023.sel(time=slice(
+            wd.np.datetime64('2023-08-07'),
+            wd.np.datetime64('2023-08-09')
+        )), 
+        3).sel(time=wd.np.datetime64('2023-08-08'))
+
+    res = hansMean / data
+    res = res.drop_vars("time")
+    title = "Hans mean precipitations relative to yearly mean maximum"
+    fileName = "tp24_relative-mean-max-year_0.25_hans-07-09"
+    fig, axis = wd.draw_map(res, title=title, extent=(0,1))
+    fig.savefig(endDir+fileName+'.png')
+    del hansMean
+    wd.geo.plt.close()
+
+
+
+def relative_mean2_monthly():
+    name = 'continuous_max-mean2_0.25_monthly'
+    assert name in  tpSet.compute.keys()
+    with open(tpSet.compute[name], 'rb') as inp:
+        data = pickle.load(inp).sel(time=8)
+
+    resolution = '0.25x0.25'
+
+    tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
+
+    hansMean = wd.mean_over_time(
+        tp2023.sel(time=slice(
+            wd.np.datetime64('2023-08-07'),
+            wd.np.datetime64('2023-08-08')
+        )), 
+        2).sel(time=wd.np.datetime64('2023-08-08'))
+
+    res = hansMean / data
+    res = res.drop_vars("time")
+    title = "Hans mean precipitations relative to August's mean maximum"
+    fileName = "tp24_relative-mean-max-august_0.25_hans-07-08"
+    fig, axis = wd.draw_map(res, title=title, extent=(0,1))
+    fig.savefig(endDir+fileName+'.png')
+    del hansMean
+    wd.geo.plt.close()
+
+
+
+def relative_mean3_monthly():
+    name = 'continuous_max-mean3_0.25_monthly'
+    assert name in  tpSet.compute.keys()
+    with open(tpSet.compute[name], 'rb') as inp:
+        data = pickle.load(inp).sel(time=8)
+
+    resolution = '0.25x0.25'
+
+    tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
+
+    hansMean = wd.mean_over_time(
+        tp2023.sel(time=slice(
+            wd.np.datetime64('2023-08-07'),
+            wd.np.datetime64('2023-08-09')
+        )), 
+        3).sel(time=wd.np.datetime64('2023-08-08'))
+
+    res = hansMean / data
+    res = res.drop_vars("time")
+    title = "Hans mean precipitations relative to August's mean maximum"
+    fileName = "tp24_relative-mean-max-august_0.25_hans-07-09"
+    fig, axis = wd.draw_map(res, title=title, extent=(0,1))
+    fig.savefig(endDir+fileName+'.png')
+    del hansMean
     wd.geo.plt.close()
 
 
