@@ -8,11 +8,11 @@ sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapp
 import weatherdata as wd
 import pickle
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl', 'rb') as inp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_all-res.pkl', 'rb') as inp:
     tpSet = pickle.load(inp)
 
 
-endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/max/'
+endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/maps/max/'
 
 
 def all_res_all_time():
@@ -28,7 +28,7 @@ def all_res_all_time():
             fig.savefig(endDir+'tp24_all-res_all-time.png')
     else:
         res = wd.map_of_max(data=tpSet, title=title, dir=endDir, splitYears=True)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -50,7 +50,7 @@ def all_res_annual():
             fig.savefig(endDir+'tp24_all-res_2019-2024.png')
     else:
         res = wd.map_of_max(data=tpSet, title=title, years=years, splitYears=True, dir=endDir)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -68,7 +68,7 @@ def all_res_annual():
             fig.savefig(endDir+'tp24_all-res_2013-2018.png')
     else:
         res = wd.map_of_max(data=tpSet, title=title, years=years, splitYears=True, dir=endDir)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -86,7 +86,7 @@ def all_res_annual():
             fig.savefig(endDir+'tp24_all-res_2007-2012.png')
     else:
         res = wd.map_of_max(data=tpSet, title=title, years=years, splitYears=True, dir=endDir)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -109,7 +109,7 @@ def all_res_decadal():
     else:
         timeSpan = 10
         res = wd.map_of_max(data=tpSet, title=title, years=years, splitYears=True, timeSpan=timeSpan, sizeMap=sizeMap, dir=endDir)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -131,7 +131,7 @@ def all_res_monthly():
                 fig.savefig(endDir+'tp24_all-res_'+alphaMonth)
     else:
         res = wd.map_of_max(data=tpSet, title=title, months=months, splitPlot=True, dir=endDir)
-        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/' + name + '.pkl'
+        path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.pkl'
         with open(path, 'wb') as outp:
             pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = path
@@ -141,5 +141,5 @@ if __name__=='__main__':
     func_name = sys.argv[1]
     globals()[func_name]()
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl', 'wb') as outp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_all-res.pkl', 'wb') as outp:
     pickle.dump(tpSet, outp, pickle.HIGHEST_PROTOCOL)

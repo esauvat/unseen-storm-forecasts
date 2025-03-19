@@ -10,7 +10,7 @@ import numpy as np
 
 import pickle
 
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg_0.25_daily.pkl', 'rb') as inp:
+with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg_0.25_daily.pkl', 'rb') as inp:
     data = pickle.load(inp)
 
 alphaMonths = [
@@ -63,11 +63,11 @@ sort_monthly_max(data, dailyValues)
 sort_monthly_max(mean2, mean2Values)
 sort_monthly_max(mean3, mean3Values)
 
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-daily_0.25_monthly-max.pkl', 'wb') as outp:
+with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-daily_0.25_monthly-max.pkl', 'wb') as outp:
     pickle.dump(dailyValues, outp, pickle.HIGHEST_PROTOCOL)
 
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-mean2_0.25_monthly-max.pkl', 'wb') as outp:
+with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean2_0.25_monthly-max.pkl', 'wb') as outp:
     pickle.dump(mean2Values, outp, pickle.HIGHEST_PROTOCOL)
 
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-mean3_0.25_monthly-max.pkl', 'wb') as outp:
+with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean3_0.25_monthly-max.pkl', 'wb') as outp:
     pickle.dump(mean3Values, outp, pickle.HIGHEST_PROTOCOL)

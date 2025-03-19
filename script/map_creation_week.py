@@ -4,7 +4,7 @@
 
 import sys
 
-sys.path.append('/home/esauvat/Documents/NORCE - Extrem weather forecasting/unseen-storm-forecasts/python_mapping')
+sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')
 sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping')
 
 import weatherdata as wd
@@ -36,7 +36,7 @@ for ax in axis :
 fig.suptitle('Daily total precipitation')
 
 """ mp.plt.show() """
-fig.savefig('unseen-storm-forecasts/hans_storm/maps/1d_tp/1d_tp_week')
+fig.savefig('unseen-storm-forecasts/maps/1d_tp/1d_tp_week')
 
 
 ###   3 days precipitations   ###
@@ -56,7 +56,7 @@ for ax in axis :
 fig.suptitle('3 days total precipitation')
 
 """ mp.plt.show() """
-fig.savefig('unseen-storm-forecasts/hans_storm/maps/3d_tp/3d_tp_week')
+fig.savefig('unseen-storm-forecasts/maps/3d_tp/3d_tp_week')
 
 # Average Precipitations
 
@@ -70,4 +70,4 @@ for ax in axis :
 fig.suptitle('3 days average precipitation')
 
 """ mp.plt.show() """
-fig.savefig('unseen-storm-forecasts/hans_storm/maps/3d_tp/3d_avgp_week')
+fig.savefig('unseen-storm-forecasts/maps/3d_tp/3d_avgp_week')

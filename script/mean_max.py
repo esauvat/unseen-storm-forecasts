@@ -8,8 +8,8 @@ sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapp
 import weatherdata as wd
 import pickle
 
-path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
-dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/'
+path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
+dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
 
 with open(path, 'rb') as inp:
     tpSet = pickle.load(inp)

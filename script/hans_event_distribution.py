@@ -13,7 +13,7 @@ import numpy as np
 
 import pickle
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl', 'rb') as inp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl', 'rb') as inp:
     tpSet = pickle.load(inp)
 
 
@@ -81,14 +81,14 @@ for date in np.arange(np.datetime64('1941-01-02'), np.datetime64('2024-12-31'), 
     mean3Values[month].append((mean3, np.datetime_as_string(date)))
 
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg_0.25_daily.pkl', 'wb') as outp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg_0.25_daily.pkl', 'wb') as outp:
     pickle.dump(data, outp, pickle.HIGHEST_PROTOCOL)
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-daily_0.25_monthly.pkl', 'wb') as outp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-daily_0.25_monthly.pkl', 'wb') as outp:
     pickle.dump(dailyValues, outp, pickle.HIGHEST_PROTOCOL)
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-mean2_0.25_monthly.pkl', 'wb') as outp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean2_0.25_monthly.pkl', 'wb') as outp:
     pickle.dump(mean2Values, outp, pickle.HIGHEST_PROTOCOL)
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_hans-area-avg-mean3_0.25_monthly.pkl', 'wb') as outp:
+with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean3_0.25_monthly.pkl', 'wb') as outp:
     pickle.dump(mean3Values, outp, pickle.HIGHEST_PROTOCOL)

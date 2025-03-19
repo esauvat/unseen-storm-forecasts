@@ -71,7 +71,7 @@ def mapping_1d(pathToFile : str, day : int) -> None :
         # 1 day
     tpPlot1d = ax.contourf(tp['longitude'], tp['latitude'], tp.isel(time=1), transform=ccrs.PlateCarree())
     plt.colorbar(tpPlot1d)
-    plt.savefig('unseen-storm-forecasts/hans_storm/maps/1d_tp/1d_tp_'+nbToDate(day))
+    plt.savefig('unseen-storm-forecasts/maps/1d_tp/1d_tp_'+nbToDate(day))
 
 
 def mapping_avg_3d(pathToFile : str, day : int) -> None :
@@ -98,7 +98,7 @@ def mapping_avg_3d(pathToFile : str, day : int) -> None :
         # Averaged 3 days
     tpPlot3d = ax.contourf(tp['longitude'], tp['latitude'], tp.mean(dim="time"), transform=ccrs.PlateCarree())
     plt.colorbar(tpPlot3d)
-    plt.savefig('unseen-storm-forecasts/hans_storm/maps/3d_tp/3d_avgp_'+nbToDate(day))
+    plt.savefig('unseen-storm-forecasts/maps/3d_tp/3d_avgp_'+nbToDate(day))
 
 
 
@@ -107,9 +107,9 @@ def mapping_avg_3d(pathToFile : str, day : int) -> None :
 for number in range(217,223):
     mapping_1d(pathToFile="/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc", day=number)
     mapping_avg_3d(pathToFile="/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc", day=number)
-    """ mapping_1d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number)
-    mapping_avg_3d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=number) """
+    """ mapping_1d(pathToFile="unseen-storm-forecasts/data/continuous/daily/tp24_0.25x0.25_2023.nc", day=number)
+    mapping_avg_3d(pathToFile="unseen-storm-forecasts/data/continuous/daily/tp24_0.25x0.25_2023.nc", day=number) """
 
 ### Short testing
 
-""" mapping_avg_3d(pathToFile="unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc", day=219) """
+""" mapping_avg_3d(pathToFile="unseen-storm-forecasts/data/continuous/daily/tp24_0.25x0.25_2023.nc", day=219) """

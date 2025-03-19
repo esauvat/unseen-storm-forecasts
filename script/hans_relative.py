@@ -9,11 +9,11 @@ import weatherdata as wd
 import pickle
 
 
-endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/maps/hans_era5/'
+endDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/maps/hans_era5/'
 
 
 def relative_august():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_all-res.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
@@ -27,7 +27,7 @@ def relative_august():
     else:
         title = "Monthly maximum recorded precipitations"
         data = wd.map_of_max(data=tpSet, title=title, months=[i for i in range(1, 13)])
-        maxPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_max_all-res_monthly.pkl'
+        maxPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_max_all-res_monthly.pkl'
         with open(maxPath, 'wb') as outp:
             pickle.dump(data, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = maxPath
@@ -102,7 +102,7 @@ def relative_august():
 
 
 def relative_all_year():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_all-res.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_all-res.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
@@ -114,7 +114,7 @@ def relative_all_year():
             data = pickle.load(inp)
     else:
         data = wd.map_of_max(data=tpSet)
-        maxPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/results/continuous_max_all-res_all-time.pkl'
+        maxPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/continuous_max_all-res_all-time.pkl'
         with open(maxPath, 'wb') as outp:
             pickle.dump(data, outp, pickle.HIGHEST_PROTOCOL)
             tpSet.compute[name] = maxPath
@@ -192,7 +192,7 @@ def relative_all_year():
 
 
 def relative_mean2():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
@@ -225,7 +225,7 @@ def relative_mean2():
 
 
 def relative_mean3():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
@@ -258,7 +258,7 @@ def relative_mean3():
 
 
 def relative_mean2_monthly():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
@@ -290,7 +290,7 @@ def relative_mean2_monthly():
 
 
 def relative_mean3_monthly():
-    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weathersets/continuous_0.25.pkl'
+    path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
 
     with open(path, 'rb') as inp:
         tpSet = pickle.load(inp)
