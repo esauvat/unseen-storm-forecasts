@@ -37,7 +37,7 @@ if not name in tpSet.compute.keys():
         values.append(arr.sel(latitude=latitudes, longitude=longitudes).mean(dim=["latitude","longitude"]))
 
     for key in tpSet.fileList:
-        arr = xr.open_dataarray(tpSet.pathsToFiles[key])
+        arr = tpSet.open_data(key)
         process_daily(arr)
         arr.close()
     

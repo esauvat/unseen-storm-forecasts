@@ -100,7 +100,7 @@ class composite_dataset :
         """ # Relevant when the 'if fileType=='hindcast' part will have been reworked
         fileType, fileName = key """
         
-        fileName = key[1]
+        fileType, fileName = key
         da = xr.open_dataarray(self.pathsToFiles[key])
         if self.reanalysis:
             da = da.drop_vars(names="number", errors="ignore")                                      # If the dataset is a reanalysis' one, remove the "number" dimension if it exists
@@ -114,7 +114,7 @@ class composite_dataset :
                 latitude=self.coords['latitude'],
                 longitude=self.coords['longitude']
             ))
-        da.name = key                                                                               # Change DataArray name for (fileType,fileName) tuple
+        da.name = fileType + '-' + fileName                                                         # Change DataArray name for (fileType,fileName) tuple
         return da
 
 

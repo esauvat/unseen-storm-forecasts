@@ -12,7 +12,7 @@ import weatherdata as wd
 
 import pickle
 
-wsPath = '/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/continuous_0.5.pkl'
+wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.5.pkl'
 
 with open(wsPath, 'rb') as inp:
     tpSet = pickle.load(inp)
@@ -26,14 +26,17 @@ alphaMonths = [
     "jul", "aug", "sep", "oct", "nov", "dec"
 ]
 
+years = np.arange(np.datetime64('1941'), np.datetime64('2025')).astype(str)
+
 def sort_monthly_max(data:xr.DataArray):
     ''' Get the maximum for each month '''
     months = np.arange(np.datetime64('1941'), np.datetime64('2025'), np.timedelta64(1,'M'))
-    res = xr.DataArray(np.full_like(alphaMonths,[]), dict(months=alphaMonths))
+    res = xr.DataArray(np.full((len(alphaMonths), len(years)), None), dict(months=alphaMonths))
     for m in months:
         mIdx = alphaMonths[m.astype(int) % 12]
+        yIdx = (m.astype(int) // 12) - 1941
         val = data.sel(time=slice(m, m+np.timedelta64(1,'M')-np.timedelta64(1,'D'))).max()
-        res[mIdx].append((val, np.datetime_as_string(m.astype('datetime64[Y]'))))
+        res[mIdx, yIdx] = val
     return res
 
 
