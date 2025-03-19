@@ -162,22 +162,21 @@ def select_sample(data:xr.DataArray, boundaries:np.ndarray, timesIndex:np.ndarra
 ###   Xarray Operations   ###
 
 def sum_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.full_like(data, 0)                                                             # Creating an empty copy
+    res = xr.full_like(data, np.nan)                                                        # Creating an empty copy
     totalTime = len(data['time'])
     for t in range(totalTime):
         begin, end = t-span//2, t+(span+1)//2                                               # Setting the time range for the sum
         if begin>=0 & end <= totalTime :                                                    # Checking if all the time to sum exist
             res[t,:,:]=data[begin:end, :, :].sum(dim="time")
-        else :
-            res[t,:,:]=None
     return res
 
-def mean_over_time(data:xr.DataArray, span:int) -> xr.DataArray :
-    res = xr.full_like(data, 0)                                                             # Creating an empty copy
+def mean_over_time(data:xr.DataArray, span:int, edges=True) -> xr.DataArray :
+    res = xr.full_like(data, np.nan)                                                        # Creating an empty copy
     totalTime = len(data['time'])
     for t in range(totalTime):
         begin, end = t-span//2, t+(span+1)//2                                               # Setting the time range for the mean
-        res[t,:,:]=data[max(0,begin):min(totalTime,end), :, :].mean(dim="time")
+        if edges or (begin>=0 & end<=totalTime):
+            res[t,:,:]=data[max(0,begin):min(totalTime,end), :, :].mean(dim="time")
     return res
 
 def sum_over_space(data:xr.DataArray, span:int) -> xr.DataArray :

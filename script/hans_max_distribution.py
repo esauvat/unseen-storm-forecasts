@@ -7,67 +7,57 @@ sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapp
 sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')
 
 import numpy as np
+import xarray as xr
+import weatherdata as wd
 
 import pickle
 
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg_0.25_daily.pkl', 'rb') as inp:
-    data = pickle.load(inp)
+wsPath = '/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/continuous_0.5.pkl'
+
+with open(wsPath, 'rb') as inp:
+    tpSet = pickle.load(inp)
+
+data = xr.open_dataarray(tpSet.compute['continuous_hans-area-avg_'+tpSet.resolution+'_daily'])
+
+dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
 
 alphaMonths = [
     "jan", "feb", "mar", "apr", "may", "jun",
     "jul", "aug", "sep", "oct", "nov", "dec"
 ]
 
+def sort_monthly_max(data:xr.DataArray):
+    ''' Get the maximum for each month '''
+    months = np.arange(np.datetime64('1941'), np.datetime64('2025'), np.timedelta64(1,'M'))
+    res = xr.DataArray(np.full_like(alphaMonths,[]), dict(months=alphaMonths))
+    for m in months:
+        mIdx = alphaMonths[m.astype(int) % 12]
+        val = data.sel(time=slice(m, m+np.timedelta64(1,'M')-np.timedelta64(1,'D'))).max()
+        res[mIdx].append((val, np.datetime_as_string(m.astype('datetime64[Y]'))))
+    return res
 
-def sort_monthly_max(data:dict, res:dict):
-    for year in np.arange(np.datetime64('1941'), np.datetime64('2025'), np.timedelta64(1, 'Y')):
-        for month in np.arange(year, year+np.timedelta64(1,'Y'), np.timedelta64(1, 'M')):
-            vals = np.array(
-                [data[day] for day in np.arange(
-                    month, 
-                    month+np.timedelta64(1,'M'), 
-                    np.timedelta64(1,'D')
-                )]
-            )
-            monthIdx = alphaMonths[month.astype(int) % 12]
-            res[monthIdx].append((vals.max(), 
-                                  np.datetime_as_string(year)))
 
-mean2 = {np.datetime64('2024-12-31'):np.nan}
+dailyName = 'continuous_hans-area-avg-daily_'+tpSet.resolution+'_monthly-max'
+mean2Name = 'continuous_hans-area-avg-mean2_'+tpSet.resolution+'_monthly-max'
+mean3Name = 'continuous_hans-area-avg-mean3_'+tpSet.resolution+'_monthly-max'
 
-for day in np.arange(np.datetime64('1941'), np.datetime64('2024-12-31'), np.timedelta64(1, 'D')):
-    val = ( data[day] + data[day+np.timedelta64(1,'D')] ) / 2
-    mean2[day] = val
+if not dailyName in tpSet.compute.keys():
+    path = dir+dailyName
+    sort_monthly_max(data).to_netcdf(path)
+    tpSet.compute[dailyName] = path
 
-mean3 = {np.datetime64('1941-01-01'):np.nan,
-         np.datetime64('2024-12-31'):np.nan}
+if not mean2Name in tpSet.compute.keys():
+    path = dir+mean2Name
+    mean2 = wd.mean_over_time(data=data, span=2, edges=False)
+    sort_monthly_max(mean2).to_netcdf(path)
+    tpSet.compute[mean2Name] = path
 
-for day in np.arange(np.datetime64('1941-01-02'), np.datetime64('2024-12-31'), np.timedelta64(1,'D')):
-    val = ( data[day-np.timedelta64(1,'D')] + data[day] + data[day+np.timedelta64(1,'D')] ) / 3
-    mean3[day] = val
+if not mean3Name in tpSet.compute.keys():
+    path = dir+mean3Name
+    mean3 = wd.mean_over_time(data=data, span=3, edges=False)
+    sort_monthly_max(mean3).to_netcdf(path)
+    tpSet.compute[mean3Name] = path
 
-dailyValues = dict(
-    jan=[], feb=[], mar=[], apr=[], may=[], jun=[],
-    jul=[], aug=[], sep=[], oct=[], nov=[], dec=[]
-)
-mean2Values = dict(
-    jan=[], feb=[], mar=[], apr=[], may=[], jun=[],
-    jul=[], aug=[], sep=[], oct=[], nov=[], dec=[]
-)
-mean3Values = dict(
-    jan=[], feb=[], mar=[], apr=[], may=[], jun=[],
-    jul=[], aug=[], sep=[], oct=[], nov=[], dec=[]
-)
 
-sort_monthly_max(data, dailyValues)
-sort_monthly_max(mean2, mean2Values)
-sort_monthly_max(mean3, mean3Values)
-
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-daily_0.25_monthly-max.pkl', 'wb') as outp:
-    pickle.dump(dailyValues, outp, pickle.HIGHEST_PROTOCOL)
-
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean2_0.25_monthly-max.pkl', 'wb') as outp:
-    pickle.dump(mean2Values, outp, pickle.HIGHEST_PROTOCOL)
-
-with open('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/results/continuous_hans-area-avg-mean3_0.25_monthly-max.pkl', 'wb') as outp:
-    pickle.dump(mean3Values, outp, pickle.HIGHEST_PROTOCOL)
+with open(wsPath, 'wb') as outp:
+    pickle.dump(tpSet, outp, pickle.HIGHEST_PROTOCOL)
