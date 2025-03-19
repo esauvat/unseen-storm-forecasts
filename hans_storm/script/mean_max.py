@@ -14,7 +14,7 @@ dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/hans_storm/data/weath
 with open(path, 'rb') as inp:
     tpSet = pickle.load(inp)
 
-""" name = 'continuous_max-mean2_0.25_all-time'
+name = 'continuous_max-mean2_0.25_all-time'
 if not name in tpSet.compute.keys():
     res = tpSet.compute_time_max(meanSpan = 2)
     endPath = dir + name + '.pkl'
@@ -58,7 +58,7 @@ if not name in tpSet.compute.keys():
     endPath = dir + name + '.pkl'
     with open(endPath, 'wb') as outp:
         pickle.dump(res, outp, pickle.HIGHEST_PROTOCOL)
-        tpSet.compute[name] = endPath """
+        tpSet.compute[name] = endPath
 
 name = 'continuous_max-mean2_0.25_annual'
 if not name in tpSet.compute.keys():
