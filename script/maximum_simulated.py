@@ -19,7 +19,7 @@ mapDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/maps/max/'
 dataDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
 
 
-def all_res_all_time():
+def all_time():
     """ Map with full resolution and time """
     global tpSet
     
@@ -32,12 +32,12 @@ def all_res_all_time():
         fig.savefig(mapDir+'tp24_'+tpSet.resolution+'_all-time.png')
     else:
         path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/' + name + '.nc'
-        wd.map_of_max(data=tpSet, title=title, dir=mapDir, splitYears=True).to_netcdf(path)
+        wd.map_of_max(data=tpSet, title=title, dir=mapDir).to_netcdf(path)
         tpSet.compute[name] = path
 
 
 
-def all_res_annual():
+def annual():
     """ Map with full resolution and annual maximum """
     global tpSet
 
@@ -87,7 +87,7 @@ def all_res_annual():
 
 
 
-def all_res_decadal():
+def decadal():
     """ Map with full resolution and decadal maximum """
 
     name = 'continuous_max_' + tpSet.resolution + '_1941-2024-dec'
@@ -105,7 +105,7 @@ def all_res_decadal():
         wd.map_of_max(data=tpSet, title=title, years=years, splitYears=True, timeSpan=timeSpan, sizeMap=sizeMap, dir=mapDir).to_netcdf(path)
         tpSet.compute[name] = path
 
-def all_res_monthly():
+def monthly():
     """ Map with full resolution and monthly maximum """
 
     name = 'continuous_max_' + tpSet.resolution + '_monthly'

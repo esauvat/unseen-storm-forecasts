@@ -21,20 +21,24 @@ data = xr.open_dataarray(tpSet.compute['continuous_hans-area-avg_'+tpSet.resolut
 
 dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
 
-alphaMonths = [
+alphaMonths = np.array([
     "jan", "feb", "mar", "apr", "may", "jun",
     "jul", "aug", "sep", "oct", "nov", "dec"
-]
+])
 
 years = np.arange(np.datetime64('1941'), np.datetime64('2025')).astype(str)
 
 def sort_monthly_max(data:xr.DataArray):
     ''' Get the maximum for each month '''
     months = np.arange(np.datetime64('1941'), np.datetime64('2025'), np.timedelta64(1,'M'))
-    res = xr.DataArray(np.full((len(alphaMonths), len(years)), None), dict(months=alphaMonths))
+    res = xr.DataArray(
+        np.full((len(alphaMonths), len(years)), None), 
+        dims = ("months", "years"),
+        coords = {"months":alphaMonths, "years":years}
+    )
     for m in months:
-        mIdx = alphaMonths[m.astype(int) % 12]
-        yIdx = (m.astype(int) // 12) - 1941
+        mIdx = m.astype(int) % 12
+        yIdx = int(np.datetime_as_string(m)[:4]) - 1941
         val = data.sel(time=slice(m, m+np.timedelta64(1,'M')-np.timedelta64(1,'D'))).max()
         res[mIdx, yIdx] = val
     return res
