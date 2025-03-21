@@ -23,7 +23,7 @@ with open(wsPath, 'rb') as inp:
 latitudes = slice(62.5, 60.5)
 longitudes = slice(9, 11.75)
 
-dataDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results'
+dataDir = '/nird/projects/NS9873K/emile/heavy_files/'
 
 ###   Defining utility functions
 
@@ -35,7 +35,7 @@ def process_file(tpSet:wd.Weatherset, key:str, span:int|None=1) -> xr.DataArray 
     if not key in tpSet.fileList:
         return None, None
     arr = tpSet.open_data(key)
-    arr = arr.sel(latitude=latitudes, longitude=longitudes)                                         # Selecting the geographic area
+    arr = arr.sel(latitude=latitudes, longitude=longitudes).mean(dim=["latitude","longitude"])      # Selecting the geographic area
     timeRange = 7 + span - 1
     arr = arr.isel(time=slice(timeRange, 45))                                                       # Selecting the time range (1 week plus the edges to make the sum)
     if span > 1 :
