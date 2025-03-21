@@ -23,7 +23,7 @@ with open(wsPath, 'rb') as inp:
 latitudes = slice(62.5, 60.5)
 longitudes = slice(9, 11.75)
 
-dataDir = '/nird/projects/NS9873K/emile/heavy_files/'
+dataDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
 
 ###   Defining utility functions
 
@@ -95,3 +95,7 @@ for nameIdx, name in enumerate(names):
         path = dataDir + name + '.nc'
         maxArr.to_netcdf(path)
         tpSet.compute[name] = path
+
+
+with open(wsPath, 'wb') as outp:
+    pickle.dump(tpSet, outp, pickle.HIGHEST_PROTOCOL)
