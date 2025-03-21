@@ -100,12 +100,17 @@ class composite_dataset :
         
         fileType, fileName = key
         da = xr.open_dataarray(self.pathsToFiles[key])
+        fileDate = fileName[-10:]
         if self.reanalysis:
             da = da.drop_vars(names="number", errors="ignore")                                      # If the dataset is a reanalysis' one, remove the "number" dimension if it exists
 
         if self.multiType and (fileType != 'hindcast'):                                                    
-            hdate = "".join(fileName[-13:-3].split('-'))
+            hdate = int("".join(fileDate.split('-')))
             da = da.expand_dims(dict(hdate=[hdate]))
+
+        # This part is to adress the weird issue of repeated values in 2023 forecast files
+        if fileType=='forecast' and np.datetime64(fileDate)>=np.datetime64('2023-06-29'):
+            da['number'] = xr.DataArray(np.arange(1,102, dtype=np.int32), dims=("number"))
         
         if (not self.resolution=='0.5') and '0.5' in fileName:                                      # Checking if the data is with 0.5 resolution while the dataset is with 0.25 one
             da = da.reindex(dict(                                                                   # If so, reindex (the missing values are filled with np.nan)

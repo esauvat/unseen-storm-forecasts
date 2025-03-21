@@ -12,7 +12,7 @@ import pickle
 
 ###   Opening the Weatherset
 
-wsPath = '/home/esauvat/Documents/NORCE/unseen-storm-forecasts/weathersets/s2s_0.5.pkl'
+wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5.pkl'
 
 with open(wsPath, 'rb') as inp:
     tpSet = pickle.load(inp)
@@ -49,10 +49,10 @@ def date_as_float(date:np.datetime64) -> float :
 
 
 def test_time(fileName:str, nbWeeks:int|None=1, timeRange:tuple[float, float]|None=(8.01,8.31)) -> bool:
-    fileDate = np.datetime64(fileName[-13:-3])
+    fileDate = np.datetime64(fileName[-10:])
     endDate = fileDate + np.timedelta64(45, 'D')
     startDate = endDate - np.timedelta64(7*nbWeeks, 'D')
-    return (startDate<=timeRange[1]) and (endDate>=timeRange[0])
+    return (date_as_float(startDate)<=timeRange[1]) and (date_as_float(endDate)>=timeRange[0])
 
 
 def compute_distrib(tpSet:wd.Weatherset, span:int|None=1) -> xr.DataArray:
@@ -65,17 +65,19 @@ def compute_distrib(tpSet:wd.Weatherset, span:int|None=1) -> xr.DataArray:
             forecast, fKey = process_file(tpSet, fKey, span)
             hindcast, hKey = process_file(tpSet, hKey, span)
             if fKey and hKey:
-                dataarrays.append(xr.concat(
-                    [forecast, hindcast], 
-                    dim="hdate").expand_dims(dict(name=[fileName])))
+                arr = xr.concat([forecast, hindcast], dim="hdate")
                 forecast.close()
                 hindcast.close()
             elif fKey:
-                dataarrays.append(forecast.expand_dims(dict(name=[fileName])))
+                arr = forecast.copy()
                 forecast.close()
-            elif hKey:
-                dataarrays.append(hindcast.expand_dims(dict(name=[fileName])))
+            else:
+                arr = hindcast.copy()
                 hindcast.close()
+            fArr = arr.expand_dims({"name":[fileName]}).reindex({"number":np.arange(1,52)}, copy=True)
+            dataarrays.append(arr)
+            arr.close()
+            fArr.close()
     res = xr.concat(dataarrays, dim="name")
     del dataarrays
     return res
