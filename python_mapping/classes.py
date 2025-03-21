@@ -10,10 +10,11 @@ class composite_dataset :
     ''' A python class to simplify operation on a multi-file dataset '''
 
 
-    def __init__(self, pathListToData:list[str], reanalysis=True, resolution:str=None):
+    def __init__(self, pathListToData:list[str], reanalysis:bool|None=True, resolution:str|None=None, multiType:bool|None=False):
         
         self.resolution = resolution                                                                # Resolution of the data, if None, all resolutions are selected
         self.reanalysis = reanalysis
+        self.multiType = multiType
 
         self.pathsToFiles = self.get_paths(pathListToData, self.resolution)                         # Dict of (fileType,fileName) keys with pathToFile values
         self.fileList = [key for key in self.pathsToFiles.keys()]                                   # List of tuple (fileType,fileName)
@@ -96,25 +97,22 @@ class composite_dataset :
 
     def open_data(self, key:tuple[str,str]) -> xr.DataArray:
         ''' Open "file" as DataArray and reshape it to fit the class attributes '''
-
-        """ # Relevant when the 'if fileType=='hindcast' part will have been reworked
-        fileType, fileName = key """
         
         fileType, fileName = key
         da = xr.open_dataarray(self.pathsToFiles[key])
         if self.reanalysis:
             da = da.drop_vars(names="number", errors="ignore")                                      # If the dataset is a reanalysis' one, remove the "number" dimension if it exists
 
-        """ # This needs to be reworked 
-        if fileType == 'hindcast':                                                                  # Reindexing the ('hdate','time') dimension for hincast files
-            da = reindex_hindcast(da) """
+        if self.multiType and (fileType != 'hindcast'):                                                    
+            hdate = "".join(fileName[-13:-3].split('-'))
+            da = da.expand_dims(dict(hdate=[hdate]))
         
         if (not self.resolution=='0.5') and '0.5' in fileName:                                      # Checking if the data is with 0.5 resolution while the dataset is with 0.25 one
             da = da.reindex(dict(                                                                   # If so, reindex (the missing values are filled with np.nan)
                 latitude=self.coords['latitude'],
                 longitude=self.coords['longitude']
             ))
-        da.name = fileType + '-' + fileName                                                         # Change DataArray name for (fileType,fileName) tuple
+        da.name = fileType + '-' + fileName                                                         # Change DataArray name for fileType_fileName 
         return da
 
 

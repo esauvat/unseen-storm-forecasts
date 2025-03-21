@@ -270,14 +270,10 @@ def extract_files(dir:str, pathsToFiles:list):
 def reindex_hindcast(da:xr.DataArray):
     ''' Reindexing the ('hdate','time') dimension for hincast files '''
     da = da.stack(fullTime=["hdate","time"])                                                # Combining the 2 time related coordinates
-    newIndexes = []
+    newIndexes = np.array([])
     for (hdate,time) in da['fullTime'].values:                                              # Creating the new indexes
-        hyear = hdate // 10000
-        isLeapYearCase = (time.day==29) and (time.month==2) and ((time.year-hyear)%4!=0)    # Checking if the date exists if the hindcast is started at hdate
-        if isLeapYearCase:
-            newIndexes.append(time.replace(day=1,month=3,year=hyear))
-        else:
-            newIndexes.append(time.replace(year=hyear))
+        yearOffset = time.year = hdate//10000
+        newIndexes.append()
     reindexed_da = xr.DataArray(
         da.values,
         dims=("latitude","longitude","time"),
