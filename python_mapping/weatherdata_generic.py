@@ -9,6 +9,7 @@ import xarray as xr
 from netCDF4 import Dataset
 from datetime import datetime, date, timedelta
 import os
+from scipy.stats import spearmanr
 
 bound_values = {
     'centerNo':(59.7, 62.1, 6.6, 11.5),
@@ -284,3 +285,24 @@ def reindex_hindcast(da:xr.DataArray):
         }
     )
     return reindexed_da
+
+
+###   Spearman rank correlation
+
+# Apply spearmanr along 'number' dimension
+def spearman_corr(x):
+    """Computes Spearman correlation along the 'number' dimension."""
+    ranks = np.arange(len(x))  # Rank array for number dimension
+    corr, _ = spearmanr(ranks, x, axis=0)  # Keep only correlation values
+    return corr  # Should be shape (hdate,)
+
+# Use apply_ufunc
+def spearman_rank_correlation(data:xr.DataArray) -> xr.DataArray :
+    result = xr.apply_ufunc(
+        spearman_corr, data,
+        input_core_dims=[["number"]],
+        output_core_dims=[[]],          # Reduce dimension
+        vectorize=True,
+        dask="parallelized"             # Enable dask if using large data
+    )
+    return result
