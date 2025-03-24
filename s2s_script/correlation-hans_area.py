@@ -43,11 +43,16 @@ type = dictType[argType]
 
 ###   Function
 
-def process_file(data:xr.DataArray) -> None :
+def process_file(key:tuple[str,str], tpSet:wd.Weatherset) -> None :
     global dataarrays
+    data = tpSet.open_data(key)
     data = data.sel(latitude=lats, longitude=longs).mean(dim=["latitude","longitude"])                      # Selecting the mean over hans' area
     if type:
         data = wd.mean_over_time(data, type, False)
+    fileDate = np.datetime64(key[1][-10:])
+    data = data.reindex({
+        "time" : np.array([(date - fileDate).astype(int) for date in data['time'].values])
+        })
     data = wd.spearman_rank_correlation(data).to_dataset(dim="hdate")
     for var in data.data_vars:
         arr = data[var]
@@ -60,9 +65,7 @@ def process_file(data:xr.DataArray) -> None :
 ###   Processing
 
 for key in tpSet.fileList:
-    data = tpSet.open_data(key)
-    process_file(data)
-    data.close()
+    process_file(key, tpSet)
 
 name = 's2s-' + tpSet.resolution + '-' + argType + '_correlation-hans_area'
 path = dir + name + '.nc'
