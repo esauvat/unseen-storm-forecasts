@@ -49,10 +49,10 @@ def process_file(key:tuple[str,str], tpSet:wd.Weatherset) -> None :
     data = data.sel(latitude=lats, longitude=longs).mean(dim=["latitude","longitude"])                      # Selecting the mean over hans' area
     if type:
         data = wd.mean_over_time(data, type, False)
-    fileDate = np.datetime64(key[1][-10:])
-    data = data.reindex({
-        "time" : np.array([(date - fileDate).astype(int) for date in data['time'].values])
-        })
+    fileDate = np.datetime64(key[1][-10:]).astype('datetime64[D]').astype(int)
+    data['time'] = np.array([
+        (date.astype('datetime64[D]').astype(int) - fileDate) for date in data['time'].values
+    ])
     data = wd.spearman_rank_correlation(data).to_dataset(dim="hdate")
     for var in data.data_vars:
         arr = data[var]
@@ -67,7 +67,7 @@ def process_file(key:tuple[str,str], tpSet:wd.Weatherset) -> None :
 for key in tpSet.fileList:
     process_file(key, tpSet)
 
-name = 's2s-' + tpSet.resolution + '-' + argType + '_correlation-hans_area'
+name = 's2s-hans_area-' + tpSet.resolution + '-' + argType + '_correlation'
 path = dir + name + '.nc'
 
 xr.concat(dataarrays, dim="date").to_netcdf(path)
