@@ -27,7 +27,7 @@ with open(wsPath, 'rb') as inp:
 
 dataarrays = []
 
-dir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
+dir = '/nird/projects/NS9873K/emile/heavy_files/'
 
 lats = slice(62.5, 60.5)
 longs = slice(9, 11.75)
