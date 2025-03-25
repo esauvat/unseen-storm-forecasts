@@ -10,6 +10,7 @@ from netCDF4 import Dataset
 from datetime import datetime, date, timedelta
 import os
 from scipy.stats import spearmanr
+import numpy.ma as ma
 
 bound_values = {
     'centerNo':(59.7, 62.1, 6.6, 11.5),
@@ -287,7 +288,7 @@ def reindex_hindcast(da:xr.DataArray):
     return reindexed_da
 
 
-###   Spearman rank correlation
+###   Correlation
 
 # Apply spearmanr along 'number' dimension
 def spearman_corr(x):
@@ -305,4 +306,37 @@ def spearman_rank_correlation(data:xr.DataArray) -> xr.DataArray :
         vectorize=True,
         dask="parallelized"             # Enable dask if using large data
     )
+    return result
+
+def pears_norm(arr):
+    """Compute the correlation matrix"""
+    corr_mat = np.corrcoef(arr)
+    return np.linalg.norm(corr_mat)
+
+def pears_mean(arr):
+    corr_mat = np.corrcoef(arr)
+    return (corr_mat-np.identity(corr_mat.shape[0])).mean()
+
+def pears_full(arr):
+    corr_mat = ma.corrcoef(ma.masked_array(arr))
+    norm = np.linalg.norm(corr_mat)
+    mean = np.mean(corr_mat - np.identity(corr_mat.shape[0]))
+    std = np.std(corr_mat - np.identity(corr_mat.shape[0]))
+    return np.array([norm, mean, std])
+
+def pearson_correlation(data:xr.DataArray, func:str|None='full') -> xr.DataArray :
+    data = data.stack(coordinates=["latitude","longitude"])
+    funcDict = dict(norm=pears_norm, mean=pears_mean, full=pears_full)
+    if func=='full':
+        output_dims = [["statistics"]]
+    else:
+        output_dims = [[]]
+    result = xr.apply_ufunc(
+        funcDict[func], data,
+        input_core_dims=[["number","coordinates"]],
+        output_core_dims=output_dims,
+        vectorize=True,
+        dask="parallelized"
+    )
+    result['statistics'] = np.array(['norm','mean','std'])
     return result
