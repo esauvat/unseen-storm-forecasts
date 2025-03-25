@@ -318,11 +318,12 @@ def pears_mean(arr):
     return (corr_mat-np.identity(corr_mat.shape[0])).mean()
 
 def pears_full(arr):
-    corr_mat = ma.corrcoef(ma.masked_array(arr))
-    norm = np.linalg.norm(corr_mat)
-    mean = np.mean(corr_mat - np.identity(corr_mat.shape[0]))
-    std = np.std(corr_mat - np.identity(corr_mat.shape[0]))
-    return np.array([norm, mean, std])
+    correl_mat = ma.corrcoef(ma.masked_array(arr))
+    norm = np.linalg.norm(correl_mat)
+    mean = np.mean(correl_mat)
+    std = np.std(correl_mat)
+    norm_stand = norm / correl_mat.shape[0]
+    return np.array([norm, mean, std, norm_stand])
 
 def pearson_correlation(data:xr.DataArray, func:str|None='full') -> xr.DataArray :
     data = data.stack(coordinates=["latitude","longitude"])
@@ -338,5 +339,6 @@ def pearson_correlation(data:xr.DataArray, func:str|None='full') -> xr.DataArray
         vectorize=True,
         dask="parallelized"
     )
-    result['statistics'] = np.array(['norm','mean','std'])
+    if func=='full':
+        result['statistics'] = np.array(['norm','mean','std', 'norm_stand'])
     return result

@@ -42,6 +42,7 @@ def process_file(data:xr.DataArray) -> None :
     data['time'] = np.array([                                                                               # Reindex the lead times to have the length of the model
         (date.astype('datetime64[D]').astype(int) - fileDate) for date in data['time'].values
     ])
+    data = data.reindex({"time":np.arange(15,46)})
     data = wd.pearson_correlation(data).to_dataset(dim="hdate")                                             # Compute the correlations statistics (norm, mean, std)
     for var in data.data_vars:
         dataarrays.append(data[var])
@@ -52,10 +53,9 @@ def process_file(data:xr.DataArray) -> None :
 
 for key in tpSet.fileList:
     data = tpSet.open_data(key)
-    if data['number'].values.shape == (46,) :                                                               # Only use the data with the full lead time
-        process_file(data)
+    process_file(data)
 
-name = 's2s-hans_area-' + tpSet.resolution + '-correlation_statistics-45_times'
+name = 's2s-hans_area-' + tpSet.resolution + '-correlation_statistics'
 path = dir + name + '.nc'
 
 res = xr.concat(dataarrays, dim="model")
