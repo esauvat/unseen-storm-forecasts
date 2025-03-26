@@ -308,6 +308,11 @@ def spearman_rank_correlation(data:xr.DataArray) -> xr.DataArray :
     )
     return result
 
+def pears(arr):
+    """Compute the Pearson correlation coefficient"""
+    arr = np.array([arr, np.arange(1, len(arr)+1)])
+    return np.corrcoef(arr)[0][1]
+
 def pears_norm(arr):
     """Compute the correlation matrix"""
     corr_mat = np.corrcoef(arr)

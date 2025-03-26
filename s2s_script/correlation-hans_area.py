@@ -17,10 +17,15 @@ import pickle
 
 ###   Opening the dataset
 
-wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5.pkl'
+wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
 
-with open(wsPath, 'rb') as inp:
-    tpSet = pickle.load(inp)
+""" with open(wsPath, 'rb') as inp:
+    tpSet = pickle.load(inp) """
+
+# Just for this time :
+directories = ['/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/',
+               '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/hindcast/daily/values/tp24/']
+tpSet = wd.Weatherset(directories, reanalysis=False, multiType=True)
 
 
 ###   Variables
@@ -38,40 +43,62 @@ dictType = dict(
     mean2 = 2,
     mean3 = 3
 )
-type = dictType[argType]
+span = dictType[argType]
 
 
 ###   Function
 
-def process_file(key:tuple[str,str], tpSet:wd.Weatherset) -> None :
+def process_files(keys:list[tuple], fileDate:int, tpSet:wd.Weatherset) -> None :
     global dataarrays
-    data = tpSet.open_data(key)
-    data = data.sel(latitude=lats, longitude=longs).mean(dim=["latitude","longitude"])                      # Selecting the mean over hans' area
-    if type:
-        data = wd.mean_over_time(data, type, False)
-    fileDate = np.datetime64(key[1][-10:]).astype('datetime64[D]').astype(int)
+    datas = [tpSet.open_data(key).sel(latitude=lats,longitude=longs).mean(dim=["latitude","longitude"]) 
+             for key in keys]
+    data = xr.concat([
+        xr.concat(datas[:2], dim="time"),
+        xr.concat(datas[2:], dim="time")
+    ], dim="hdate")
+    del datas
+    if span:
+        data = wd.mean_over_time(data, span, False)
+    fileDate = np.datetime64(fileDate).astype('datetime64[D]').astype(int)
     data['time'] = np.array([
         (date.astype('datetime64[D]').astype(int) - fileDate) for date in data['time'].values
     ])
-    data = wd.spearman_rank_correlation(data).to_dataset(dim="hdate")
-    for var in data.data_vars:
-        arr = data[var]
-        arr.name = str(arr.name)
-        dataarrays.append(arr)
-        arr.close()
+    data = xr.apply_ufunc(
+        wd.pears, data,
+        input_core_dims=[["number"]],
+        output_core_dims=[[]],
+        vectorize=True
+    )
+    for hdate in data['hdate'].values:
+        dataarrays.append(data.sel(hdate=hdate))
     data.close()
 
 
 ###   Processing
 
-for key in tpSet.fileList:
-    process_file(key, tpSet)
+fileDates = np.unique([fileName[-10:] for _,fileName in tpSet.fileList])
+fileDates = fileDates[np.where(fileDates <= '2022-12-29')]
+
+hResName = 'tp24_0.25x0.25_'
+lResName = 'tp24_0.5x0.5_'
+
+for date in fileDates:
+    keys = [('forecast', hResName+date),
+            ('forecast', lResName+date),
+            ('hindcast', hResName+date),
+            ('hindcast', lResName+date)]
+    if np.any([not (key in tpSet.fileList) for key in keys]):
+        raise "The dataset is uncomplete"
+    else:
+        process_files(keys, date, tpSet)
 
 name = 's2s-hans_area-' + tpSet.resolution + '-' + argType + '_correlation'
 path = dir + name + '.nc'
 
-xr.concat(dataarrays, dim="date").to_netcdf(path)
+res = xr.concat(dataarrays, dim="date", )
 del dataarrays
+res.name = "correl-HA_avg"
+res.to_netcdf(path)
 
 tpSet.compute[name] = path
 
