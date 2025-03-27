@@ -48,27 +48,42 @@ span = dictType[argType]
 
 ###   Function
 
-def process_files(keys:list[tuple], fileDate:int, tpSet:wd.Weatherset) -> None :
+def process_files(keys:list[tuple], fileDate:str, tpSet:wd.Weatherset) -> None :
     global dataarrays
-    datas = [tpSet.open_data(key).sel(latitude=lats,longitude=longs).mean(dim=["latitude","longitude"]) 
-             for key in keys]
+    
+    forecast = xr.concat(
+        [xr.open_dataarray(tpSet.pathsToFiles[keys[0]]).sel(latitude=lats,longitude=longs).mean(["latitude","longitude"]),
+        xr.open_dataarray(tpSet.pathsToFiles[keys[1]]).sel(latitude=lats,longitude=longs).mean(["latitude","longitude"])],
+        dim="time"
+    ).expand_dims({"hdate":[int("".join(fileDate.split('-')))]})
+    hindcast = xr.concat(
+        [xr.open_dataarray(tpSet.pathsToFiles[keys[2]]).sel(latitude=lats,longitude=longs).mean(["latitude","longitude"]),
+        xr.open_dataarray(tpSet.pathsToFiles[keys[3]]).sel(latitude=lats,longitude=longs).mean(["latitude","longitude"])],
+        dim="time"
+    )
     data = xr.concat([
-        xr.concat(datas[:2], dim="time"),
-        xr.concat(datas[2:], dim="time")
-    ], dim="hdate")
-    del datas
+        forecast, 
+        hindcast], 
+        dim="hdate"
+    )
+    forecast.close()
+    hindcast.close()
+
     if span:
         data = wd.mean_over_time(data, span, False)
+
     fileDate = np.datetime64(fileDate).astype('datetime64[D]').astype(int)
     data['time'] = np.array([
         (date.astype('datetime64[D]').astype(int) - fileDate) for date in data['time'].values
     ])
+
     data = xr.apply_ufunc(
         wd.pears, data,
         input_core_dims=[["number"]],
         output_core_dims=[[]],
         vectorize=True
     )
+
     for hdate in data['hdate'].values:
         dataarrays.append(data.sel(hdate=hdate))
     data.close()
@@ -92,10 +107,15 @@ for date in fileDates:
     else:
         process_files(keys, date, tpSet)
 
-name = 's2s-hans_area-' + tpSet.resolution + '-' + argType + '_correlation'
+if tpSet.resolution:
+    resolution = tpSet.resolution
+else:
+    resolution = 'all_res'
+
+name = 's2s-HA_avg_correlation-' + resolution + '-' + argType
 path = dir + name + '.nc'
 
-res = xr.concat(dataarrays, dim="date", )
+res = xr.concat(dataarrays, dim="date")
 del dataarrays
 res.name = "correl-HA_avg"
 res.to_netcdf(path)
