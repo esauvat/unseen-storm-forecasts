@@ -1,10 +1,6 @@
 
 ''' Compute the distribution of august's maximum '''
 
-import sys
-
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping/')
-
 import numpy as np, xarray as xr, pandas as pd
 import weatherdata as wd
 import pickle

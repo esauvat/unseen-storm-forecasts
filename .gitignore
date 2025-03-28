@@ -1,0 +1,12 @@
+
+##################################
+#       Ignore data files 
+
+*.nc
+
+
+################################## 
+#       Ignore testing files
+
+console.ipynb
+#

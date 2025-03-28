@@ -6,10 +6,6 @@ the norms, ie we substract sqrt(n) which is the minimal norm of the correlation 
 
 ###   Packages 
 
-import sys
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')                       # Path to the python modules
-sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')                      # Path to the same directory on the computer to run tests
-
 import weatherdata as wd
 import numpy as np, xarray as xr
 import pickle
@@ -25,7 +21,7 @@ with open(wsPath, 'rb') as inp:
 
 ###   Variables
 
-dataarrays = []                                                                                             # Initialize a list to store the arrays of correlation depending on lead time before concatenation
+arraysList = []                                                                                             # Initialize a list to store the arrays of correlation depending on lead time before concatenation
 
 dir = '/nird/projects/NS9873K/emile/heavy_files/'                                                           # The final array's size will be about 75MB, hence we store them outside of the git repo
 
@@ -36,7 +32,7 @@ longs = slice(9, 11.75)     # Hans area longitudes indexes
 ###   Function
 
 def process_file(data:xr.DataArray) -> None :
-    global dataarrays
+    global arraysList
     data = data.sel(latitude=lats, longitude=longs)                                                         # Selecting hans' area
     fileDate = np.datetime64(key[1][-10:]).astype('datetime64[D]').astype(int)
     data['time'] = np.array([                                                                               # Reindex the lead times to have the length of the model
@@ -58,10 +54,10 @@ for key in tpSet.fileList:
 name = 's2s-hans_area-' + tpSet.resolution + '-correlation_statistics'
 path = dir + name + '.nc'
 
-res = xr.concat(dataarrays, dim="model")
+res = xr.concat(arraysList, dim="model")
 res.name = "HA-correlation_statistics"
 res.to_netcdf(path)
-del dataarrays
+del arraysList
 
 tpSet.compute[name] = path
 

@@ -1,10 +1,6 @@
 
 ''' Script to compute the maximum means '''
 
-import sys
-
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')
-
 import weatherdata as wd
 import pickle
 
@@ -28,33 +24,33 @@ if not name in tpSet.compute.keys():
 
 name = 'continuous_max-mean2_' + tpSet.resolution + '_monthly'
 if not name in tpSet.compute.keys():
-    dataarrays = []
+    arraysList = []
     for m in range(1, 13):
         arr = tpSet.compute_time_max(months=[m], meanSpan = 2)
         arr = arr.expand_dims({"time":[m]}).transpose("time","latitude","longitude")
-        dataarrays.append(arr)
+        arraysList.append(arr)
         arr.close()
     endPath = dir + name + '.nc'
-    wd.xr.concat(dataarrays, "time").to_netcdf(endPath)
-    del dataarrays
+    wd.xr.concat(arraysList, "time").to_netcdf(endPath)
+    del arraysList
     tpSet.compute[name] = endPath
 
 name = 'continuous_max-mean3_' + tpSet.resolution + '_monthly'
 if not name in tpSet.compute.keys():
-    dataarrays = []
+    arraysList = []
     for m in range(1, 13):
         arr = tpSet.compute_time_max(months=[m], meanSpan = 3)
         arr = arr.expand_dims({"time":[m]}).transpose("time","latitude","longitude")
-        dataarrays.append(arr)
+        arraysList.append(arr)
         arr.close()
     endPath = dir + name + '.nc'
-    wd.xr.concat(dataarrays, "time").to_netcdf(endPath)
-    del dataarrays
+    wd.xr.concat(arraysList, "time").to_netcdf(endPath)
+    del arraysList
     tpSet.compute[name] = endPath
 
 name = 'continuous_max-mean2_' + tpSet.resolution + '_annual'
 if not name in tpSet.compute.keys():
-    dataarrays = []
+    arraysList = []
     for key in tpSet.fileList:
         data = wd.xr.open_dataarray(tpSet.pathsToFiles[key])
         arr = wd.xr.full_like(data, wd.np.nan)
@@ -62,17 +58,17 @@ if not name in tpSet.compute.keys():
             arr[i,:,:] = data.isel(time=[i,i+1]).mean(dim="time")
         arr = arr.max(dim="time")
         arr.expand_dims({"time":[key[1][-4:]]})
-        dataarrays.append(arr)
+        arraysList.append(arr)
         arr.close()
         data.close()
     endPath = dir + name + '.nc'
-    wd.xr.concat(dataarrays, "time").to_netcdf(endPath)
-    del dataarrays
+    wd.xr.concat(arraysList, "time").to_netcdf(endPath)
+    del arraysList
     tpSet.compute[name] = endPath
 
 name = 'continuous_max-mean3_' + tpSet.resolution + '_annual'
 if not name in tpSet.compute.keys():
-    dataarrays = []
+    arraysList = []
     for key in tpSet.fileList:
         data = wd.xr.open_dataarray(tpSet.pathsToFiles[key])
         arr = wd.xr.full_like(data, wd.np.nan)
@@ -80,12 +76,12 @@ if not name in tpSet.compute.keys():
             arr[i,:,:] = data.isel(time=[i-1,i,i+1]).mean(dim="time")
         arr = arr.max(dim="time")
         arr.expand_dims({"time":[key[1][-4:]]})
-        dataarrays.append(arr)
+        arraysList.append(arr)
         arr.close()
         data.close()
     endPath = dir + name + '.nc'
-    wd.xr.concat(dataarrays, "time").to_netcdf(endPath)
-    del dataarrays
+    wd.xr.concat(arraysList, "time").to_netcdf(endPath)
+    del arraysList
     tpSet.compute[name] = endPath
 
 

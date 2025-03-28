@@ -7,9 +7,6 @@ members. This will be much harder when handling all the grid. We will probably s
 ###   Packages 
 
 import sys
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')                       # Path to the python modules
-sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')                      # Path to the same directory on the computer to run tests
-
 import weatherdata as wd
 import numpy as np, xarray as xr
 import pickle
@@ -19,18 +16,13 @@ import pickle
 
 wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
 
-""" with open(wsPath, 'rb') as inp:
-    tpSet = pickle.load(inp) """
-
-# Just for this time :
-directories = ['/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/',
-               '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/hindcast/daily/values/tp24/']
-tpSet = wd.Weatherset(directories, reanalysis=False, multiType=True)
+with open(wsPath, 'rb') as inp:
+    tpSet = pickle.load(inp)
 
 
 ###   Variables
 
-dataarrays = []
+arraysList = []
 
 dir = '/nird/projects/NS9873K/emile/heavy_files/'
 
@@ -49,7 +41,7 @@ span = dictType[argType]
 ###   Function
 
 def process_files(keys:list[tuple], fileDate:str, tpSet:wd.Weatherset) -> None :
-    global dataarrays
+    global arraysList
     
     forecast = xr.concat(
         [xr.open_dataarray(tpSet.pathsToFiles[keys[0]]).sel(latitude=lats,longitude=longs).mean(["latitude","longitude"]),
@@ -115,8 +107,8 @@ else:
 name = 's2s-HA_avg_correlation-' + resolution + '-' + argType
 path = dir + name + '.nc'
 
-res = xr.concat(dataarrays, dim="date")
-del dataarrays
+res = xr.concat(arraysList, dim="date")
+del arraysList
 res.name = "correl-HA_avg"
 res.to_netcdf(path)
 

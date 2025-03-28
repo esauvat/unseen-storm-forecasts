@@ -1,11 +1,6 @@
 
 ''' Script to plot the mean maximum on a large area each year and raise values over a certain threshold '''
 
-import sys
-
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')
-sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')
-
 import numpy as np
 import xarray as xr
 import weatherdata as wd

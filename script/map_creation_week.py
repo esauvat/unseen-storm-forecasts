@@ -2,13 +2,8 @@
 ###    Creation of Hans Storm weather week maps
 ###
 
-import sys
-
-sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping')
-sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping')
-
 import weatherdata as wd
-import maps as mp
+from weatherdata import geographics as geo
 
 # pathToFile = "unseen-storm-forecasts/hans_storm/tp24_0.25x0.25_2023.nc"
 pathToFile = "/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.25x0.25_2023.nc"
@@ -22,12 +17,12 @@ n, p = 2, 3
 
 boundaries, cLat, cLon = wd.boundaries(ncData, 'largeNo')
 effectSample = wd.select_sample(totalPrecipitationsNo, boundaries, days)
-projLCoNo = mp.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
+projLCoNo = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=cLon)
 
 
 ###   Daily precipitations   ###
 
-fig, axis = mp.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
+fig, axis = geo.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
 fig, axis = wd.showcase_data(totalPrecipitationsNo, effectSample, days, fig, axis)
 i=0
 for ax in axis :
@@ -35,7 +30,7 @@ for ax in axis :
     i+=1
 fig.suptitle('Daily total precipitation')
 
-""" mp.plt.show() """
+""" geo.plt.show() """
 fig.savefig('unseen-storm-forecasts/maps/1d_tp/1d_tp_week')
 
 
@@ -46,7 +41,7 @@ threeDaysAvgPrecipitationsNo = wd.mean_over_time(totalPrecipitationsNo, span=3)
 
 # Total Precipitations
 
-fig, axis = mp.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
+fig, axis = geo.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
 
 fig, axis = wd.showcase_data(threeDaysTotalPrecipitationsNo, boundaries, days, fig, axis)
 i=0
@@ -55,12 +50,12 @@ for ax in axis :
     i+=1
 fig.suptitle('3 days total precipitation')
 
-""" mp.plt.show() """
+""" geo.plt.show() """
 fig.savefig('unseen-storm-forecasts/maps/3d_tp/3d_tp_week')
 
 # Average Precipitations
 
-fig, axis = mp.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
+fig, axis = geo.map(n=n, p=p, size=size, boundaries = boundaries, proj=projLCoNo)
 
 fig, axis = wd.showcase_data(threeDaysAvgPrecipitationsNo, boundaries, days, fig, axis)
 i=0
@@ -69,5 +64,5 @@ for ax in axis :
     i+=1
 fig.suptitle('3 days average precipitation')
 
-""" mp.plt.show() """
+""" geo.plt.show() """
 fig.savefig('unseen-storm-forecasts/maps/3d_tp/3d_avgp_week')

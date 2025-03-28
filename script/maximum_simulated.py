@@ -2,9 +2,6 @@
 ''' Script to make the maps of maximum total precipitations ever modeled '''
 
 import sys
-
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')
-
 import weatherdata as wd
 import numpy as np, xarray as xr
 import pickle

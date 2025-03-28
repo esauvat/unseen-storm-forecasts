@@ -1,10 +1,6 @@
 
 ''' Creation of s2s' weathersets 0'''
 
-import sys
-
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping/')
-
 import weatherdata as wd
 import pickle
 

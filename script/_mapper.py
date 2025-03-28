@@ -2,12 +2,8 @@
 import sys
 import getopt
 import os
-
-""" sys.path.append('/home/esauvat/Documents/NORCE/unseen-storm-forecasts/python_mapping_tools')
-sys.path.append('/nird/projects/NSS9873K/emile/unseen-storm-forecasts/python_mapping_tools') """
-
-import geographics as geo
 import weatherdata as wd
+import weatherdata.geographics as geo
 
 ###     The passed arguments are the following : 
 ###     --file   (can be multiple inputs separated by a comma)

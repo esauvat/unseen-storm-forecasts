@@ -1,15 +1,11 @@
 
 ''' Script to make the maps of report between Hans' data and maximum '''
 
-import sys
 
-sys.path.append('/nird/projects/NS9873K/emile/unseen-storm-forecasts/python_mapping')
-
-import weatherdata as wd
 import xarray as xr
 import numpy as np
 import pickle
-
+import weatherdata as wd
 
 path = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.25.pkl'
 mapDir = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/maps/hans_era5/'
@@ -36,16 +32,16 @@ def relative_august():
 
     tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
 
-    hansData = [tp2023.sel(time=wd.np.datetime64('2023-08-06')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-07')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-08')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-09'))]
+    hansData = [tp2023.sel(time=np.datetime64('2023-08-06')),
+                tp2023.sel(time=np.datetime64('2023-08-07')),
+                tp2023.sel(time=np.datetime64('2023-08-08')),
+                tp2023.sel(time=np.datetime64('2023-08-09'))]
 
     for dailyData in hansData:
 
         res = dailyData / data
 
-        date = wd.np.datetime_as_string(dailyData['time'].values)[:10]
+        date = np.datetime_as_string(dailyData['time'].values)[:10]
         title = "Total precipitations relative to August's max : " + date
         fileName = "tp24_relative-max-august_all-res_" + date
 
@@ -56,10 +52,10 @@ def relative_august():
 
     hansMean2 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-08')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-08')
         )), 
-        2).sel(time=wd.np.datetime64('2023-08-08'))
+        2).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean2 / data
 
@@ -74,10 +70,10 @@ def relative_august():
 
     hansMean3 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-09')
         )), 
-        3).sel(time=wd.np.datetime64('2023-08-08'))
+        3).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean3 / data
 
@@ -92,10 +88,10 @@ def relative_august():
 
     hansMean4 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-06'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-06'),
+            np.datetime64('2023-08-09')
         )), 
-        4).sel(time=wd.np.datetime64('2023-08-08'))
+        4).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean4 / data
 
@@ -124,16 +120,16 @@ def relative_all_year():
 
     tp2023 = tpSet.open_data(key=('continuous','tp24_'+resolution+'_2023'))
 
-    hansData = [tp2023.sel(time=wd.np.datetime64('2023-08-06')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-07')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-08')),
-                tp2023.sel(time=wd.np.datetime64('2023-08-09'))]
+    hansData = [tp2023.sel(time=np.datetime64('2023-08-06')),
+                tp2023.sel(time=np.datetime64('2023-08-07')),
+                tp2023.sel(time=np.datetime64('2023-08-08')),
+                tp2023.sel(time=np.datetime64('2023-08-09'))]
 
     for dailyData in hansData:
 
         res = dailyData / data
         res = res.drop_vars("time")
-        date = wd.np.datetime_as_string(dailyData['time'].values.astype('datetime64[D]'))
+        date = np.datetime_as_string(dailyData['time'].values.astype('datetime64[D]'))
 
         title = "Total precipitations relative to yearly max : " + date
         fileName = "tp24_relative-max-year_all-res_" + date
@@ -145,10 +141,10 @@ def relative_all_year():
 
     hansMean2 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-08')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-08')
         )), 
-        2).sel(time=wd.np.datetime64('2023-08-08'))
+        2).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean2 / data
     res = res.drop_vars("time")
@@ -164,10 +160,10 @@ def relative_all_year():
 
     hansMean3 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-09')
         )), 
-        3).sel(time=wd.np.datetime64('2023-08-08'))
+        3).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean3 / data
     res = res.drop_vars("time")
@@ -183,10 +179,10 @@ def relative_all_year():
 
     hansMean4 = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-06'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-06'),
+            np.datetime64('2023-08-09')
         )), 
-        4).sel(time=wd.np.datetime64('2023-08-08'))
+        4).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean4 / data
     res = res.drop_vars("time")
@@ -214,10 +210,10 @@ def relative_mean2():
 
     hansMean = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-08')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-08')
         )), 
-        2).sel(time=wd.np.datetime64('2023-08-08'))
+        2).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean / data
     res = res.drop_vars("time")
@@ -245,10 +241,10 @@ def relative_mean3():
 
     hansMean = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-09')
         )), 
-        3).sel(time=wd.np.datetime64('2023-08-08'))
+        3).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean / data
     res = res.drop_vars("time")
@@ -276,10 +272,10 @@ def relative_mean2_monthly():
 
     hansMean = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-08')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-08')
         )), 
-        2).sel(time=wd.np.datetime64('2023-08-08'))
+        2).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean / data
 
@@ -306,10 +302,10 @@ def relative_mean3_monthly():
 
     hansMean = wd.mean_over_time(
         tp2023.sel(time=slice(
-            wd.np.datetime64('2023-08-07'),
-            wd.np.datetime64('2023-08-09')
+            np.datetime64('2023-08-07'),
+            np.datetime64('2023-08-09')
         )), 
-        3).sel(time=wd.np.datetime64('2023-08-08'))
+        3).sel(time=np.datetime64('2023-08-08'))
 
     res = hansMean / data
 
@@ -322,10 +318,6 @@ def relative_mean3_monthly():
 
     wd.geo.plt.close()
 
-
-if __name__=='__main__':
-    func_name = sys.argv[1]
-    globals()[func_name]()
 
 with open(path, 'wb') as outp:
     pickle.dump(tpSet, outp, pickle.HIGHEST_PROTOCOL)
