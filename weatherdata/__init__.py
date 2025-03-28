@@ -7,17 +7,20 @@ from datetime import datetime
 import os
 import numpy.ma as ma
 import geographics as geo
+import functions
+
+
 
 bound_values = {
-    'centerNo': (59.7, 62.1, 6.6, 11.5),
-    'largeNo': (57, 66, 3, 17),
-    'fullScand': (55, 71.4, 1.5, 32.4)
+    'centerNo':(59.7, 62.1, 6.6, 11.5),
+    'largeNo':(57, 66, 3, 17),
+    'fullScand':(55, 71.4, 1.5, 32.4)
 }
 
 alphaMonths = {
-    1: 'January', 2: 'February', 3: 'March', 4: 'April',
-    5: 'May', 6: 'June', 7: 'July', 8: 'August',
-    9: 'September', 10: 'October', 11: 'November', 12: 'December'
+    1:'January', 2:'February', 3:'March', 4:'April',
+    5:'May', 6:'June', 7:'July', 8:'August',
+    9:'September', 10:'October', 11:'November', 12:'December'
 }
 
 
@@ -29,16 +32,16 @@ def boundaries(
 ) -> tuple:
     """ Correcting, if needed, a wanted value for the coordinates range
     to make sure it fits the data """
-
+    
     assert (size in bound_values.keys()), "The size variable must be one of 'centerNo', 'largeNo' and 'fullScand'"
-
+    
     s, n, w, e = bound_values[size]  # Accessing the wanted values for the boundaries
-
+    
     latS = max(s, data.coords['latitude'][-1])  # Correcting each value if necessary to make sure the map
     latN = min(n, data.coords['latitude'][0])  # does not outrange the data
     lonW = max(w, data.coords['longitude'][0])
     lonE = min(e, data.coords['longitude'][-1])
-
+    
     return np.array([lonW, lonE, latS, latN]), (latS + latN) / 2, (lonW + lonE) / 2
 
 
@@ -52,33 +55,44 @@ def showcase_data(
         **kwargs: np.ndarray
 ) -> tuple:
     extent = kwargs.get('extent', [])
-
+    
     if 'time' not in data.dims:
-        data = data.expand_dims("time").transpose("time", "latitude",
-                                                  "longitude")  # If no time dimension, reshape the array to fit the data access later
-
-    timesIndex = kwargs.get('timesIndex',
-                            data['time'])  # Setting the default value for the time selection to all the dataset
+        data = data.expand_dims("time").transpose(
+            "time", "latitude",
+            "longitude"
+        )  # If no time dimension, reshape the array to fit the data access later
+    
+    timesIndex = kwargs.get(
+        'timesIndex',
+        data['time']
+    )  # Setting the default value for the time selection to all the dataset
     assert ((timesIndex.min() >= data['time'][0]) & (timesIndex.max() <= data['time'][
         -1]))  # Checking if the time selection does not get out of range for the dataset's dimension
-
+    
     if extent:
         vmin, vmax = extent
     else:
-        effectSample = select_sample(data, boundValues,
-                                     timesIndex)  # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
+        effectSample = select_sample(
+            data, boundValues,
+            timesIndex
+        )  # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
         vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)  # Computing the range of the colorbar
-
+    
     _, Y, X = data.dims
+    
+    p: object = None
+    
     for i in range(nbMap):
-        p: object = axgr[i].pcolormesh(data[X], data[Y], data.loc[timesIndex[i]],
-                                       # Plotting each set of value on the corresponding subplot
-                                       vmin=vmin,
-                                       vmax=vmax,
-                                       transform=geo.projPlane)
-
+        p = axgr[i].pcolormesh(
+            data[X], data[Y], data.loc[timesIndex[i]],
+            # Plotting each set of value on the corresponding subplot
+            vmin=vmin,
+            vmax=vmax,
+            transform=geo.projPlane
+        )
+    
     axgr.cbar_axes[0].colorbar(p)  # Adding the colorbar
-
+    
     return fig, axgr
 
 
@@ -120,24 +134,24 @@ def dataset_to_xr(data:Dataset, hindcastDate) :
 
 def select_area(data: xr.DataArray, boundValues: np.ndarray):
     """ Select the data in the geographic range that will be plotted """
-
+    
     [lonW, lonE, latS, latN] = boundValues
-
+    
     iLonW = np.where(np.isclose(data['longitude'], lonW))[0][0]  # Getting the index for each of the extreme
     iLonE = np.where(np.isclose(data['longitude'], lonE))[0][0]  # values of the latitude and longitude
     iLatS = np.where(np.isclose(data['latitude'], latS))[0][0]
     iLatN = np.where(np.isclose(data['latitude'], latN))[0][0]
-
+    
     ''' # Remark
     The following part can probably be inproved using xr.DataArray.copy() '''
-
+    
     res = xr.DataArray(
         data[:, iLatN:iLatS + 1, iLonW:iLonE + 1],  # Selecting the wanted data
         dims=data.dims,
         coords={
-            "time": data['time'],
-            "latitude": data['latitude'][iLatN:iLatS + 1],  # Adjusting latitude coordinate
-            "longitude": data['longitude'][iLonW:iLonE + 1]  # Adjusting longitude coordinate
+            "time":data['time'],
+            "latitude":data['latitude'][iLatN:iLatS + 1],  # Adjusting latitude coordinate
+            "longitude":data['longitude'][iLonW:iLonE + 1]  # Adjusting longitude coordinate
         }
     )
     return res
@@ -145,17 +159,17 @@ def select_area(data: xr.DataArray, boundValues: np.ndarray):
 
 def select_time(data: xr.DataArray, timesIndex: np.ndarray) -> xr.DataArray:
     """ Select the data in the time range that will be plotted """
-
+    
     ''' # Remark
     As above, probable improvment '''
-
+    
     res = xr.DataArray(
         data.loc[timesIndex, :, :],  # Selecting the wanted data
         dims=data.dims,
         coords={
-            "time": timesIndex,  # Adjusting time coordinate
-            "latitude": data['latitude'],
-            "longitude": data['longitude']
+            "time":timesIndex,  # Adjusting time coordinate
+            "latitude":data['latitude'],
+            "longitude":data['longitude']
         }
     )
     return res
@@ -172,14 +186,14 @@ def select_sample(data: xr.DataArray, boundValues: np.ndarray, timesIndex: np.nd
 def mean_over_time(data: xr.DataArray, span: int, edges: bool = True) -> xr.DataArray:
     if "time" not in data.dims:
         raise ValueError("Le DataArray doit avoir une dimension 'time'.")
-
+    
     shift = (span - 1) % 2  # Décale d'un cran à droite si span est pair
-
+    
     if edges:
         rolling_obj = data.rolling(time=span, center=True, min_periods=1)
     else:
         rolling_obj = data.rolling(time=span, center=True, min_periods=span)
-
+    
     return rolling_obj.construct("window_dim").shift(time=-shift).mean("window_dim")
 
 
@@ -266,9 +280,9 @@ def reindex_hindcast(da: xr.DataArray):
         da.values,
         dims=("latitude", "longitude", "time"),
         coords={
-            "latitude": da['latitude'],
-            "longitude": da['longitude'],
-            "time": np.array(newIndexes)
+            "latitude":da['latitude'],
+            "longitude":da['longitude'],
+            "time":np.array(newIndexes)
         }
     )
     return reindexed_da
@@ -329,16 +343,17 @@ def pears_full(arr):
 
 def pearson_correlation(
         data: xr.DataArray,
-        func: str = 'full'
+        func: str | None = 'full'
 ) -> xr.DataArray:
     data = data.stack(coordinates=["latitude", "longitude"])
     funcDict = dict(norm=pears_norm, mean=pears_mean, full=pears_full)
+    
     if func == 'full':
         output_dims = [["statistics"]]
     else:
         output_dims = [[]]
     result = xr.apply_ufunc(
-        funcDict[func], data,
+        funcDict[str: func], data,
         input_core_dims=[["number", "coordinates"]],
         output_core_dims=output_dims,
         vectorize=True,

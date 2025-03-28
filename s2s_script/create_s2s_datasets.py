@@ -1,8 +1,9 @@
+""" Creation of s2s weathersets """
 
-''' Creation of s2s' weathersets 0'''
-
-import weatherdata as wd
 import pickle
+
+from weatherdata.classes import Weatherset
+
 
 
 ###   Setting variables
@@ -10,12 +11,10 @@ import pickle
 dirs = ['/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/',
         '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/hindcast/daily/values/tp24/']
 
-
 ###   Creation of the datasets
 
-hRes = wd.Weatherset(dirs, reanalysis=False, resolution='0.25', multiType=True)
-lRes = wd.Weatherset(dirs, reanalysis=False, resolution='0.5', multiType=True)
-
+hRes = Weatherset(dirs, reanalysis=False, resolution='0.25', multiType=True)
+lRes = Weatherset(dirs, reanalysis=False, resolution='0.5', multiType=True)
 
 ###   Saving
 
