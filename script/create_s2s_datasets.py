@@ -18,7 +18,7 @@ lRes = Weatherset(dirs, reanalysis=False, resolution='0.5', multiType=True)
 
 ###   Saving
 
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.25.pkl', 'wb') as outp:
+with open('/weathersets/s2s_0.25.pkl', 'wb') as outp:
     pickle.dump(hRes, outp, pickle.HIGHEST_PROTOCOL)
-with open('/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5.pkl', 'wb') as outp:
+with open('/weathersets/s2s_0.5.pkl', 'wb') as outp:
     pickle.dump(lRes, outp, pickle.HIGHEST_PROTOCOL)

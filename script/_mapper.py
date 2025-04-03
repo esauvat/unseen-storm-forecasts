@@ -182,7 +182,7 @@ def draw(pathToFile:str) :
 
     fig, axis = geo.map(nbRow, nbColumn, nbMap, size, boundaries, projection)
 
-    fig, axis = wd.showcase_data(totalPrecipitation, boundaries, fig, axis, nbMap, timesIndex=effectDays)
+    fig, axis = geo.showcase_data(totalPrecipitation, boundaries, fig, axis, nbMap, timesIndex=effectDays)
     for i in range(nbMap):
         axis[i].set_title(wd.np.datetime_as_string(effectDays[i]))
     if title:

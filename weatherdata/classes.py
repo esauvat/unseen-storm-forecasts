@@ -2,7 +2,10 @@
 
 from typing import Any
 
-from __init__ import *
+import xarray as xr
+import numpy as np
+import os
+from weatherdata.__init__ import mean_over_time
 
 
 
@@ -44,6 +47,23 @@ def get_paths(pathListToData, resolution):
             del pathsToFiles[key]
     
     return pathsToFiles
+
+
+
+def extract_files(
+        sourceDir: str,
+        pathsToFiles: dict[tuple, str],
+):
+    fileType = ''
+    pathScatter = sourceDir.split('/')
+    while pathScatter:
+        subDir = pathScatter.pop()
+        if subDir == 'daily':
+            fileType = pathScatter[-1].split('-')[0]
+            break
+    assert type != '', "Wrong directory"
+    for filename in os.listdir(sourceDir):
+        pathsToFiles[(fileType, filename[:-3])] = os.path.join(sourceDir, filename)
 
 
 class Weatherset:

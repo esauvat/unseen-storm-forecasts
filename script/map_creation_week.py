@@ -24,7 +24,7 @@ projLCoNo = geo.ccrs.LambertConformal(central_latitude=cLat, central_longitude=c
 ###   Daily precipitations   ###
 
 fig, axis = geo.map(n=n, p=p, size=size, boundaries=boundaries, proj=projLCoNo)
-fig, axis = wd.showcase_data(totalPrecipitationsNo, effectSample, days, fig, axis)
+fig, axis = geo.showcase_data(totalPrecipitationsNo, effectSample, days, fig, axis)
 i = 0
 for ax in axis:
     ax.set_title(wd.nb_to_date(days[i], '2023'))
@@ -42,7 +42,7 @@ threeDaysAvgPrecipitationsNo = wd.mean_over_time(totalPrecipitationsNo, span=3)
 
 fig, axis = geo.map(n=n, p=p, size=size, boundaries=boundaries, proj=projLCoNo)
 
-fig, axis = wd.showcase_data(threeDaysAvgPrecipitationsNo, boundaries, days, fig, axis)
+fig, axis = geo.showcase_data(threeDaysAvgPrecipitationsNo, boundaries, days, fig, axis)
 i = 0
 for ax in axis:
     ax.set_title(wd.nb_to_date(days[i], '2023'))

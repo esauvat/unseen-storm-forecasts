@@ -4,7 +4,9 @@ from cartopy import crs as ccrs, feature as cfeature
 from cartopy.mpl.geoaxes import GeoAxes
 from mpl_toolkits.axes_grid1 import AxesGrid
 import matplotlib.pyplot as plt
-
+import numpy as np
+import xarray as xr
+from __init__ import *
 
 
 ###   Some projection variable   ###
@@ -23,13 +25,13 @@ sizes = {
 
 ###   Map background   ###
 
-def map_background(ax: GeoAxes, boundaries=None) -> GeoAxes:
-    if boundaries is None:
-        boundaries = []
-    assert (len(boundaries) in [0, 4]), "The boundaries must be an array of 4 values"  #
+def map_background(ax: GeoAxes, boundValues=None) -> GeoAxes:
+    if boundValues is None:
+        boundValues = []
+    assert (len(boundValues) in [0, 4]), "The boundValues must be an array of 4 values"  #
     
-    if not boundaries.size == 0:
-        ax.set_extent(boundaries, crs=projPlane)  # Set the size of the map according to boundaries
+    if not boundValues.size == 0:
+        ax.set_extent(boundValues, crs=projPlane)  # Set the size of the map according to boundValues
     ax.coastlines()
     ax.add_feature(cfeature.STATES, linewidth=0.3, linestyle='--', edgecolor='black')  # Add european countries borders
     ax.add_feature(cfeature.BORDERS, linewidth=0.5, linestyle='solid', edgecolor='black')  # Add bordrers
@@ -40,7 +42,7 @@ def map_background(ax: GeoAxes, boundaries=None) -> GeoAxes:
     return ax
 
 
-def map(n=1, p=1, nbMap=1, size='medium', boundaries=None, proj=projMerc):
+def map(n=1, p=1, nbMap=1, size='medium', boundValues=None, proj=projMerc):
     assert (size in sizes.keys()), "The size is incorrect"
     
     figSize = sizes[size]
@@ -59,6 +61,57 @@ def map(n=1, p=1, nbMap=1, size='medium', boundaries=None, proj=projMerc):
     )  # Solo colorbar
     
     for i in range(nbMap):
-        map_background(axgr[i], boundaries)  # Putting background in each effective subplot
+        map_background(axgr[i], boundValues)  # Putting background in each effective subplot
     
+    return fig, axgr
+
+
+###   Showcasing the data   ###
+
+def showcase_data(
+        data: xr.DataArray,
+        boundValues: np.ndarray,
+        fig: plt.Figure, axgr: AxesGrid,
+        nbMap: int | None = 1,
+        **kwargs: np.ndarray
+) -> tuple:
+    extent = kwargs.get('extent', [])
+
+    if 'time' not in data.dims:
+        data = data.expand_dims("time").transpose(
+            "time", "latitude",
+            "longitude"
+        )  # If no time dimension, reshape the array to fit the data access later
+
+    timesIndex = kwargs.get(
+        'timesIndex',
+        data['time']
+    )  # Setting the default value for the time selection to all the dataset
+    assert ((timesIndex.min() >= data['time'][0]) & (timesIndex.max() <= data['time'][
+        -1]))  # Checking if the time selection does not get out of range for the dataset's dimension
+
+    if extent:
+        vmin, vmax = extent
+    else:
+        effectSample = select_sample(
+            data, boundValues,
+            timesIndex
+        )  # Selecting the values of the dataset that will be plotted to determine the best extent for the colorbar
+        vmin, vmax = effectSample.min(skipna=True), effectSample.max(skipna=True)  # Computing the range of the colorbar
+
+    _, Y, X = data.dims
+
+    p: object = None
+
+    for i in range(nbMap):
+        p = axgr[i].pcolormesh(
+            data[X], data[Y], data.loc[timesIndex[i]],
+            # Plotting each set of value on the corresponding subplot
+            vmin=vmin,
+            vmax=vmax,
+            transform=projPlane
+        )
+
+    axgr.cbar_axes[0].colorbar(p)  # Adding the colorbar
+
     return fig, axgr
