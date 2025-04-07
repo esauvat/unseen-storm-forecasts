@@ -1,5 +1,6 @@
 # Ignore data files
-*.nc
+tp24*
+weathersets/results/*
 
 # Ignore running files
 *.ipynb

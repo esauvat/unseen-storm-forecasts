@@ -22,6 +22,9 @@ sizes = {
     'huge':(60, 45)
 }
 
+weightsLRes = xr.open_dataarray('geo_weights-0.5.nc')
+weightsHRes = xr.open_dataarray('geo_weights-0.25.nc')
+
 
 ###   Map background   ###
 
