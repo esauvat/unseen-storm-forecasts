@@ -71,7 +71,8 @@ class Weatherset:
     
     def __init__(
             self, pathListToData: list[str], reanalysis: bool | None = True, resolution: str | None = None,
-            multiType: bool | None = False
+            multiType: bool | None = False,
+            resultsDirectory: str | None = None,
     ):
         
         self.resolution = resolution  # Resolution of the data, if None, all resolutions are selected
@@ -131,9 +132,10 @@ class Weatherset:
         
         self.compute = dict()  # compute dict links already computed arrays such as max over time to pkl file's
         # addresses
+        self.results: str = resultsDirectory
         
         pass
-    
+
     def open_data(self, key: tuple[str, str]) -> xr.DataArray:
         """ Open "file" as DataArray and reshape it to fit the class attributes """
         

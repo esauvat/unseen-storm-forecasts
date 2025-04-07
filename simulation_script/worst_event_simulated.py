@@ -18,12 +18,13 @@
 #
 #       To ensure such plotting, the resulting array will have the following dimensions :
 #
-#           dimensions :    - Simulation reference (multiIndex)
-#                               • initialization date
-#                               • hindcast date
-#                               • ensemble member
-#                           - Information
-#                               (the coordinates will be [value, date, overlap_month])
+#           dimensions :    - Simulation reference (no index)
+#
+#           coordinates:    - initialization date (sim)
+#                           - hindcast date (sim)
+#                           - ensemble member (sim)
+#                           - time (sim)
+#                           - overlap month (sim)
 #
 
 ###################################################################################################
@@ -44,22 +45,18 @@ from weatherdata.classes import Weatherset
 #   Variables definition
 #
 
-# Computed results folder
-storingDir: str = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/results/'
-
 # Hans' areas boundValues
-lats: slice(float,float) = (
+lats: slice(float, float) = (
     slice(62.75, 60.5))
-longs: slice(float,float) = (
+longs: slice(float, float) = (
     slice(9, 11.75))
 
 # Dictionary to convert treatment type into time span
-typeDict: dict[str:int] = {
+typeDict: dict[ str:int ] = {
     "daily":None, "mean2":2, "mean3":3 }
 
 # Minimum lead time for uncorrelated ensemble members
 firstUncorrelated: int = 15
-
 
 
 ###################################################################################################
@@ -152,28 +149,28 @@ def open_files(
     #   False           | True          | [lowres]
     #   False           | False         | [lowres, highres]
 
-    if tpSet.multiType and initializationDate>'2022-12-29':
+    if tpSet.multiType and initializationDate > '2022-12-29':
         typeList = [
             'forecast'
         ]
-    elif tpSet.multiType :
+    elif tpSet.multiType:
         typeList = [
             'forecast', 'hindcast'
         ]
     else:
-        setType: str = tpSet.fileList[0][0]
+        setType: str = tpSet.fileList[ 0 ][ 0 ]
         if setType == 'forecast':
             typeList = [
                 'forecast'
             ]
-        elif initializationDate<='2022-12-29':
+        elif initializationDate <= '2022-12-29':
             typeList = [
                 'hindcast'
             ]
         else:
             return None
 
-    if initializationDate>'2023-06-29' or firstUncorrelated>=15:
+    if initializationDate > '2023-06-29' or firstUncorrelated >= 15:
         nameList = [
             'tp24_0.5x0.5_' + initializationDate
         ]
@@ -186,9 +183,9 @@ def open_files(
     #############################################
     #   Open and concatenate files
 
-    arrays: list[xr.DataArray] = []
+    arrays: list[ xr.DataArray ] = [ ]
     for fileType in typeList:
-        sameTypeArrays: list[xr.DataArray] = []
+        sameTypeArrays: list[ xr.DataArray ] = [ ]
         for fileName in nameList:
             sameTypeArrays.append(
                 tpSet.open_data(
@@ -197,18 +194,18 @@ def open_files(
                     latitude=lats,
                     longitude=longs
                 ).mean(
-                    dim=["latitude", "longitude"]
+                    dim=[ "latitude", "longitude" ]
                 )
             )
         res = xr.concat(
             sameTypeArrays,
             dim="time"
         ).expand_dims(
-            dict(fdate=np.array([initializationDate]))
+            dict(fdate=np.array([ initializationDate ]))
         )
 
         arrays.append(
-            res.stack(sim=["fdate","hdate","number"])
+            res.stack(sim=[ "fdate", "hdate", "number" ])
         )
 
     #############################################
@@ -220,10 +217,10 @@ def open_files(
     )
 
     firstCurrentUnco = (
-        np.datetime64(initializationDate)
-        + np.timedelta64(firstUncorrelated, 'D'))
+            np.datetime64(initializationDate)
+            + np.timedelta64(firstUncorrelated, 'D'))
     res = res.sel(
-        time = (res.coords['time']>=firstCurrentUnco)
+        time=(res.coords[ 'time' ] >= firstCurrentUnco)
     )
 
     return res
@@ -241,17 +238,16 @@ def determine_overlap_month(
     lastMonth: int = lastDate.astype(object).month
     firstMonthNumber: int = firstDate.astype('datetime64[M]').astype(int)
     lastMonthNumber: int = lastDate.astype('datetime64[M]').astype(int)
-    if (lastMonthNumber - firstMonthNumber)==2:
-        return (firstMonth+1) % 12
+    if (lastMonthNumber - firstMonthNumber) == 2:
+        return (firstMonth + 1) % 12
     else:
         # Determine the lenght of the extent:
         lenght: int = wd.date_as_int(lastDate) - wd.date_as_int(firstDate)
         lastDayNumber = lastDate.astype(object).day
-        if lastDayNumber >= (lenght//2) :
+        if lastDayNumber >= (lenght // 2):
             return lastMonth
         else:
             return firstMonth
-
 
 
 ###################################################################################################
@@ -262,7 +258,7 @@ def determine_overlap_month(
 def main(
         tpSet: Weatherset,
         treatmentType: str | None = "daily",
-) :
+):
     """ Compute the worst event for each simulation """
 
     # For each initialization date, we use open_files to obtain the concatenated array of all
@@ -271,26 +267,30 @@ def main(
     # The second part will be to reshape the array to delete all possible empty parts (full of
     # Nan) in the array to gain place
 
-    # List of all the initialization dates
-    initDateList: np.ndarray[tuple[int,], str] = np.unique([fileName[-10:] for _, fileName in tpSet.fileList])
+    # List of all the initialization dates, nb : init dates are drawn from only low resolution files because fewer exist but
+    # low resolution is always necessary
+    lResArr = np.array(tpSet.fileList)[
+        np.where(np.array(
+            [ fileName[ 5:-11 ] for _, fileName in tpSet.fileList ]
+        ) == '0.5x0.5')
+    ]
+    initDateList: np.ndarray[ tuple[ int, ], str ] = np.unique([ fileName[ -10: ] for _, fileName in lResArr ])
     # Temporary storage for results arrays before concatenation
-    resultsList: list[xr.DataArray] = []
+    resultsList: list[ xr.DataArray ] = [ ]
     # Time span for possible averaging in time
-    span: int = typeDict[treatmentType]
+    span: int = typeDict[ treatmentType ]
 
     #############################################
     #   Process each file
     for date in initDateList:
         data = open_files(date, tpSet)
-            # data : xr.DataArray(
-            #   values = np.array("""avg tp over hans area""")
-            #   dims = (time,
-            #           sim=MultiIndex(fdate,hdate,number) ) )
+        # data : xr.DataArray(
+        #   values = np.array("""avg tp over hans area""")
+        #   dims = (time,
+        #           sim=MultiIndex(fdate,hdate,number) ) )
         if span:
             data = wd.mean_over_time(
-                data, span, center=False
-            ).isel(
-                time = slice(0,-span+1)
+                data, span, edges=False
             )
 
         # Select each required information:
@@ -304,8 +304,9 @@ def main(
             )
         )
         valMax = valMax.assign_coords(
-            {"time": ("sim", dateMax.values),
-             "olMonth": ("sim", olMonth)}
+            {
+                "time":("sim", dateMax.values),
+                "olMonth":("sim", olMonth) }
         )
 
         resultsList.append(valMax)
@@ -319,16 +320,136 @@ def main(
         resultsList,
         dim="sim"
     )
-    del resultsList # Delete the results list to free space
+    del resultsList  # Delete the results list to free space
 
     name = "s2s-HA_avg-all_res-worst_event_simulated-" + treatmentType
-    path = storingDir + name + ".nc"
+    path = set.results + name + ".nc"
 
     # Remove MultiIndexes
     res = res.reset_index("sim")
 
     res.to_netcdf(path)
-    del res
-    tpSet.compute[name] = path
+    tpSet.compute[ name ] = path
+
+    return res
+    ### END ###
+
+
+###################################################################################################
+#
+#   Run section
+#
+
+wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
+
+import pickle
+
+
+
+with open(wsPath, 'rb') as inp:
+    set: Weatherset = pickle.load(inp)
+
+mean2Maxs = main(set, "mean2")
+mean3Maxs = main(set, "mean3")
+
+with open(wsPath, 'wb') as outp:
+    pickle.dump(set, outp, pickle.HIGHEST_PROTOCOL)
+
+#   Create the plots
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+
+def plot_monthly(
+        arr: xr.DataArray,
+        title: str,
+        treatmentType: str | None = "daily"
+) -> None:
+    months = np.arange(1, 13)
+    monthsLabels = [
+        'jan', 'feb', 'mar', 'apr', 'may', 'jun',
+        'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+    ]
+    vals = [
+        arr.where(arr[ 'olMonth' ] == m, drop=True).values for m in months
+    ]
+
+    plt.figure(figsize=(12, 6))
+    sns.boxplot(data=vals)
+
+    # Determining Hans value for reference
+    monthlyMaxERA5 = xr.open_dataarray(
+        '/nird/projects/NS9873K/emile/unseen-storm-forecasts/'
+        'weathersets/results/continuous_hans-area-avg-' + treatmentType + '_0.5_monthly-max.nc',
+    )
+    hansValue = monthlyMaxERA5.sel(
+        years='2023', months='aug'
+    )
+    plt.plot([hansValue for _ in range(len(months))], color='red')
+
+    plt.xticks(ticks=list(range(12)), labels=monthsLabels, rotation=45)
+    plt.ylabel('total precipitation (m)')
+    plt.title(title)
+    path = ('/nird/projects/NS9873K/emile/unseen-storm-forecasts/plots/simulations_maximums/HA_avg-months-maxs_'
+    + treatmentType + '.png')
+    plt.savefig(path)
 
     pass
+
+
+# def plot_daily(
+#         arr: xr.DataArray,
+#         title: str,
+#         path: str
+# ) -> None:
+#     def get_cal_idx(
+#             da: xr.DataArray
+#     ) -> xr.DataArray:
+#         val = np.array([
+#             100 * date.month + date.day for date in
+#             da.values.astype('datetime64[D]').astype(object)
+#         ])
+#         res = xr.full_like(da, np.nan)
+#         res.values = val
+#         return res
+#
+#     days = np.arange(
+#         np.datetime64('2000-01-01'),
+#         np.datetime64('2001-01-01'),
+#         np.timedelta64(1, 'D')
+#     )
+#     vals = [
+#         arr.where(get_cal_idx(arr[ 'time' ]) == dateIdx, drop=True)
+#         for dateIdx in get_cal_idx(xr.DataArray(days)).values
+#     ]
+#
+#     plt.figure(figsize=(12, 6))
+#     sns.boxplot(data=vals)
+#
+#     plt.xticks(ticks=list(range(366)))
+#     plt.ylabel('total precipitation (m)')
+#     plt.title(title)
+#     plt.savefig(path)
+#
+#     pass
+
+
+plot_monthly(
+    mean2Maxs, "2 days average maximums for each simulation",
+    "mean2"
+)
+plot_monthly(
+    mean3Maxs, "3 days average maximums for each simulation",
+    "mean3"
+)
+
+# plot_daily(
+#     mean2Maxs, "2 days average maximums for each simulation",
+#     '/nird/projects/NS9873K/emile/unseen-storm-forecasts/plots/simulations_maximums/HA_avg-days-maxs_mean2.png'
+# )
+# plot_daily(
+#     mean3Maxs, "3 days average maximums for each simulation",
+#     '/nird/projects/NS9873K/emile/unseen-storm-forecasts/plots/simulations_maximums/HA_avg-days-maxs_mean3.png'
+# )

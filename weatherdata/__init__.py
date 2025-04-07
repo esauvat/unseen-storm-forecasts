@@ -168,29 +168,24 @@ def mean_over_time(
         data: xr.DataArray,
         span: int,
         edges: bool = True,
-        center: bool = True
 ) -> xr.DataArray:
     if "time" not in data.dims:
         raise ValueError(
             "Le DataArray doit avoir une dimension 'time'.")
 
-    shift = (span - 1) % 2  # Décale d'un cran à droite si span est pair
+    rolling_obj = data.rolling(
+        time=span,
+        min_periods=1,
+    ).mean("time")
 
-    if edges:
-        rolling_obj = data.rolling(
-            time=span,
-            center=center,
-            min_periods=1)
-    else:
-        rolling_obj = data.rolling(
-            time=span,
-            center=center,
-            min_periods=span)
+    if not edges:
+        rolling_obj = rolling_obj.isel(
+            time=slice(
+                span-1, len(rolling_obj['time'].values)
+            )
+        )
 
-    return rolling_obj.construct(
-        "window_dim").shift(
-        time=-shift).mean(
-        "window_dim")
+    return rolling_obj
 
 
 def sum_over_space(

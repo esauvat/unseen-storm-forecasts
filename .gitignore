@@ -1,12 +1,9 @@
-
-##################################
-#       Ignore data files 
-
+# Ignore data files
 *.nc
 
+# Ignore running files
+*.ipynb
 
-################################## 
 #       Ignore testing files
-
 console.ipynb
 wset_test/
