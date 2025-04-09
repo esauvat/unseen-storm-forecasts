@@ -6,6 +6,7 @@ import sys
 import xarray as xr
 
 import weatherdata as wd
+import weatherdata.functions
 
 
 
@@ -126,7 +127,10 @@ def monthly():
 
 
 if __name__ == '__main__':
-    func_name = sys.argv[1]
+    if len(sys.argv) >= 2:
+        func_name = sys.argv[1]
+    else:
+        func_name = 'all_time'
     globals()[func_name]()
 
 with open(wsPath, 'wb') as outp:

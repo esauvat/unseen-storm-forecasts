@@ -22,8 +22,10 @@ sizes = {
     'huge':(60, 45)
 }
 
-weightsLRes = xr.open_dataarray('geo_weights-0.5.nc')
-weightsHRes = xr.open_dataarray('geo_weights-0.25.nc')
+weightsLRes = xr.open_dataarray(
+    '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.5.nc')
+weightsHRes = xr.open_dataarray(
+    '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.25.nc')
 
 
 ###   Map background   ###
@@ -118,3 +120,33 @@ def showcase_data(
     axgr.cbar_axes[0].colorbar(p)  # Adding the colorbar
 
     return fig, axgr
+
+
+###   Apply earth's curvature weights
+
+def apply_curv_weights(
+        data: xr.DataArray,
+) -> xr.DataArray:
+    """ Apply weights to take into account earth's curvature when averaging over space """
+
+    resolution = data['latitude'].values[0] - data['latitude'].values[1]
+    if resolution == 0.5:
+        weights = weightsLRes
+    elif resolution == 0.25:
+        weights = weightsHRes
+    else:
+        raise ValueError('The resolution must be 0.5 or 0.25')
+
+    latMin = data['latitude'].min().values
+    latMax = data['latitude'].max().values
+    lonMin = data['longitude'].min().values
+    lonMax = data['longitude'].max().values
+
+    weights = weights.sel(
+        latitude=slice(latMax, latMin),
+        longitude=slice(lonMin, lonMax)
+    )
+
+    res = (data * weights) / weights.max()
+
+    return res

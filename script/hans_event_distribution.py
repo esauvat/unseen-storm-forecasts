@@ -6,6 +6,7 @@ import pickle
 import xarray as xr
 
 from weatherdata.classes import Weatherset
+from weatherdata.geographics import apply_curv_weights
 
 
 
@@ -31,8 +32,11 @@ if not name in tpSet.compute.keys():
     
     def process_daily(a: xr.DataArray) -> None:
         global values
+        a = apply_curv_weights(a.sel(
+            latitude=latitudes, longitude=longitudes
+        ))
         values.append(
-            a.sel(latitude=latitudes, longitude=longitudes).mean(
+            a.mean(
                 dim=["latitude", "longitude"]
             )
         )

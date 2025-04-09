@@ -175,13 +175,14 @@ def mean_over_time(
 
     rolling_obj = data.rolling(
         time=span,
+        center=True,
         min_periods=1,
     ).mean("time")
 
     if not edges:
-        rolling_obj = rolling_obj.isel(
+        rolling_obj = rolling_obj.shift(time=-span//2).isel(
             time=slice(
-                span-1, len(rolling_obj['time'].values)
+            0, len(rolling_obj['time'].values - span + 1)
             )
         )
 

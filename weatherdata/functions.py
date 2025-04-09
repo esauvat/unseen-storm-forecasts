@@ -307,7 +307,8 @@ def combine_4_files_ha(
         longitude=slice(
             9,
             11.75)
-    ).mean(
+    )
+    forecast = geo.apply_curv_weights(forecast).mean(
         dim=["latitude", "longitude"]
     )
 
@@ -325,7 +326,8 @@ def combine_4_files_ha(
         longitude=slice(
             9,
             11.75)
-    ).mean(
+    )
+    hindcast = geo.apply_curv_weights(hindcast).mean(
         dim=["latitude", "longitude"]
     )
 

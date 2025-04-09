@@ -54,18 +54,18 @@ mean2Name = ('continuous_hans-area-avg-mean2_' + tpSet.resolution + '_monthly-ma
 mean3Name = ('continuous_hans-area-avg-mean3_' + tpSet.resolution + '_monthly-max')
 
 if not dailyName in tpSet.compute.keys():
-    path = storingDir + dailyName
+    path = storingDir + dailyName + '.nc'
     sort_monthly_max(data).to_netcdf(path)
     tpSet.compute[dailyName] = path
 
 if not mean2Name in tpSet.compute.keys():
-    path = storingDir + mean2Name
+    path = storingDir + mean2Name + '.nc'
     mean2 = wd.mean_over_time(data=data, span=2, edges=False)
     sort_monthly_max(mean2).to_netcdf(path)
     tpSet.compute[mean2Name] = path
 
 if not mean3Name in tpSet.compute.keys():
-    path = storingDir + mean3Name
+    path = storingDir + mean3Name + '.nc'
     mean3 = wd.mean_over_time(data=data, span=3, edges=False)
     sort_monthly_max(mean3).to_netcdf(path)
     tpSet.compute[mean3Name] = path

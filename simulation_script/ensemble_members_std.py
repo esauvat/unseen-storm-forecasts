@@ -60,8 +60,7 @@ def process_init_date(
     span = typeDict[treatmentType]
     if span:
         data = wd.mean_over_time(
-            data, span=span, edges=False, center=False).isel(
-            time=slice(0, -span + 1))
+            data, span=span, edges=False)
 
     def members_std(
             arr
@@ -70,7 +69,9 @@ def process_init_date(
             arr, axis=2)
 
     data = xr.apply_ufunc(
-        members_std, data, input_core_dims=[["number"]], output_core_dims=[[]])
+        members_std, data,
+        input_core_dims=[["number"]],
+        output_core_dims=[[]])
     data = data.expand_dims(
         { "fdate":[fileDate] }).stack(
         sim=["fdate", "hdate"]).reset_index(
@@ -120,3 +121,32 @@ def compute_std(
     tpSet.compute[name] = path
 
     ### END ###
+
+
+###############################################################
+#
+#       Run the program
+#
+
+if __name__ == "__main__":
+
+    wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
+
+    import pickle
+
+
+
+    with open(
+            wsPath, 'rb') as inp:
+        set = pickle.load(
+            inp)
+
+    compute_std(
+        set, '2021-01-01', "mean2")
+    compute_std(
+        set, '2021-01-01', "mean3")
+
+    with open(
+            wsPath, 'wb') as outp:
+        pickle.dump(
+            set, outp, pickle.HIGHEST_PROTOCOL)

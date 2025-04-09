@@ -36,6 +36,7 @@ import numpy as np
 import xarray as xr
 
 import weatherdata as wd
+from weatherdata.geographics import apply_curv_weights
 from weatherdata.classes import Weatherset
 
 
@@ -56,7 +57,7 @@ typeDict: dict[ str:int ] = {
     "daily":None, "mean2":2, "mean3":3 }
 
 # Minimum lead time for uncorrelated ensemble members
-firstUncorrelated: int = 15
+firstUncorrelated: int = 16
 
 
 ###################################################################################################
@@ -187,13 +188,12 @@ def open_files(
     for fileType in typeList:
         sameTypeArrays: list[ xr.DataArray ] = [ ]
         for fileName in nameList:
+            arr = tpSet.open_data(
+                key=(fileType, fileName)
+            ).sel(latitude=lats, longitude=longs)
+
             sameTypeArrays.append(
-                tpSet.open_data(
-                    key=(fileType, fileName)
-                ).sel(
-                    latitude=lats,
-                    longitude=longs
-                ).mean(
+                apply_curv_weights(arr).mean(
                     dim=[ "latitude", "longitude" ]
                 )
             )
@@ -204,9 +204,14 @@ def open_files(
             dict(fdate=np.array([ initializationDate ]))
         )
 
-        arrays.append(
-            res.stack(sim=[ "fdate", "hdate", "number" ])
-        )
+        if "hdate" in res.dims:
+            arrays.append(
+                res.stack(sim=[ "fdate", "hdate", "number" ])
+            )
+        else:
+            arrays.append(
+                res.stack(sim=[ "fdate", "number" ])
+            )
 
     #############################################
     #   Select only high enough lead time
@@ -388,6 +393,7 @@ def plot_monthly(
         years='2023', months='aug'
     )
     plt.plot([hansValue for _ in range(len(months))], color='red')
+    plt.text(0, 1.01*hansValue, "Hans", color='red')
 
     plt.xticks(ticks=list(range(12)), labels=monthsLabels, rotation=45)
     plt.ylabel('total precipitation (m)')

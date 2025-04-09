@@ -11,6 +11,7 @@ import numpy as np
 import xarray as xr
 
 import weatherdata as wd
+from weatherdata.geographics import apply_curv_weights
 from weatherdata.classes import Weatherset
 
 
@@ -71,13 +72,15 @@ def process_4_files(
             data1 = data1.sel(
                 latitude=lats,
                 longitude=longs
-            ).mean(
+            )
+            data1 = apply_curv_weights(data1).mean(
                 dim=["latitude", "longitude"]
             )
             data2 = data2.sel(
                 latitude=lats,
                 longitude=longs
-            ).mean(
+            )
+            data2 = apply_curv_weights(data2).mean(
                 dim=["latitude", "longitude"]
             )
 
@@ -139,8 +142,7 @@ def process_4_files(
         data = wd.mean_over_time(
             data,
             span,
-            edges=False,
-            center=False).isel(time=slice(0,-span+1))
+            edges=False)
 
         # Change the time coordinates to the lead time as int
     intFileDate = wd.date_as_int(
@@ -166,6 +168,18 @@ def open_arrays(
         tpSet: Weatherset,
         timeSpan: int | None = None
 ) -> xr.DataArray:
+    def open_array(
+            key: tuple[str,str]
+    ) -> xr.DataArray:
+        arr = tpSet.open_data(
+            key
+        ).sel(
+            latitude=lats, longitude=longs
+        )
+        return apply_curv_weights(arr).mean(
+            dim=["latitude", "longitude"]
+        )
+
     if timeSpan and 15 < leadTime <= 15 + timeSpan:
         fileTypes = [
             'forecast',
@@ -179,35 +193,15 @@ def open_arrays(
             product(
                 fileTypes,
                 fileNames))
-        a = tpSet.open_data(
-            keys[0]).sel(
-            latitude=lats,
-            longitude=longs
-        ).mean(
-            ["latitude", "longitude"])
-        b = tpSet.open_data(
-            keys[1]).sel(
-            latitude=lats,
-            longitude=longs
-        ).mean(
-            ["latitude", "longitude"])
+        a = open_array(keys[0])
+        b = open_array(keys[1])
         forecast = xr.concat(
             [a, b],
             dim="time"
         ).sel(
             number=numbers)
-        a = tpSet.open_data(
-            keys[2]).sel(
-            latitude=lats,
-            longitude=longs
-        ).mean(
-            ["latitude", "longitude"])
-        b = tpSet.open_data(
-            keys[3]).sel(
-            latitude=lats,
-            longitude=longs
-        ).mean(
-            ["latitude", "longitude"])
+        a = open_array(keys[2])
+        b = open_array(keys[3])
         hindcast = xr.concat(
             [a, b],
             dim="time"
@@ -222,21 +216,10 @@ def open_arrays(
             ['forecast', 'tp24_' + dateResolution + '_' + fileDate],
             ['hindcast', 'tp24_' + dateResolution + '_' + fileDate],
         ]
-        forecast = tpSet.open_data(
-            tuple(
-                keys[0])).sel(
-            latitude=lats,
-            longitude=longs,
+        forecast = open_array(keys[0]).sel(
             number=numbers
-        ).mean(
-            ["latitude", "longitude"])
-        hindcast = tpSet.open_data(
-            tuple(
-                keys[1])).sel(
-            latitude=lats,
-            longitude=longs,
-        ).mean(
-            ["latitude", "longitude"])
+        )
+        hindcast = open_array(keys[1])
 
     return xr.concat(
         [forecast, hindcast],
@@ -260,8 +243,7 @@ def process_files_one_ltime(
         data = wd.mean_over_time(
             data,
             timeSpan,
-            edges=False,
-            center=False
+            edges=False
         )
 
     return data.sel(
@@ -272,7 +254,9 @@ def process_files_one_ltime(
 
 
 ###############################################################
+#
 #       Main functions
+#
 
 def main(
         tpSet: Weatherset,
@@ -362,3 +346,25 @@ def main(
     pass
 
     ### END ###
+
+
+###############################################################
+#
+#   Run the program
+#
+
+if __name__ == '__main__':
+    wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
+
+    import pickle
+
+
+
+    with open(wsPath, 'rb') as inp:
+        set: Weatherset = pickle.load(inp)
+
+    main(set, "mean2", '2021-01-01')
+    main(set, "mean3", '2021-01-01')
+
+    with open(wsPath, 'wb') as outp:
+        pickle.dump(set, outp, pickle.HIGHEST_PROTOCOL)
