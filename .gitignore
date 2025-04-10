@@ -1,6 +1,8 @@
 # Ignore data files
 tp24*
 weathersets/results/*
+weathersets/forecast_results/*
+weathersets/hindcast_results/*
 
 # Ignore running files
 *.ipynb

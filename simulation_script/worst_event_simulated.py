@@ -262,6 +262,7 @@ def determine_overlap_month(
 
 def main(
         tpSet: Weatherset,
+        pathSpecific: str | None = '',
         treatmentType: str | None = "daily",
 ):
     """ Compute the worst event for each simulation """
@@ -327,7 +328,9 @@ def main(
     )
     del resultsList  # Delete the results list to free space
 
-    name = "s2s-HA_avg-all_res-worst_event_simulated-" + treatmentType
+    if pathSpecific:
+        pathSpecific += '-'
+    name = "s2s-" + pathSpecific + "HA_avg-all_res-worst_event_simulated-" + treatmentType
     path = set.results + name + ".nc"
 
     # Remove MultiIndexes
@@ -348,19 +351,11 @@ def main(
 wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_all-res.pkl'
 
 import pickle
+import sys
 
 
 
-with open(wsPath, 'rb') as inp:
-    set: Weatherset = pickle.load(inp)
-
-mean2Maxs = main(set, "mean2")
-mean3Maxs = main(set, "mean3")
-
-with open(wsPath, 'wb') as outp:
-    pickle.dump(set, outp, pickle.HIGHEST_PROTOCOL)
-
-#   Create the plots
+#   Function to create the plots
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -370,6 +365,7 @@ import seaborn as sns
 def plot_monthly(
         arr: xr.DataArray,
         title: str,
+        pathSpecific: str | None = '',
         treatmentType: str | None = "daily"
 ) -> None:
     months = np.arange(1, 13)
@@ -398,8 +394,10 @@ def plot_monthly(
     plt.xticks(ticks=list(range(12)), labels=monthsLabels, rotation=45)
     plt.ylabel('total precipitation (m)')
     plt.title(title)
-    path = ('/nird/projects/NS9873K/emile/unseen-storm-forecasts/plots/simulations_maximums/HA_avg-months-maxs_'
-    + treatmentType + '.png')
+    if pathSpecific:
+        pathSpecific += '/'
+    path = ('/nird/projects/NS9873K/emile/unseen-storm-forecasts/plots/simulations_maximums/' + pathSpecific +
+            'HA_avg-months-maxs_' + treatmentType + '.png')
     plt.savefig(path)
 
     pass
@@ -442,14 +440,33 @@ def plot_monthly(
 #     pass
 
 
-plot_monthly(
-    mean2Maxs, "2 days average maximums for each simulation",
-    "mean2"
-)
-plot_monthly(
-    mean3Maxs, "3 days average maximums for each simulation",
-    "mean3"
-)
+
+
+if __name__ == '__main__':
+
+    dirAddon = ''
+
+    if len(sys.argv) >= 2:
+        wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/' + sys.argv[1]
+        dirAddon = sys.argv[1].split('_')[-1][:-4]
+
+    with open(wsPath, 'rb') as inp:
+        set: Weatherset = pickle.load(inp)
+
+    mean2Maxs = main(set, dirAddon, "mean2")
+    mean3Maxs = main(set, dirAddon, "mean3")
+
+    with open(wsPath, 'wb') as outp:
+        pickle.dump(set, outp, pickle.HIGHEST_PROTOCOL)
+
+    plot_monthly(
+        mean2Maxs, "2 days average maximums for each simulation",
+        dirAddon, "mean2"
+    )
+    plot_monthly(
+        mean3Maxs, "3 days average maximums for each simulation",
+        dirAddon, "mean3"
+    )
 
 # plot_daily(
 #     mean2Maxs, "2 days average maximums for each simulation",
