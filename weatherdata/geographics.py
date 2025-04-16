@@ -125,8 +125,8 @@ def showcase_data(
 ###   Apply earth's curvature weights
 
 def apply_curv_weights(
-        data: xr.DataArray,
-) -> xr.DataArray:
+        data: xr.DataArray | xr.Dataset,
+) -> xr.DataArray | xr.Dataset :
     """ Apply weights to take into account earth's curvature when averaging over space """
 
     resolution = data['latitude'].values[0] - data['latitude'].values[1]
@@ -146,7 +146,13 @@ def apply_curv_weights(
         latitude=slice(latMax, latMin),
         longitude=slice(lonMin, lonMax)
     )
-
-    res = (data * weights) / weights.max()
+    if type(data) is xr.Dataset:
+        res = data.copy(deep=True)
+        for var in data.data_vars:
+            res[var] = (data[var] * weights) / weights.max()
+    elif type(data) is xr.DataArray:
+        res = (data * weights) / weights.max()
+    else:
+        raise ValueError('The data must be a Dataset or a DataArray')
 
     return res

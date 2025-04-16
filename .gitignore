@@ -3,6 +3,7 @@ tp24*
 weathersets/results/*
 weathersets/forecast_results/*
 weathersets/hindcast_results/*
+unseen_protocol/data/*
 
 # Ignore running files
 *.ipynb
