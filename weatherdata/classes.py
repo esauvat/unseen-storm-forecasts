@@ -156,8 +156,7 @@ class Weatherset:
         if fileType == 'forecast' and np.datetime64(fileDate) >= np.datetime64('2023-06-29'):
             da['number'] = xr.DataArray(np.arange(1, 102, dtype=np.int32), dims="number")
         
-        if (
-                not self.resolution == '0.5') and '0.5' in fileName:  # Checking if the data is with 0.5 resolution
+        if self.resolution != '0.5' and '0.5' in fileName:  # Checking if the data is with 0.5 resolution
             # while the dataset is with 0.25 one
             da = da.reindex(
                 dict(  # If so, reindex (the missing values are filled with np.nan)
