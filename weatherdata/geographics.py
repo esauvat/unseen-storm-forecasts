@@ -4,8 +4,8 @@ from cartopy import crs as ccrs, feature as cfeature
 from cartopy.mpl.geoaxes import GeoAxes
 from mpl_toolkits.axes_grid1 import AxesGrid
 import matplotlib.pyplot as plt
-import numpy as np
 import xarray as xr
+import numpy as np
 from __init__ import *
 
 
@@ -137,10 +137,10 @@ def apply_curv_weights(
     else:
         raise ValueError('The resolution must be 0.5 or 0.25')
 
-    latMin = data['latitude'].min().values
-    latMax = data['latitude'].max().values
-    lonMin = data['longitude'].min().values
-    lonMax = data['longitude'].max().values
+    latMin = float(data['latitude'].min().values)
+    latMax = float(data['latitude'].max().values)
+    lonMin = float(data['longitude'].min().values)
+    lonMax = float(data['longitude'].max().values)
 
     weights = weights.sel(
         latitude=slice(latMax, latMin),
