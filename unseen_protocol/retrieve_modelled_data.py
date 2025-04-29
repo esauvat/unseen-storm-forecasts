@@ -50,7 +50,6 @@ from sys import argv
 import numpy as np
 import xarray as xr
 
-from simulation_script.worst_event_simulated import firstUncorrelated
 from weatherdata.classes import Weatherset
 from weatherdata.geographics import apply_curv_weights
 
@@ -59,6 +58,7 @@ from weatherdata.geographics import apply_curv_weights
 tpSet: Weatherset = None
 hansLats: slice(float, float) = slice(62.5, 60.5)
 hansLongs: slice(float, float) = slice(9., 11.5)
+firstUncorrelated: int = 15
 
 
 ###############################################################
