@@ -365,6 +365,16 @@ def pears_distrib(
         corr.shape[0],
         k=1)]
 
+def spear_distrib(
+        arr
+):
+    df = pd.DataFrame(
+        arr.T)
+    corr = df.corr(method='spearman').values
+    return corr[np.triu_indices(
+        corr.shape[0],
+        k=1)]
+
 
 def pears_norm(
         arr
