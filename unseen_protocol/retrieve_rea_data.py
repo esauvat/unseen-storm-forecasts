@@ -10,7 +10,7 @@ import pickle
 
 from weatherdata.classes import Weatherset
 from weatherdata.geographics import apply_curv_weights
-from weatherdata import mean_over_time
+from weatherdata import sum_over_time
 
 
 
@@ -30,11 +30,13 @@ def process_file(
         latitude = slice(62.5, 60.5),
         longitude = slice(9,11.75)
     )
-    return apply_curv_weights(
+    da = apply_curv_weights(
             da
     ).mean(
         dim=["latitude", "longitude"]
     )
+    da.values *= 1000
+    return da
 
 def main() -> xr.DataArray:
     """
@@ -61,9 +63,7 @@ def main() -> xr.DataArray:
             dim='time'
         )
 
-    return mean_over_time(
-        da_res, span=3, edges=False
-    )
+    return da_res
 
 
 
