@@ -6,6 +6,8 @@
 import xarray as xr
 import numpy as np
 
+from weatherdata import sum_over_time
+
 
 
 ###############################################################
@@ -74,7 +76,7 @@ def main(
     """
 
     if not vals:
-        vals = xr.open_dataarray('data/retrieved-rea.nc')
+        vals = sum_over_time(xr.open_dataarray('data/retrieved-rea.nc'), span=3, edges=False)
 
     yearsCoords: np.ndarray = np.arange(
         np.datetime64('1941'),

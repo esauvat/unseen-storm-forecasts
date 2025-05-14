@@ -175,6 +175,7 @@ def main() -> xr.DataArray:
             dim="idate"
         )
 
+    da_res.values *= 1000
     da_res.name = "tp24"
 
     # Save the DataArray

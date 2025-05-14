@@ -157,7 +157,7 @@ def plot_kde_distributions(
 
         plt.title(f'KDE Distributions for {month}')
         plt.xlabel('Precipitations')
-        plt.xlim(-0.003,0.017)
+        # plt.xlim(-0.003,0.017)
         plt.ylabel('Density')
         plt.legend()
         plt.grid(True)

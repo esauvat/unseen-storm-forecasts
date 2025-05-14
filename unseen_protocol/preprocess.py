@@ -1,6 +1,6 @@
 #
 # Run some preprocessing over the data, ie:
-#   - averaging over 3 consecutive days
+#   - accumulating over 3 consecutive days
 #   - selecting the max for each month and determine the overlap month
 #
 
@@ -8,7 +8,7 @@ from sys import argv
 
 import xarray as xr
 import numpy as np
-from weatherdata import date_as_int, mean_over_time
+from weatherdata import date_as_int, sum_over_time
 
 
 
@@ -16,39 +16,6 @@ from weatherdata import date_as_int, mean_over_time
 #
 #       Functions
 #
-
-# def rolling_by_htime_group(group, winSpan: int = 3):
-#     #
-#     # The function was written by chatGPT
-#     #
-#
-#     # Get sorted indices by htime (just in case)
-#     sorter = np.argsort(group['htime'].values)
-#
-#     # Sort group by htime
-#     group_sorted = group.isel(time=sorter)
-#     htime_sorted = group_sorted['htime']
-#
-#     # We'll apply rolling manually along the 'time' axis
-#     values = group_sorted.values
-#     rolled = np.full_like(values, np.nan)
-#
-#     # Looping over each time index to compute rolling mean
-#     for i in range(0, len(htime_sorted)-winSpan):
-#         # Get window of size winSpan expanding on the right
-#         window = values[..., i:i+winSpan]
-#         if window.shape[-1] == winSpan:
-#             rolled[..., i] = np.nanmean(window, axis=-1)
-#
-#     # Put the rolled data back into a DataArray
-#     result = group_sorted.copy(data=rolled)
-#     return result
-#
-# def rolling_mean_over_htime(
-#         da: xr.DataArray,
-# ) -> xr.DataArray:
-#     da = xr.concat([rolling_by_htime_group(grp) for _, grp in da.groupby('fdate')], dim='time')
-#     return da.sortby('time')
 
 
 def determine_overlap_month(
@@ -103,6 +70,7 @@ def maximize(
         ],
         dim="idate"
     )
+    olMonths.values = olMonths.values.astype(int)
 
     return xr.Dataset(
         data_vars=dict(
@@ -132,7 +100,7 @@ if __name__ == '__main__':
         files="full"
 
     res = maximize(
-        mean_over_time(
+        sum_over_time(
             data, span=3, edges=False
         )
     )

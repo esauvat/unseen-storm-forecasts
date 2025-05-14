@@ -8,6 +8,6 @@ unseen_protocol/data/*
 # Ignore running files
 *.ipynb
 
-#       Ignore testing files
+# Ignore testing files
 console.ipynb
 wset_test/

@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-from weatherdata import spear_distrib, mean_over_time
+from weatherdata import pears_distrib, sum_over_time
 
 
 
@@ -104,7 +104,7 @@ def correlation(
         mData = data.where(data.time['time.month'] == mId+5, drop=True)
         for lt in data.time.values:
             c = xr.apply_ufunc(
-                spear_distrib,
+                pears_distrib,
                 mData.where(mData.lead_time==lt, drop=True),
                 input_core_dims=[ [ "number", "time" ] ],
                 output_core_dims=[ [ "corrs" ] ],
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     plot_correlations(
         correlation(
             preprocess(
-                mean_over_time(
+                sum_over_time(
                     da, span=3, edges=False
                 )
             )

@@ -7,6 +7,7 @@
 #
 
 import os
+from sys import argv
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,8 +32,11 @@ def bootstrap_samples(
     Select random samples of mod_da elements, matching the shape of rea_da.
 
     :param size: size of the bootstraps samples.
+    
     :param ds_mod: modelled data.
+    
     :param month: working month.
+    
     :param sample_nb: number of bootstrap samples to create.
     """
 
@@ -111,8 +115,10 @@ def plot(
 
     :param reaAttrs: Attributes of the reanalysis distribution for each month
         of the May-October period. The shape must be (6, 4).
+        
     :param modAttrs: Attributes of the bootstrapped modelled data for each month
         and each bootstrap sample. The shape must be (6, 4, bsNb).
+        
     :param save_dir: Directory to save the plots.
     """
 
@@ -152,5 +158,11 @@ def plot(
 import time
 
 if __name__ == "__main__":
-    rea, mod = main()
-    plot(rea, mod)
+
+    if len(argv) >= 2 and argv[1]=="corrected":
+        rea, mod = main("data/corrected-full.nc")
+        plot(rea, mod, save_dir="corrected_results")
+    else:
+
+        rea, mod = main()
+        plot(rea, mod)

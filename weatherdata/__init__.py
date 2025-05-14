@@ -185,7 +185,29 @@ def mean_over_time(
             0, len(rolling_obj['time'].values - span + 1)
             )
         )
+    return rolling_obj
 
+def sum_over_time(
+        data: xr.DataArray,
+        span: int,
+        edges: bool = True,
+) -> xr.DataArray:
+    if "time" not in data.dims:
+        raise ValueError(
+            "Le DataArray doit avoir une dimension 'time'.")
+
+    rolling_obj = data.rolling(
+        time=span,
+        center=True,
+        min_periods=1,
+    ).sum("time")
+
+    if not edges:
+        rolling_obj = rolling_obj.shift(time=-span//2).isel(
+            time=slice(
+            0, len(rolling_obj['time'].values - span + 1)
+            )
+        )
     return rolling_obj
 
 
