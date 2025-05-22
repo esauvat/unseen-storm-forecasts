@@ -39,7 +39,7 @@ def preprocess(
 
     timeShifts: NDArray = np.array(
             [np.timedelta64(d, 'D')
-            for d in np.unique(data.lead_time.values)]
+            for d in np.unique(data.lead_time.values).astype(int)]
         ).flatten()
 
     idateRepeatAdd = xr.DataArray(
@@ -102,7 +102,7 @@ def correlation(
     for mId, month in enumerate(months):
         mArrs: list = []
         mData = data.where(data.time['time.month'] == mId+5, drop=True)
-        for lt in data.time.values:
+        for lt in data.lead_time.values:
             c = xr.apply_ufunc(
                 pears_distrib,
                 mData.where(mData.lead_time==lt, drop=True),

@@ -196,18 +196,27 @@ def sum_over_time(
         raise ValueError(
             "Le DataArray doit avoir une dimension 'time'.")
 
-    rolling_obj = data.rolling(
-        time=span,
-        center=True,
-        min_periods=1,
-    ).sum("time")
+    if edges:
+        rolling_obj = data.rolling(
+            time=span,
+            center=True,
+            min_periods=1,
+        ).sum("time")
 
-    if not edges:
-        rolling_obj = rolling_obj.shift(time=-span//2).isel(
-            time=slice(
-            0, len(rolling_obj['time'].values - span + 1)
+    else:
+        rolling_obj = data.rolling(
+            time=span,
+            center=False,
+            min_periods=span,
+        ).sum("time").shift(
+            time=-span+1
+        ).isel(
+            time=xr.DataArray(
+                np.arange(0,len(data.time.values)-span+1),
+                dims="time"
             )
         )
+
     return rolling_obj
 
 
@@ -382,7 +391,7 @@ def pears_distrib(
 ):
     df = pd.DataFrame(
         arr.T)
-    corr = df.corr().values
+    corr = df.corr(method='pearson').values
     return corr[np.triu_indices(
         corr.shape[0],
         k=1)]

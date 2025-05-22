@@ -8,7 +8,7 @@ from sys import argv
 
 import xarray as xr
 import numpy as np
-from weatherdata import date_as_int, sum_over_time
+from weatherdata import date_as_int
 
 
 
@@ -62,8 +62,8 @@ def maximize(
             xr.full_like(
                 valMaxs.where(valMaxs.fdate==date, drop=True),
                 determine_overlap_month(
-                    np.datetime64(date)+np.timedelta64(firstOffset, 'D'),
-                    np.datetime64(date)+np.timedelta64(lastOffset, 'D')
+                    np.datetime64(date)+np.timedelta64(int(firstOffset), 'D'),
+                    np.datetime64(date)+np.timedelta64(int(lastOffset), 'D')
                 )
             )
             for date in np.unique(valMaxs.fdate.values)
@@ -100,9 +100,7 @@ if __name__ == '__main__':
         files="full"
 
     res = maximize(
-        sum_over_time(
-            data, span=3, edges=False
-        )
+        data
     )
 
     res.to_netcdf('data/processed-'+files+'.nc')

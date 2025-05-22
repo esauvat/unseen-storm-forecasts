@@ -22,12 +22,12 @@ corrections = np.array([
     0,      # February
     0,      # March
     0,      # April
-    4.5,    # May
+    5,      # May
     7,      # June
-    10,     # July
-    9.5,    # August
-    8,      # September
-    3,      # October
+    7,      # July
+    9,      # August
+    9,      # September
+    7,      # October
     0,      # November
     0,      # December
 ])

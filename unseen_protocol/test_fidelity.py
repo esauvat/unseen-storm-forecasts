@@ -155,14 +155,15 @@ def plot(
 #
 #       Running script
 #
-import time
 
 if __name__ == "__main__":
 
     if len(argv) >= 2 and argv[1]=="corrected":
         rea, mod = main("data/corrected-full.nc")
         plot(rea, mod, save_dir="corrected_results")
+    elif len(argv) >= 2 and argv[1]=="uni_corrected":
+        rea, mod = main("data/uni_corrected-full.nc")
+        plot(rea, mod, save_dir="uniform_correction")
     else:
-
         rea, mod = main()
         plot(rea, mod)

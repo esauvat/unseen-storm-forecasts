@@ -31,11 +31,10 @@
 # We will use (for now at least) the second option, given that it is the one we already use
 # in other scripts. This decision may change in the future.
 #
-#
 # The resulting DataArray will be of the following format:
 #
 #   - Dimensions : [ "number", "time", "idate"]
-#   - Coordinates :
+#   - Coordinates : int
 #       • "number" : ensemble member identification
 #               (for hincdast will be in [1,2,3,4,5,6,7,8,9,10,51])
 #       • "time" : lead time as int
@@ -44,18 +43,17 @@
 #           → hindcast date
 #
 
-import pickle
 from sys import argv
 
 import numpy as np
 import xarray as xr
+from numpy.typing import NDArray
 
-from weatherdata.classes import Weatherset
+from weatherdata import sum_over_time
 from weatherdata.geographics import apply_curv_weights
 
 
 
-tpSet: Weatherset = None
 hansLats: slice(float, float) = slice(62.5, 60.5)
 hansLongs: slice(float, float) = slice(9., 11.5)
 firstUncorrelated: int = 15
@@ -65,6 +63,49 @@ firstUncorrelated: int = 15
 #
 #   Auxiliary functions
 #
+
+def get_list(
+        type: str = ''
+) -> NDArray :
+    """
+    Get the list of netCDF files
+    """
+
+    dates = np.concat(
+        [np.arange(
+            np.datetime64('2020-01-02'),
+            np.datetime64('2023-06-26'),
+            np.timedelta64(7, 'D')
+        ), np.arange(
+            np.datetime64('2020-01-06'),
+            np.datetime64('2023-06-26'),
+            np.timedelta64(7, 'D')
+        )]
+    )
+
+    dates = np.datetime_as_string(dates)
+
+    if type == "forecast":
+        files = [
+            '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/tp24_0.5x0.5_'+date+'.nc'
+            for date in dates
+        ]
+    elif type == "hindcast":
+        files = [
+            '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/tp24_0.5x0.5_' + date + '.nc'
+            for date in dates
+        ]
+    else :
+        files = [
+            '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/forecast/daily/values/tp24/tp24_0.5x0.5_' + date + '.nc'
+            for date in dates
+        ] + [
+            '/nird/projects/NS9873K/etdu/processed/cf-forsikring/s2s/ecmwf/hindcast/daily/values/tp24/tp24_0.5x0.5_' + date + '.nc'
+            for date in dates
+        ]
+
+    return files
+
 
 def refactor_coords(
         da: xr.DataArray,
@@ -82,27 +123,6 @@ def refactor_coords(
         da = da.expand_dims(
             {"hdate": [hdateIdx]},
         )
-        #
-        #   ### This part is no longer used, we have now decided to keep all
-        #   the ensemble members, and not select anything past 26-06-2023 ###
-        #
-        # # Selecting the proper ensemble numbers
-        # if tpSet.multiType:
-        #     numberIndexer = xr.DataArray(
-        #         np.array(list(range(10)) + [ 50 ]),
-        #         dims="number"
-        #     )
-        #     da = da.isel(
-        #         number=numberIndexer
-        #     )
-        # else:
-        #     numberIndexer = xr.DataArray(
-        #         np.arange(51),
-        #         dims="number"
-        #     )
-        #     da = da.isel(
-        #         number=numberIndexer
-        #     )
 
     res = da.expand_dims(
         {"fdate": [initDate]}
@@ -114,20 +134,23 @@ def refactor_coords(
 
 
 def process_file(
-        key: tuple[ str, str ]
+        path: str
 ) -> xr.DataArray:
-    fileType, fileName = key
     da = xr.open_dataarray(
-        tpSet.pathsToFiles[ key ]
+        path
     ).sel(
         latitude=hansLats,
         longitude=hansLongs,
     )
     da = apply_curv_weights(da)
+
+    # Remove negative values
+    da = xr.where(da>=0, da, 0)
+
     da = da.mean(
         [ "latitude", "longitude" ]
     )
-    str_initDate: str = fileName[-10:]
+    str_initDate: str = path[-13:-3]
     dt64_initDate: np.datetime64 = np.datetime64(str_initDate)
 
     da = refactor_coords(da, str_initDate)
@@ -155,27 +178,24 @@ def process_file(
 #   Main functions
 #
 
-def main() -> xr.DataArray:
+def main(
+        files: list[str]
+) -> xr.DataArray:
     """
     Select the averaged total precipitation over Hans area and create a single data array.
     """
 
     da_res: xr.DataArray = None
 
-    toProcessQueue: list[tuple] = []
-    for key in tpSet.fileList:
-        if key[1][-10:] <= '2023-06-26':
-            toProcessQueue.append(key)
-
-    if toProcessQueue:
-        da_res = process_file(toProcessQueue.pop())
-    while toProcessQueue:
+    if files:
+        da_res = process_file(files.pop())
+    while files:
         da_res = xr.concat(
-            [ da_res, process_file(toProcessQueue.pop()) ],
+            [ da_res, process_file(files.pop()) ],
             dim="idate"
         )
 
-    da_res.values *= 1000
+    da_res.values = da_res.values * 1000
     da_res.name = "tp24"
 
     # Save the DataArray
@@ -191,7 +211,8 @@ def main() -> xr.DataArray:
         files = "forecast"
     else:
         files = "hindcast"
-    da_res.to_netcdf(
+
+    sum_over_time(da_res, span=3, edges=False).to_netcdf(
         'data/retrieved-' + files + ".nc"
     )
 
@@ -205,15 +226,11 @@ def main() -> xr.DataArray:
 
 if __name__ == "__main__":
 
-    wsPath: str = None
     if len(argv) >= 2 and argv[ 1 ] == "forecast":
-        wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5_forecast.pkl'
+        filesList = get_list("forecast")
     elif len(argv) >= 2 and argv[ 1 ] == "hindcast":
-        wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5_hindcast.pkl'
+        filesList = get_list("hindcast")
     else:
-        wsPath = '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/s2s_0.5.pkl'
+        filesList = get_list()
 
-    with open(wsPath, 'rb') as inp:
-        tpSet = pickle.load(inp)
-
-    main()
+    main(filesList)

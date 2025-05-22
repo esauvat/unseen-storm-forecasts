@@ -40,7 +40,7 @@ def preprocess(
             [
                 [np.timedelta64(d, 'D') + np.timedelta64(ns, 'ns')
                 for ns in np.unique(da.number.values)]
-                for d in np.unique(da.lead_time.values)
+                for d in np.unique(da.lead_time.values).astype(int)
             ]
         ).flatten()
 
@@ -88,7 +88,7 @@ def distribution(
     months = [
         "May", "June", "July", "August", "September", "October"
     ]
-    ltimes = np.unique(da.lead_time.values)
+    ltimes = np.unique(da.lead_time.values.astype(int))
 
     arrays: list = []
 
@@ -109,6 +109,7 @@ def distribution(
                 {"month":[month]}
             )
         )
+
     return xr.concat(
         arrays,
         dim="month"
@@ -147,13 +148,13 @@ def plot_kde_distributions(
             data = monthData.sel(ltime=lt).values
 
             # Transparency: low alpha normally, full alpha for every 5th curve
-            alpha = 1.0 if ((45-lt) % 5 == 0) else 0.1
+            alpha = 1.0 if ((43-lt) % 5 == 0) else 0.1
 
             # Compute color from colormap
             color = cmap(norm(lt))
 
             # Plot using seaborn kdeplot
-            sns.kdeplot(data, alpha=alpha, color=color, label=f'Lead time {lt}' if ((45-lt) % 5 == 0) else None)
+            sns.kdeplot(data, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 5 == 0) else None, warn_singular=False)
 
         plt.title(f'KDE Distributions for {month}')
         plt.xlabel('Precipitations')
@@ -209,13 +210,13 @@ def plot_return_period(
             return_period = (n+1) / ranks
 
             # Transparency: low alpha normally, full alpha for every 5th curve
-            alpha = 1.0 if ((45-lt) % 5 == 0) else 0.1
+            alpha = 1.0 if ((43-lt) % 5 == 0) else 0.1
 
             # Compute color from colormap
             color = cmap(norm(lt))
 
             # Plot
-            plt.plot(sorted_data, return_period, alpha=alpha, color=color, label=f'Lead time {lt}' if ((45-lt) % 5 == 0) else None)
+            plt.plot(sorted_data, return_period, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 5 == 0) else None)
 
         plt.title(f'Return periods for {month}')
         plt.xlabel('Precipitations')
