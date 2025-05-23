@@ -4,7 +4,7 @@ import numpy as np
 import xarray as xr
 from itertools import product
 
-import __init__ as utils
+import weatherdata.__init__ as utils
 import weatherdata.geographics as geo
 from weatherdata.classes import Weatherset
 

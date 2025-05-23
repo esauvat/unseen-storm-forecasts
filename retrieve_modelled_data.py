@@ -54,8 +54,8 @@ from weatherdata.geographics import apply_curv_weights
 
 
 
-hansLats: slice(float, float) = slice(62.5, 60.5)
-hansLongs: slice(float, float) = slice(9., 11.5)
+hansLats: slice(float, float) = slice(62.5, 60.5) # type: ignore
+hansLongs: slice(float, float) = slice(9., 11.5) # type: ignore
 firstUncorrelated: int = 15
 
 
@@ -66,7 +66,7 @@ firstUncorrelated: int = 15
 
 def get_list(
         type: str = ''
-) -> NDArray :
+) -> list[str] :
     """
     Get the list of netCDF files
     """
@@ -161,7 +161,7 @@ def process_file(
         da.time >= firstUncoDate,
         drop=True
     )
-    newTimes: np.ndarray[tuple[int,], int] = (
+    newTimes: NDArray = (
         np.array([
             (time.astype('datetime64[D]')-dt64_initDate).astype(int)
             for time in da.time.values
@@ -185,7 +185,7 @@ def main(
     Select the averaged total precipitation over Hans area and create a single data array.
     """
 
-    da_res: xr.DataArray = None
+    da_res: xr.DataArray = None # type: ignore
 
     if files:
         da_res = process_file(files.pop())
@@ -206,14 +206,14 @@ def main(
         hindcast = (argv[ 1 ] != "forecast")
 
     if forecast and hindcast:
-        files = "full"
+        dataName = "full"
     elif forecast:
-        files = "forecast"
+        dataName = "forecast"
     else:
-        files = "hindcast"
+        dataName = "hindcast"
 
     sum_over_time(da_res, span=3, edges=False).to_netcdf(
-        'data/retrieved-' + files + ".nc"
+        'data/retrieved-' + dataName + ".nc"
     )
 
     return da_res

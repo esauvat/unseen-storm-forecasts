@@ -25,7 +25,7 @@ alphaMonths = {
 
 def boundaries(
         data: xr.DataArray,
-        size: str | None = 'largeNo',
+        size: str = 'largeNo',
 ) -> tuple:
     """ Correcting, if needed, a wanted value for the coordinates range
     to make sure it fits the data """
