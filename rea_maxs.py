@@ -3,6 +3,9 @@
 # for each of the targeted months, being the ones between May and October
 #
 
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 import xarray as xr
 import numpy as np
 
@@ -30,9 +33,11 @@ def compute_maxs(
     Compute the maximum over the specified month for each year of the data.
 
     :param da_val: DataArray containing the data to be processed.
+    
     :param da_res: DataArray of the results, carefull this array will be
         modified in place since it stores the results for each year and months
         between May and October.
+        
     :param month: Integer representing the month to compute the maximum over,
         each month is represented by its calendar number (eg: 1 → January).
     """
@@ -65,7 +70,7 @@ def compute_maxs(
 
 
 def main(
-        vals: xr.DataArray = None
+        vals: xr.DataArray | None = None
 ) -> xr.DataArray:
     """
     Compute the monthly maximum for each year on the May-October time period.
@@ -76,8 +81,8 @@ def main(
     """
 
     if not vals:
-        vals = sum_over_time(xr.open_dataarray('data/retrieved-rea.nc'), span=3, edges=False)
-
+        vals = xr.open_dataarray('data/retrieved-rea.nc')
+        
     yearsCoords: np.ndarray = np.arange(
         np.datetime64('1941'),
         np.datetime64('2025'),

@@ -23,10 +23,7 @@
 #
 # The first option is much cleaner in terms of coordinates, but is kind of a missuse of the
 # Dataset objects, given that the data are the same physical properties, and most of the
-# variables don't overlap in time
-#
-# The second option offers a single DataArray, which is much easier to handle when computing
-# statistics, however specific day's data may be less clean to access.
+# variables don't overlap over specific day's data may be less clean to access.
 #
 # We will use (for now at least) the second option, given that it is the one we already use
 # in other scripts. This decision may change in the future.
@@ -43,6 +40,9 @@
 #           → hindcast date
 #
 
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 from sys import argv
 
 import numpy as np
@@ -57,6 +57,7 @@ from weatherdata.geographics import apply_curv_weights
 hansLats: slice(float, float) = slice(62.5, 60.5) # type: ignore
 hansLongs: slice(float, float) = slice(9., 11.5) # type: ignore
 firstUncorrelated: int = 15
+shift = 0
 
 
 ###############################################################
@@ -115,7 +116,9 @@ def refactor_coords(
     Change the coordinates system and adjust the number indexes,
     if needed
     """
-
+    
+    global shift
+    
     if not "hdate" in da.coords:
         hdateIdx: int = (
             int("".join(initDate.split('-')))
@@ -124,13 +127,17 @@ def refactor_coords(
             {"hdate": [hdateIdx]},
         )
 
-    res = da.expand_dims(
-        {"fdate": [initDate]}
-    ).stack(
-        idate = ["hdate", "fdate"]
-    ).reset_index("idate")
+    res = da.assign_coords(
+        hdate = [
+            np.datetime64(str(hd//10000) + initDate[4:]) + np.timedelta64(shift, 'ns')
+            for hd in da.hdate.values
+        ]
+    ).rename(
+        {"hdate": "date"}
+    )
+    shift += 1
 
-    return res
+    return res.transpose("date","number","time")
 
 
 def process_file(
@@ -150,24 +157,11 @@ def process_file(
     da = da.mean(
         [ "latitude", "longitude" ]
     )
+
     str_initDate: str = path[-13:-3]
-    dt64_initDate: np.datetime64 = np.datetime64(str_initDate)
 
-    da = refactor_coords(da, str_initDate)
-
-    firstUncoDate: np.datetime64 = (
-            dt64_initDate + np.timedelta64(firstUncorrelated, 'D'))
-    da = da.where(
-        da.time >= firstUncoDate,
-        drop=True
-    )
-    newTimes: NDArray = (
-        np.array([
-            (time.astype('datetime64[D]')-dt64_initDate).astype(int)
-            for time in da.time.values
-        ]))
-    da = da.assign_coords(
-        time=newTimes
+    da = refactor_coords(da, str_initDate)[..., -31:].assign_coords(
+        {"time": np.arange(15,46)}
     )
 
     return da
@@ -192,7 +186,7 @@ def main(
     while files:
         da_res = xr.concat(
             [ da_res, process_file(files.pop()) ],
-            dim="idate"
+            dim="date"
         )
 
     da_res.values = da_res.values * 1000
@@ -212,11 +206,12 @@ def main(
     else:
         dataName = "hindcast"
 
-    sum_over_time(da_res, span=3, edges=False).to_netcdf(
+    res = sum_over_time(da_res, span=3, edges=False)
+    res.to_netcdf(
         'data/retrieved-' + dataName + ".nc"
     )
 
-    return da_res
+    return res
 
 
 ###############################################################

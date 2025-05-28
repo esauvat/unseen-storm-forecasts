@@ -125,7 +125,7 @@ def showcase_data(
 ###   Apply earth's curvature weights
 
 def apply_curv_weights(
-        data: xr.DataArray | xr.Dataset,
+        data: (xr.DataArray | xr.Dataset),
 ) -> xr.DataArray | xr.Dataset :
     """ Apply weights to take into account earth's curvature when averaging over space """
 

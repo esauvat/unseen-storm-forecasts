@@ -445,7 +445,7 @@ def pears_full(
 
 def pearson_correlation(
         data: xr.DataArray,
-        func: str | None = 'full'
+        func: str = 'full'
 ) -> xr.DataArray:
     data = data.stack(
         coordinates=["latitude", "longitude"])
@@ -459,7 +459,7 @@ def pearson_correlation(
     else:
         output_dims = [[]]
     result = xr.apply_ufunc(
-        funcDict[str: func],
+        funcDict[func],
         data,
         input_core_dims=[["number", "coordinates"]],
         output_core_dims=output_dims,

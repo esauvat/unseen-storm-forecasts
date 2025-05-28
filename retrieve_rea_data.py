@@ -4,9 +4,13 @@
 # This reanalysis data will be used to assess the fidelity of the s2s model.
 #
 
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 import xarray as xr
 import numpy as np
-import pickle
+
+from typing import cast, List
 
 from weatherdata.classes import Weatherset
 from weatherdata.geographics import apply_curv_weights
@@ -20,45 +24,46 @@ from weatherdata import sum_over_time
 #
 
 def process_file(
-        arr: xr.DataArray,
+        path: str,
 ) -> xr.DataArray:
     """
     Select the wanted data in the reanalysis files, not applying the mean
     """
-
-    da: xr.DataArray = arr.sel(
+    
+    da = xr.open_dataarray(path).sel(
         latitude = slice(62.5, 60.5),
-        longitude = slice(9,11.75)
+        longitude = slice(9, 11.75)
     )
-    da = apply_curv_weights(
-            da
+    da = cast(
+        xr.DataArray, apply_curv_weights(da)
     ).mean(
         dim=["latitude", "longitude"]
     )
     da.values *= 1000
     return da
 
-def main() -> xr.DataArray:
+def main(
+        paths: List,
+) -> xr.DataArray:
     """
-    Compute a DataArray with all the data and apply the mean over time
+    Compute a DataArray with all the data and apply the mean over time.
+    
+    Arguments:
+        paths (List) : list of paths to the different netCDF files.
     """
 
-    da_res: xr.DataArray = None
+    da_res: xr.DataArray = None # type: ignore
 
-    toProcessQueue: list[tuple] = [key for key in tpSet.fileList]
+    toProcessQueue: List[str] = [p for p in paths]
 
     if toProcessQueue:
         da_res = process_file(
-            tpSet.open_data(
-                toProcessQueue.pop()
-            )
+            toProcessQueue.pop()
         )
     while toProcessQueue:
         da_res = xr.concat(
             [da_res, process_file(
-                tpSet.open_data(
-                    toProcessQueue.pop()
-                )
+                toProcessQueue.pop()
             )],
             dim='time'
         )
@@ -72,16 +77,25 @@ def main() -> xr.DataArray:
 #       Running script
 #
 
-wsPath: str = (
-    '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weathersets/continuous_0.5.pkl'
+years = np.arange(
+    np.datetime64('1941'),
+    np.datetime64('2025'),
+    np.timedelta64(1, 'Y')
 )
-with open(wsPath, 'rb') as inp:
-    tpSet: Weatherset = pickle.load(inp)
+fileList = [
+    '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.5x0.5_'
+    + np.datetime_as_string(year) + '.nc'
+    for year in years
+]
 
 # Automatically run this script if the file is called as main
 if __name__ == "__main__":
 
-    res: xr.DataArray = main()
+    res: xr.DataArray = sum_over_time(
+        main(fileList),
+        span=3,
+        edges=False
+    )
     res.to_netcdf(
         'data/retrieved-rea.nc'
     )

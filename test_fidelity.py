@@ -7,6 +7,8 @@
 #
 
 import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 from sys import argv
 
 import matplotlib.pyplot as plt
@@ -80,17 +82,24 @@ def main(
     modelled = xr.open_dataset(modPath)
     reanalysis = xr.open_dataarray(reaPath)
 
-    bsSize = len(reanalysis.values)
-    bsNb = 10000
+    bsSize = len(reanalysis.values)     # Size of the bootstrap samples
+    bsNb = 10000                        # Number of bootstrap samples
+    
+    # Distribution attributes : 
+    #   Coords : 
+    #       6 months
+    #       4 attributes (mean, std, skewness, kurtoisis)
+    #       N bootstrap samples
     distribsAttrs = np.zeros((6, 4, bsNb))
     statFuncList = [ np.mean, np.std, stats.skew, stats.kurtosis ]
-    for mIdx, month in enumerate(list(range(5, 11))):
+    
+    for mId, month in enumerate(list(range(5, 11))):
         samples = bootstrap_samples(
             bsSize, modelled, month, bsNb
         )
-        for sIdy in range(4):
-            distribsAttrs[ mIdx, sIdy, : ] = samples.reduce(
-                func=statFuncList[ sIdy ],
+        for sId in range(4):
+            distribsAttrs[ mId, sId, : ] = samples.reduce(
+                func=statFuncList[ sId ],
                 dim="obj"
             )
 
@@ -124,6 +133,9 @@ def plot(
 
     months = [ 'May', 'June', 'July', 'August', 'September', 'October' ]
     attrsLongName = [ "Mean", "Standard deviation", "Skewness", "Kurtosis" ]
+    
+    reaAttrs = np.asarray(reaAttrs)
+    modAttrs = np.asarray(modAttrs)
 
     for mId, month in enumerate(months):
         fig, axs = plt.subplots(2, 2, figsize=(12, 10))

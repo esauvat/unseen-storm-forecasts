@@ -4,12 +4,14 @@
 # associated with precipitation amounts for each lead times.
 #
 
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 import xarray as xr
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
 from numpy.typing import NDArray
 
@@ -24,54 +26,45 @@ def preprocess(
         da: xr.DataArray,
 ) -> xr.DataArray:
     """
-    Flatten the DataArray, keeping only a leadtime and time coordinates.
+    Flatten the DataArray, keeping only a leadtime and time coordinates on one dimension.
+    
+    Argument:
+        da (DataArray) : DataArray with dimensions ("date", "number", "time")
+    
+    Return: 
+        DataArray with dimensions ("date", "lead_time")
     """
 
-    da = da.stack(obj=["idate", "time", "number"]).rename(
-        {"time":"lead_time"}
+    timeShifts = np.array([
+        np.timedelta64(n, 'ms')
+        for n in range(len(da.number.values) * len(da.time.values))
+    ])
+    
+    newDates = np.concat(
+        [
+            timeShifts + date
+            for date in da.date.values
+        ],
+        axis=-1
     )
-    hdate_to_dt = (
-        lambda d : np.datetime64(
-                "-".join([str(d)[:4], str(d)[4:6], str(d)[6:]])
-            )
-        )
-
-    timeShifts: NDArray = np.array(
-            [
-                [np.timedelta64(d, 'D') + np.timedelta64(ns, 'ns')
-                for ns in np.unique(da.number.values)]
-                for d in np.unique(da.lead_time.values).astype(int)
-            ]
-        ).flatten()
-
-    idateRepeatAdd = xr.DataArray(
-        np.zeros(len(np.unique(da.hdate.values))),
-        coords = [("hdate", np.unique(da.hdate.values))]
+    newLT = np.concat(
+        [
+            da.time.values
+            for _ in range(len(da.date.values)*len(da.number.values))
+        ],
+        axis=-1
     )
-
-    newTimes: list = []
-
-    idateIdx = np.unique(
-        pd.MultiIndex.from_arrays(
-            [da.hdate.values, da.fdate.values]
-        )
+    
+    res = xr.DataArray(
+        data = da.values.flatten(),
+        dims = ("date"),
+        coords={
+            "date": ("date", newDates),
+            "lead_time": ("date", newLT)
+        }
     )
-    for (hd, _) in idateIdx:
-        addon = int(idateRepeatAdd.sel(hdate=hd).values)
-        idateRepeatAdd.loc[hd] = addon + 1
-        newTimes.append(
-            hdate_to_dt(hd) + np.timedelta64(addon, 's') + timeShifts
-        )
-
-    newTimes = np.array(newTimes).flatten()
-
-    return da.reset_index("obj").drop_vars(
-        ["number", "idate", "fdate", "hdate"]
-    ).rename(
-        { "obj":"time" }
-    ).assign_coords(
-        time=newTimes
-    )
+    
+    return res
 
 
 # arr = xr.open_dataarray('data/retrieved-full.nc')
@@ -95,7 +88,7 @@ def distribution(
     for mId, month in enumerate(months):
         mId += 5
         mArrs: list = []
-        srcArray = da.where(da.time['time.month']==mId, drop=True)
+        srcArray = da.where(da.date['date.month']==mId, drop=True)
         for lt in ltimes:
             mArrs.append(
                 srcArray.where(
@@ -113,9 +106,7 @@ def distribution(
     return xr.concat(
         arrays,
         dim="month"
-    ).rename(
-        {"time":"obj"}
-    ).transpose("month","ltime","obj")
+    ).transpose("month","ltime","date")
 
 
 def plot_kde_distributions(
@@ -123,38 +114,35 @@ def plot_kde_distributions(
         outputDir: str = "results"
 ):
     """
-    Plots KDE distributions of a DataArray with dims (month, ltime, object).
+    Plots KDE distributions of a DataArray with coordinates (date, lead_time).
     
-    :param da: Input data with dims (month, ltime, object).
+    :param da: Input data with dim date and coords (date, lead_time).
     :param outputDir: Directory to save the plots.
     """
 
-    # Check required dimensions
-    if not all(dim in da.dims for dim in ['month', 'ltime', 'obj']):
-        raise ValueError("Input DataArray must have dimensions: 'month', 'ltime', 'obj'.")
-
     # Normalize lead times for colormap
-    ltValues = da.ltime.values
-    norm = plt.Normalize(vmin=min(ltValues), vmax=max(ltValues))
+    ltValues = np.unique(da.lead_time.values)
+    norm = plt.Normalize(vmin=min(ltValues), vmax=max(ltValues)) # type: ignore
     cmap = plt.get_cmap("viridis")
 
     # Create a plot for each month
-    for month in da.month.values:
+    months = ["May", "June", "July", "August", "September", "October"]
+    for mId, month in enumerate(months):
         plt.figure(figsize=(10, 6))
-        monthData = da.sel(month=month)
+        monthData = da.where(da.date['date.month']==mId+5, drop=True)
 
-        for lt in da.ltime.values:
+        for lt in ltValues:
             # Extract the data for this object
-            data = monthData.sel(ltime=lt).values
+            data = monthData.where(monthData.lead_time==lt, drop=True).values
 
             # Transparency: low alpha normally, full alpha for every 5th curve
-            alpha = 1.0 if ((43-lt) % 5 == 0) else 0.1
+            alpha = 1.0 if ((43-lt) % 4 == 0) else 0.1
 
             # Compute color from colormap
             color = cmap(norm(lt))
 
             # Plot using seaborn kdeplot
-            sns.kdeplot(data, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 5 == 0) else None, warn_singular=False)
+            sns.kdeplot(data, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 4 == 0) else None, warn_singular=False)
 
         plt.title(f'KDE Distributions for {month}')
         plt.xlabel('Precipitations')
@@ -178,27 +166,24 @@ def plot_return_period(
     """
     Plot the return period of precipitation events.
 
-    :param da: Input data with dims (month, ltime, object).
+    :param da: Input data with dims (date) and coordinates ("date", "lead_time").
     :param outputDir: Directory to save the plots.
     """
 
-    # Check required dimensions
-    if not all(dim in da.dims for dim in [ 'month', 'ltime', 'obj' ]):
-        raise ValueError("Input DataArray must have dimensions: 'month', 'ltime', 'obj'.")
-
     # Normalize lead times for colormap
-    ltValues = da.ltime.values
-    norm = plt.Normalize(vmin=min(ltValues), vmax=max(ltValues))
+    ltValues = np.unique(da.lead_time.values)
+    norm = plt.Normalize(vmin=min(ltValues), vmax=max(ltValues)) # type: ignore
     cmap = plt.get_cmap("viridis")
 
     # Create a plot for each month
-    for month in da.month.values:
+    months = ["May", "June", "July", "August", "September", "October"]
+    for mId, month in enumerate(months):
         plt.figure(figsize=(10, 6))
-        monthData = da.sel(month=month)
+        monthData = da.where(da.date['date.month']==mId+5, drop=True)
 
-        for lt in da.ltime.values:
+        for lt in ltValues:
             # Extract the data for this object
-            data = monthData.sel(ltime=lt).values
+            data = monthData.where(monthData.lead_time==lt).values
             data = data[~np.isnan(data)]
 
             # Sort in descending order
@@ -210,13 +195,13 @@ def plot_return_period(
             return_period = (n+1) / ranks
 
             # Transparency: low alpha normally, full alpha for every 5th curve
-            alpha = 1.0 if ((43-lt) % 5 == 0) else 0.1
+            alpha = 1.0 if ((43-lt) % 4 == 0) else 0.1
 
             # Compute color from colormap
             color = cmap(norm(lt))
 
             # Plot
-            plt.plot(sorted_data, return_period, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 5 == 0) else None)
+            plt.plot(sorted_data, return_period, alpha=alpha, color=color, label=f'Lead time {lt}' if ((43-lt) % 4 == 0) else None)
 
         plt.title(f'Return periods for {month}')
         plt.xlabel('Precipitations')
@@ -240,24 +225,17 @@ def plot_return_period(
 
 if __name__ == "__main__":
 
-    if not 'time-stacked-full.nc' in os.listdir('data'):
-        tp24 = preprocess(
-            xr.open_dataarray(
-                os.path.join('data','retrieved-full.nc')
-            )
+    
+    tp24 = preprocess(
+        xr.open_dataarray(
+            os.path.join('data','retrieved-full.nc')
         )
-        tp24.to_netcdf(os.path.join('data','time-stacked-full.nc'))
-    else:
-        tp24 = xr.open_dataarray(
-            os.path.join('data','time-stacked-full.nc')
-        )
-
-    distrib = distribution(tp24)
+    )
 
     plot_kde_distributions(
-        distrib
+        tp24
     )
 
     plot_return_period(
-        distrib
+        tp24
     )

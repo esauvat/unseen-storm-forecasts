@@ -4,6 +4,9 @@
 #   - selecting the max for each month and determine the overlap month
 #
 
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
 from sys import argv
 
 import xarray as xr
@@ -33,7 +36,7 @@ def determine_overlap_month(
     firstMonthNumber: int = firstDate.astype('datetime64[M]').astype(int)
     lastMonthNumber: int = lastDate.astype('datetime64[M]').astype(int)
     if (lastMonthNumber - firstMonthNumber) == 2:
-        return (firstMonth + 1) % 12
+        return (firstMonth % 12) + 1
     else:
         # Determine the lenght of the extent:
         lenght: int = date_as_int(lastDate) - date_as_int(firstDate)
@@ -56,26 +59,24 @@ def maximize(
     )
 
     valMaxs = da.max(dim="time")
-    dateMaxs = da.idxmax(dim="time")
     olMonths = xr.concat(
         [
             xr.full_like(
-                valMaxs.where(valMaxs.fdate==date, drop=True),
+                valMaxs.where(valMaxs.date.astype('datetime64[D]')==date, drop=True),
                 determine_overlap_month(
                     np.datetime64(date)+np.timedelta64(int(firstOffset), 'D'),
                     np.datetime64(date)+np.timedelta64(int(lastOffset), 'D')
                 )
             )
-            for date in np.unique(valMaxs.fdate.values)
+            for date in np.unique(valMaxs.date.values.astype('datetime64[D]'))
         ],
-        dim="idate"
+        dim="date"
     )
     olMonths.values = olMonths.values.astype(int)
 
     return xr.Dataset(
         data_vars=dict(
             tp24=valMaxs,
-            date=dateMaxs,
             month=olMonths
         ),
         coords=valMaxs.coords
