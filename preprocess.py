@@ -11,6 +11,7 @@ from sys import argv
 
 import xarray as xr
 import numpy as np
+import datetime
 from weatherdata import date_as_int
 
 
@@ -22,34 +23,35 @@ from weatherdata import date_as_int
 
 
 def determine_overlap_month(
-        firstDate: np.datetime64,
-        lastDate: np.datetime64
+        initDate: np.datetime64,
 ) -> int:
     """
-    Determine which month overlap the most with the time extent given by firstDate
-    and lastDate and return its number
+    Determine which month overlap the most with the initialization date
+    given and return its number
     """
+    
+    # Define the time extent
+    firstDate = initDate + np.timedelta64(15,'D')
+    lastDate = initDate + np.timedelta64(43, 'D')
 
     # First check if a full month exists between the dates
-    firstMonth: int = firstDate.astype(object).month
-    lastMonth: int = lastDate.astype(object).month
-    firstMonthNumber: int = firstDate.astype('datetime64[M]').astype(int)
-    lastMonthNumber: int = lastDate.astype('datetime64[M]').astype(int)
-    if (lastMonthNumber - firstMonthNumber) == 2:
-        return (firstMonth % 12) + 1
+    firstMonth: int = firstDate.astype('datetime64[M]').astype(int)
+    lastMonth: int = lastDate.astype('datetime64[M]').astype(int)
+    if (lastMonth - firstMonth) == 2:
+        return ((firstMonth + 1) % 12) + 1
     else:
         # Determine the lenght of the extent:
-        lenght: int = date_as_int(lastDate) - date_as_int(firstDate)
-        lastDayNumber = lastDate.astype(object).day
-        if lastDayNumber >= (lenght // 2):
-            return lastMonth
+        lenght: int = (lastDate - firstDate).astype(int)
+        lastDay = (lastDate - lastDate.astype('datetime64[M]')).astype(int) + 1
+        if lastDay >= (lenght // 2):
+            return lastMonth % 12 + 1
         else:
-            return firstMonth
+            return firstMonth % 12 + 1
 
 
 def maximize(
         da: xr.DataArray,
-) -> xr.Dataset:
+) -> xr.DataArray:
     """
     Select the maximum of each simulation
     """
@@ -57,29 +59,14 @@ def maximize(
     firstOffset, lastOffset = (
         da.time.values[0], da.time.values[-1]
     )
-
-    valMaxs = da.max(dim="time")
-    olMonths = xr.concat(
-        [
-            xr.full_like(
-                valMaxs.where(valMaxs.date.astype('datetime64[D]')==date, drop=True),
-                determine_overlap_month(
-                    np.datetime64(date)+np.timedelta64(int(firstOffset), 'D'),
-                    np.datetime64(date)+np.timedelta64(int(lastOffset), 'D')
-                )
-            )
-            for date in np.unique(valMaxs.date.values.astype('datetime64[D]'))
-        ],
-        dim="date"
-    )
-    olMonths.values = olMonths.values.astype(int)
-
-    return xr.Dataset(
-        data_vars=dict(
-            tp24=valMaxs,
-            month=olMonths
-        ),
-        coords=valMaxs.coords
+    
+    olMonths = np.array([
+        determine_overlap_month(d)
+        for d in da.date.values
+    ])
+    
+    return da.assign_coords(
+        month = ("date", olMonths)
     )
 
 
@@ -105,3 +92,5 @@ if __name__ == '__main__':
     )
 
     res.to_netcdf('data/processed-'+files+'.nc')
+    
+    res.max(dim="time").to_netcdf('data/maxs-'+files+'.nc')

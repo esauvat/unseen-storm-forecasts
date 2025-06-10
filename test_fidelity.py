@@ -26,7 +26,7 @@ from scipy import stats
 
 def bootstrap_samples(
         size: int,
-        ds_mod: xr.Dataset,
+        da_mod: xr.DataArray,
         month: int,
         sample_nb: int
 ) -> xr.DataArray:
@@ -50,10 +50,7 @@ def bootstrap_samples(
         dims=[ "bsId", "obj" ]
     )
 
-    mask = ds_mod[ 'month' ] == month
-    vals: NDArray = (
-        xr.where(mask, ds_mod[ 'tp24' ], np.nan).values.flatten()
-    )
+    vals: NDArray = da_mod.where(da_mod.month == month, drop=True).values.flatten()
     nonan_vals: NDArray = vals[ ~np.isnan(vals) ]
 
     assert len(nonan_vals) > size, "Not enough data to bootstrap sample"
@@ -68,7 +65,7 @@ def bootstrap_samples(
 
 
 def main(
-        modPath: str = 'data/processed-full.nc',
+        modPath: str = 'data/maxs-full.nc',
         reaPath: str = 'data/processed-rea.nc'
 ) -> tuple[ NDArray, NDArray ]:
     """
@@ -79,7 +76,7 @@ def main(
         observed data and the boostrapped simulated data.
     """
 
-    modelled = xr.open_dataset(modPath)
+    modelled = xr.open_dataarray(modPath)
     reanalysis = xr.open_dataarray(reaPath)
 
     bsSize = len(reanalysis.values)     # Size of the bootstrap samples

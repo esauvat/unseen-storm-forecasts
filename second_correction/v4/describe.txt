@@ -1,0 +1,2 @@
+On this folder, the gradient descent has been made so we get a modelling function :
+    - f(x) = b.x + c

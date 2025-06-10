@@ -24,96 +24,6 @@ from weatherdata import pears_distrib, sum_over_time
 #       Functions
 #
 
-def preprocess(
-        da: xr.DataArray,
-) -> xr.DataArray:
-    """
-    Reshape the DataArray to split the data by month and lead time.
-    """
-    
-    da = da.rename(
-        { "time": "lead_time" }
-    )
-    
-    ltimes = [lt for lt in da.lead_time.values]
-    dates = [d for d in da.date.values]
-    
-    da = da.stack(
-        time=["date", "lead_time"]
-    ).reset_index(
-        "time"
-    )
-    timeShifts = np.array([
-        np.timedelta64(lt, 'D')
-        for lt in ltimes
-    ])
-    newDates = np.concat(
-        [
-            timeShifts + date
-            for date in dates
-        ],
-        axis = -1
-    )
-    
-    return da.drop_vars(
-        "date"
-    ).rename(
-        {"time": "date"}
-    ).assign_coords(
-        date = newDates
-    )
-    
-    
-# def preprocess(
-#         data: xr.DataArray,
-# ) -> xr.DataArray:
-#     """
-#     Flatten the DataArray, keeping only a leadtime and time coordinates.
-#     """
-
-#     data = data.stack(obj=["idate", "time"]).rename(
-#         {"time":"lead_time"}
-#     )
-#     hdate_to_dt = (
-#         lambda d : np.datetime64(
-#                 "-".join([str(d)[:4], str(d)[4:6], str(d)[6:]])
-#             )
-#         )
-
-#     timeShifts: NDArray = np.array(
-#             [np.timedelta64(d, 'D')
-#             for d in np.unique(data.lead_time.values).astype(int)]
-#         ).flatten()
-
-#     idateRepeatAdd = xr.DataArray(
-#         np.zeros(len(np.unique(data.hdate.values))),
-#         coords = [("hdate", np.unique(data.hdate.values))]
-#     )
-
-#     newTimes = []
-
-#     idateIdx = np.unique(
-#         pd.MultiIndex.from_arrays(
-#             [data.hdate.values, data.fdate.values]
-#         )
-#     )
-#     for (hd, _) in idateIdx:
-#         addon = int(idateRepeatAdd.sel(hdate=hd).values)
-#         idateRepeatAdd.loc[hd] = addon + 1
-#         newTimes.append(
-#             hdate_to_dt(hd) + np.timedelta64(addon, 's') + timeShifts
-#         )
-
-#     newTimes = np.array(newTimes).flatten()
-
-#     return data.reset_index("obj").drop_vars(
-#         ["idate", "fdate"]
-#     ).rename(
-#         { "obj":"time" }
-#     ).assign_coords(
-#         time=newTimes
-#     )
-
 
 def correlation(
         data: xr.DataArray,
@@ -121,12 +31,12 @@ def correlation(
     """
     Compute the correlation for each lead time.
 
-    :param data: Input data with dimensions "number", "time". The "time" dimension has
-        two coordinates "lead_time" and "date".
+    :param data: Input data with dimensions "date", "number" and "time". The "time" dimension store
+        the lead time information.
     """
 
-    if not all([ dim in data.dims for dim in [ "number", "date" ] ]):
-        raise ValueError("Input DataArray must have dimensions: 'number', 'date'.")
+    if not all([ dim in data.dims for dim in [ "time", "number", "date" ] ]):
+        raise ValueError("Input DataArray must have dimensions: 'date', 'number', 'time'.")
 
     # Select the ensemble members that are shared between all files
     if data.date.min().values < np.datetime64('2019') :
@@ -145,11 +55,11 @@ def correlation(
 
     for mId, month in enumerate(months):
         mArrs: list = []
-        mData = data.where(data.date['date.month'] == mId+5, drop=True)
-        for lt in np.unique(data.lead_time.values):
+        mData = data.where(data.month == mId+5, drop=True)
+        for lt in data.time.values:
             c = xr.apply_ufunc(
                 pears_distrib,
-                mData.where(mData.lead_time==lt, drop=True),
+                mData.sel(time=lt),
                 input_core_dims=[ [ "number", "date" ] ],
                 output_core_dims=[ [ "corrs" ] ],
                 vectorize=True
@@ -236,13 +146,11 @@ def plot_correlations(
 #
 
 if __name__ == "__main__":
-    da = xr.open_dataarray('data/retrieved-full.nc')
+    da = xr.open_dataarray('data/processed-full.nc')
 
     plot_correlations(
         correlation(
-            preprocess(
-                da
-            )
+            da
         )
     )
     
