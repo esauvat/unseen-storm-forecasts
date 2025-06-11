@@ -11,6 +11,8 @@
 
 import os
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
+import sys
+sys.path.append("/nird/projects/NS9873K/emile/unseen-storm-forecasts")
 
 import xarray as xr
 import matplotlib.pyplot as plt
@@ -18,7 +20,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from typing import cast
-from scipy.stats import gumbel_r
+from scipy.stats import gumbel_r, genextreme
 
 from weatherdata.geographics import apply_curv_weights
 from weatherdata import sum_over_time
@@ -33,7 +35,8 @@ from weatherdata import sum_over_time
 def plot_distribution(
         da: xr.DataArray,
         threshold: float,
-        output_dir = 'final_results'
+        output_dir = 'final_results',
+        filename = 'worst_event_distribution'
 ) -> None:
     """Plot the distribution of the worst events, for each month between May and October, adding a 
         threshold to mark Hans storm.
@@ -91,7 +94,7 @@ def plot_distribution(
     # Show the plot
     plt.tight_layout()
     plt.savefig(
-        os.path.join(output_dir, 'worst_event_distribution.png')
+        os.path.join(output_dir, filename + '.png')
     )
     plt.close()
     
@@ -101,7 +104,8 @@ def plot_distribution(
 def plot_retper(
         da:xr.DataArray,
         threshold: float,
-        output_dir = 'final_results'
+        output_dir = 'final_results',
+        filename = 'worst_event_retper'
 ) -> None:
     """Plot the return period of the events, for each month between May and October, adding a 
         threshold to mark Hans storm.
@@ -157,6 +161,88 @@ def plot_retper(
         
         ax.semilogy(x_smooth, retper_smooth, label=f"{targeted_months[m]}", linestyle='-', color=color)
         
+        # # Plot empirical points
+        # ax.semilogy(sorted_events, retper, linestyle='--', alpha=0.5, color=color)
+
+    # Add Hans marker
+    ax.axvline(threshold, color='red', linestyle='--')
+    ax.text(threshold, 1, "Hans", color='red', rotation=-90, va='bottom')
+    
+    # Figure attributes
+    plt.legend()
+    plt.xlabel('Accumulated precipitations (mm)')
+    plt.ylabel('Peturn Period (years)')
+    plt.title('Return Period vs. Precipitation')
+    plt.grid(True, which='major', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.savefig(
+        os.path.join(output_dir, filename+'.png')
+    )
+    plt.close()
+    
+    pass
+
+
+def plot_retper_GEV(
+        da:xr.DataArray,
+        threshold: float,
+        output_dir = 'final_results',
+        filename = 'worst_event_retper'
+) -> None:
+    """Plot the return period of the events, for each month between May and October, adding a 
+        threshold to mark Hans storm.
+
+    Args:
+        da (xr.DataArray): DataArray of the modelled worst events, with dimensions ("date", "number").
+            The "date" dimension must have two coordinates "date" and "month", the second one storing
+            the information of the mosts overlapping month of the modelled time extent.
+        threshold (float): Value of the mark (most often representing Hans)
+        output_dir (str, optional): Directory to store the plot. Defaults to 'final_results'.
+    """
+    
+    # Ensure the necessary coordinate exists
+    if 'month' not in da.coords:
+        raise ValueError("The DataArray must have a 'month' coordinate.")
+    
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Select only months from May (5) to October (10)
+    targeted_months = {5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October"}
+    
+    fig, ax = plt.subplots(figsize=(8, 6))
+    
+    for m in targeted_months.keys():
+        
+        # Select data
+        da_month = da.sel(date=(da['month']==m))
+        
+        # Sort in descending order
+        sorted_events = np.sort(da_month.values.flatten())[::-1]
+        sorted_events = sorted_events[~np.isnan(sorted_events)]
+        n = len(sorted_events)
+        ranks = np.arange(1, n+1)
+        
+        if n < 2: # Need at least 2 points to fit
+            continue
+            
+        # Weibull return period
+        retper = (n+1)/ranks
+        
+        # Get the next color in the matplotlib cycle
+        color = ax._get_lines.get_next_color() # type: ignore
+        
+        # Fit GEV distribution to monthly data
+        
+        c, loc, scale = genextreme.fit(sorted_events)
+        
+        # Smooth curve
+        x_smooth = np.linspace(sorted_events.min(), sorted_events.max(), 200)
+        cdf = genextreme.cdf(x_smooth, c, loc=loc, scale=scale)
+        retper_smooth = 1 / (1 - cdf)
+        
+        ax.semilogy(x_smooth, retper_smooth, label=f"{targeted_months[m]}", linestyle='-', color=color)
+        
         # Plot empirical points
         ax.semilogy(sorted_events, retper, linestyle='--', alpha=0.5, color=color)
 
@@ -172,7 +258,7 @@ def plot_retper(
     plt.grid(True, which='major', linestyle='--', alpha=0.7)
     plt.tight_layout()
     plt.savefig(
-        os.path.join(output_dir, 'worst_event_retper.png')
+        os.path.join(output_dir, filename+'.png')
     )
     plt.close()
     
@@ -213,10 +299,26 @@ hans_val = sum_over_time(
 
 if __name__=="__main__":
     
-    data = xr.open_dataarray(
-        'data/maxs-full.nc'
-    )
-    
-    plot_distribution(data, hans_val)
-    
-    plot_retper(data, hans_val)
+    if len(sys.argv) >=2 and sys.argv[1]=="corrected":
+        data = xr.open_dataarray(
+            'data/maxs-corrected.nc'
+        )
+        
+        plot_distribution(
+            data, hans_val, 
+            filename="worst_event_distribution_corrected"
+        )
+        
+        plot_retper(
+            data, hans_val,
+            filename="worst_event_retper_corrected"
+        )
+        
+    else:
+        data = xr.open_dataarray(
+            'data/maxs-full.nc'
+        )
+        
+        plot_distribution(data, hans_val)
+        
+        plot_retper(data, hans_val)

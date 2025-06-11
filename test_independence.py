@@ -12,10 +12,13 @@ import numpy as np
 import xarray as xr
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.axes import Axes
 import seaborn as sns
 import os
 
-from weatherdata import pears_distrib, sum_over_time
+from weatherdata import spear_distrib
+import independence_refs as refs
 
 
 
@@ -27,7 +30,7 @@ from weatherdata import pears_distrib, sum_over_time
 
 def correlation(
         data: xr.DataArray,
-) -> xr.DataArray:
+) -> tuple[xr.DataArray, list] :
     """
     Compute the correlation for each lead time.
 
@@ -52,13 +55,16 @@ def correlation(
 
     arrays: list = [ ]
     months = ["May", "June", "July", "August", "September", "October"]
+    CI = []
 
-    for mId, month in enumerate(months):
+    for mId in np.sort(np.unique(data.month.values)):
+        month = months[mId-5]
         mArrs: list = []
-        mData = data.where(data.month == mId+5, drop=True)
+        mData = data.sel(date = data.month==mId)
+        CI.append(list(refs.run_CI(10000, mData[...,0].shape)))
         for lt in data.time.values:
             c = xr.apply_ufunc(
-                pears_distrib,
+                spear_distrib,
                 mData.sel(time=lt),
                 input_core_dims=[ [ "number", "date" ] ],
                 output_core_dims=[ [ "corrs" ] ],
@@ -79,21 +85,24 @@ def correlation(
     return xr.concat(
         arrays,
         dim="month"
-    )
+    ), CI
 
 
 def plot_correlations(
         data: xr.DataArray,
-        outputDir: str = 'results'
+        CI: list,
+        outputDir: str = 'results',
+        show = False
 ) -> None:
     """
     Plot the correlation distributions for each lead time.
 
     :param data: Input data with dimensions "ltime", "corrs".
+    :param CI: confidence intervals for reference.
     :param outputDir: Output directory to save the figure.
     """
 
-    for month in data.month.values:
+    for mid, month in enumerate(data.month.values):
         mData = data.sel(month=month)
 
         # Convert to DataFrame
@@ -109,32 +118,62 @@ def plot_correlations(
 
         # Create figure and axes
         fig, axes = plt.subplots(2, 1, figsize=(20, 15))
-        fig.suptitle(f'Correlation distributions for {month}', fontsize=20)
-
+        fig.suptitle(f'Correlation distributions for {month}', fontsize=30)
+        
+        # Add confidence intervals
+        for ci in CI[mid]:
+            low, high = ci
+            left, right = -0.5, 13.5
+            rect = patches.Rectangle(
+                xy=(left, low),
+                width=(right-left),
+                height=(high-low),
+                alpha=0.4,
+                color='gray'
+            )
+            axes[0].add_patch(rect)
+        for ci in CI[mid]:
+            low, high = ci
+            left, right = -0.5, 14.5
+            rect = patches.Rectangle(
+                xy=(left, low),
+                width=(right-left),
+                height=(high-low),
+                alpha=0.4,
+                color='gray'
+            )
+            axes[1].add_patch(rect)
+            
+        
         # First half
-        sns.violinplot(
+        sns.boxplot(
             data=df[ df[ "lead_time" ].isin(lt_group1) ],
             x="lead_time", y="corr",
             ax=axes[ 0 ], fill=False, color='black',
-            inner_kws=dict(box_width=6, whis_width=2)
+            width = 0.5
+            # box_width=6, whis_width=2
         )
         axes[ 0 ].grid(linestyle='--', color='gray', alpha=0.5)
-        axes[ 0 ].set_xlabel("Lead Time")
-        axes[ 0 ].set_ylabel("Correlation")
+        axes[ 0 ].set_xlabel("")
+        axes[ 0 ].set_ylabel("Correlation", fontsize=15)
 
         # Second half
-        sns.violinplot(
+        sns.boxplot(
             data=df[ df[ "lead_time" ].isin(lt_group2) ],
             x="lead_time", y="corr",
             ax=axes[ 1 ], fill=False, color='black',
-            inner_kws=dict(box_width=6, whis_width=2)
+            width = 0.5
+            # box_width=6, whis_width=2
         )
         axes[ 1 ].grid(linestyle='--', color='gray', alpha=0.5)
-        axes[ 1 ].set_xlabel("Lead Time")
-        axes[ 1 ].set_ylabel("Correlation")
+        axes[ 1 ].set_xlabel("Lead Time", fontsize=15)
+        axes[ 1 ].set_ylabel("Correlation", fontsize=15)
 
         # Save figure
+        plt.tight_layout()
         fig.savefig(os.path.join(outputDir, f'independance-{month}.png'))
+        if show:
+            plt.show()
         plt.close(fig)  # free memory
 
     pass
@@ -148,9 +187,9 @@ def plot_correlations(
 if __name__ == "__main__":
     da = xr.open_dataarray('data/processed-full.nc')
 
+    corr, interv = correlation(da)
     plot_correlations(
-        correlation(
-            da
-        )
+        corr,
+        interv
     )
     

@@ -25,7 +25,8 @@ from numpy.typing import NDArray
 
 def plot_kde_distributions(
         da: xr.DataArray,
-        outputDir: str = "results"
+        outputDir: str = "results",
+        show = False
 ):
     """
     Plots KDE distributions of a DataArray with coordinates (date, time).
@@ -41,9 +42,10 @@ def plot_kde_distributions(
 
     # Create a plot for each month
     months = ["May", "June", "July", "August", "September", "October"]
-    for mId, month in enumerate(months):
+    for mId in np.sort(np.unique(da.month.values)):
+        month = months[mId-5]
         plt.figure(figsize=(10, 6))
-        monthData = da.where(da.month == mId+5, drop=True)
+        monthData = da.sel(date=(da.month == mId))
 
         for lt in ltValues:
             # Extract the data for this object
@@ -68,6 +70,8 @@ def plot_kde_distributions(
         # Save plot
         filename = os.path.join(outputDir, f'stability_kde-{month}.png')
         plt.savefig(filename)
+        if show:
+            plt.show()
         plt.close()  # Close the figure to save memory
 
     pass
@@ -75,7 +79,8 @@ def plot_kde_distributions(
 
 def plot_return_period(
         da: xr.DataArray,
-        outputDir: str = "results"
+        outputDir: str = "results",
+        show = False
 ):
     """
     Plot the return period of precipitation events.
@@ -91,9 +96,10 @@ def plot_return_period(
 
     # Create a plot for each month
     months = ["May", "June", "July", "August", "September", "October"]
-    for mId, month in enumerate(months):
+    for mId in np.sort(np.unique(da.month.values)):
+        month = months[mId-5]
         plt.figure(figsize=(10, 6))
-        monthData = da.where(da.month==mId+5, drop=True)
+        monthData = da.sel(date=(da.month==mId))
 
         for lt in ltValues:
             # Extract the data for this object
@@ -126,6 +132,8 @@ def plot_return_period(
         # Save plot
         filename = os.path.join(outputDir, f'stability_retper-{month}.png')
         plt.savefig(filename)
+        if show:
+            plt.show()
         plt.close()  # Close the figure to save memory
 
     pass

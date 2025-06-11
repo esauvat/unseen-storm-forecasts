@@ -24,6 +24,7 @@ from scipy import stats
 #       Functions
 #
 
+
 def bootstrap_samples(
         size: int,
         da_mod: xr.DataArray,
@@ -78,6 +79,8 @@ def main(
 
     modelled = xr.open_dataarray(modPath)
     reanalysis = xr.open_dataarray(reaPath)
+    mArr = np.sort(np.unique(modelled.month.values))
+    reanalysis = reanalysis[:, mArr-5]
 
     bsSize = len(reanalysis.values)     # Size of the bootstrap samples
     bsNb = 10000                        # Number of bootstrap samples
@@ -87,10 +90,10 @@ def main(
     #       6 months
     #       4 attributes (mean, std, skewness, kurtoisis)
     #       N bootstrap samples
-    distribsAttrs = np.zeros((6, 4, bsNb))
+    distribsAttrs = np.zeros((len(mArr), 4, bsNb))
     statFuncList = [ np.mean, np.std, stats.skew, stats.kurtosis ]
     
-    for mId, month in enumerate(list(range(5, 11))):
+    for mId, month in enumerate(mArr):
         samples = bootstrap_samples(
             bsSize, modelled, month, bsNb
         )
@@ -114,7 +117,9 @@ def main(
 def plot(
         reaAttrs: ArrayLike,
         modAttrs: ArrayLike,
-        save_dir: str = 'results'
+        save_dir: str = 'results',
+        *args,
+        show = False
 ) -> None:
     """
     Plot the distribution of the bootstrapped distribution attributes.
@@ -126,15 +131,23 @@ def plot(
         and each bootstrap sample. The shape must be (6, 4, bsNb).
         
     :param save_dir: Directory to save the plots.
+    
+    :param *args: Specific months (all if none)
     """
 
-    months = [ 'May', 'June', 'July', 'August', 'September', 'October' ]
     attrsLongName = [ "Mean", "Standard deviation", "Skewness", "Kurtosis" ]
     
     reaAttrs = np.asarray(reaAttrs)
     modAttrs = np.asarray(modAttrs)
 
+    months = args
+    if not months:
+        months = [
+            "May", "June", "July", "August", "September", "October"
+        ]
+
     for mId, month in enumerate(months):
+        month = months[mId]
         fig, axs = plt.subplots(2, 2, figsize=(12, 10))
         fig.suptitle(f'Fidelity test for {month}', fontsize=16)
 
@@ -157,6 +170,8 @@ def plot(
 
         save_path = os.path.join(save_dir, f"fidelity-{month}.png")
         plt.savefig(save_path)
+        if show:
+            plt.show()
         plt.close(fig)  # Close to free memory
 
 
