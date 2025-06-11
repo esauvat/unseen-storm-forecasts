@@ -6,9 +6,6 @@ weathersets/hindcast_results/*
 data/*
 *.nc
 
-# Ignore running files
-*.ipynb
-
 # Ignore testing files
 console.ipynb
 wset_test/
