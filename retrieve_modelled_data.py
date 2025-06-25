@@ -43,7 +43,8 @@
 import os
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
-from sys import argv
+from sys import argv, path
+path.append("/nird/projects/NS9873K/emile/unseen-storm-forecasts/")
 
 import numpy as np
 import xarray as xr
@@ -173,7 +174,9 @@ def process_file(
 #
 
 def main(
-        files: list[str]
+        files: list[str],
+        span: int = 3,
+        output_dir: str = 'data'
 ) -> xr.DataArray:
     """
     Select the averaged total precipitation over Hans area and create a single data array.
@@ -206,10 +209,15 @@ def main(
     else:
         dataName = "hindcast"
 
-    res = sum_over_time(da_res, span=3, edges=False)
-    res.to_netcdf(
-        'data/retrieved-' + dataName + ".nc"
-    )
+    res = sum_over_time(da_res, span=span, edges=False)
+    if span != 3:
+        res.to_netcdf(
+            os.path.join(output_dir, 'retrieved-' + dataName + '-' + str(span) + ".nc")
+        )
+    else:
+        res.to_netcdf(
+            os.path.join(output_dir, 'retrieved-' + dataName + ".nc")
+        )
 
     return res
 

@@ -80,7 +80,7 @@ def main(
     :return: DataArray containing the maximum over the specified month for each year.
     """
 
-    if not vals:
+    if vals is None:
         vals = xr.open_dataarray('data/retrieved-rea.nc')
         
     yearsCoords: np.ndarray = np.arange(

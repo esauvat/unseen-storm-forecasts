@@ -113,8 +113,10 @@ def plot_correlations(
 
         # Split lead times
         unique_lt = sorted(df[ "lead_time" ].unique())
-        lt_group1 = unique_lt[ :14 ]
-        lt_group2 = unique_lt[ 14: ]
+        n = len(unique_lt)
+        sep = n//2
+        lt_group1 = unique_lt[ :sep ]
+        lt_group2 = unique_lt[ sep: ]
 
         # Create figure and axes
         fig, axes = plt.subplots(2, 1, figsize=(20, 15))
@@ -123,7 +125,7 @@ def plot_correlations(
         # Add confidence intervals
         for ci in CI[mid]:
             low, high = ci
-            left, right = -0.5, 13.5
+            left, right = -0.5, sep-0.5
             rect = patches.Rectangle(
                 xy=(left, low),
                 width=(right-left),
@@ -134,7 +136,7 @@ def plot_correlations(
             axes[0].add_patch(rect)
         for ci in CI[mid]:
             low, high = ci
-            left, right = -0.5, 14.5
+            left, right = -0.5, n-sep-0.5
             rect = patches.Rectangle(
                 xy=(left, low),
                 width=(right-left),

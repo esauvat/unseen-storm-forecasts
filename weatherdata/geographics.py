@@ -23,9 +23,9 @@ sizes = {
 }
 
 weightsLRes = xr.open_dataarray(
-    'weatherdata/geo_weights-0.5.nc')
+    '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.5.nc')
 weightsHRes = xr.open_dataarray(
-    'weatherdata/geo_weights-0.25.nc')
+    '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.25.nc')
 
 
 ###   Map background   ###
