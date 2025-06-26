@@ -67,7 +67,8 @@ def bootstrap_samples(
 
 def main(
         modPath: str = 'data/maxs-full.nc',
-        reaPath: str = 'data/processed-rea.nc'
+        reaPath: str = 'data/processed-rea.nc',
+        **kwargs: xr.DataArray,
 ) -> tuple[ NDArray, NDArray ]:
     """
     Compute the  statistical attributes from a bootstrapped sampling
@@ -77,8 +78,12 @@ def main(
         observed data and the boostrapped simulated data.
     """
 
-    modelled = xr.open_dataarray(modPath)
-    reanalysis = xr.open_dataarray(reaPath)
+    if kwargs:
+        modelled = kwargs.get('modelled')
+        reanalysis = kwargs.get('reanalysis')
+    else:
+        modelled = xr.open_dataarray(modPath)
+        reanalysis = xr.open_dataarray(reaPath)
     mArr = np.sort(np.unique(modelled.month.values))
     reanalysis = reanalysis[:, mArr-5]
 

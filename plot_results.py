@@ -271,33 +271,35 @@ def plot_retper_GEV(
 #       Run the script
 #
 
-era5_2023 = xr.open_dataarray(
-    '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.5x0.5_2023.nc'
-).sel(
-    latitude=slice(62.5,60.5),
-    longitude=slice(9,11.5)
-)
 
-era5_2023 = cast(
-    xr.DataArray,
-    apply_curv_weights(
-        era5_2023
-    )
-).mean(
-    dim=["latitude", "longitude"]
-) * 1000
-
-hans_val = sum_over_time(
-    era5_2023.sel(
-        time = slice(
-            np.datetime64('2023-08-07'),
-            np.datetime64('2023-08-09')
-        )
-    ),
-    span=3, edges=False
-).values[0]
 
 if __name__=="__main__":
+
+    era5_2023 = xr.open_dataarray(
+        '/nird/projects/NS9873K/etdu/processed/cf-forsikring/era5/continuous-format/daily/tp24/tp24_0.5x0.5_2023.nc'
+    ).sel(
+        latitude=slice(62.5,60.5),
+        longitude=slice(9,11.5)
+    )
+
+    era5_2023 = cast(
+        xr.DataArray,
+        apply_curv_weights(
+            era5_2023
+        )
+    ).mean(
+        dim=["latitude", "longitude"]
+    ) * 1000
+
+    hans_val = sum_over_time(
+        era5_2023.sel(
+            time = slice(
+                np.datetime64('2023-08-07'),
+                np.datetime64('2023-08-09')
+            )
+        ),
+        span=3, edges=False
+    ).values[0]
     
     if len(sys.argv) >=2 and sys.argv[1]=="corrected":
         data = xr.open_dataarray(
