@@ -1,5 +1,6 @@
 """ A set of tools to generate maps of Norway """
 
+import os
 from cartopy import crs as ccrs, feature as cfeature
 from cartopy.mpl.geoaxes import GeoAxes
 from mpl_toolkits.axes_grid1 import AxesGrid
@@ -22,10 +23,17 @@ sizes = {
     'huge':(60, 45)
 }
 
-weightsLRes = xr.open_dataarray(
-    '/home/esauvat/PycharmProjects/unseen-storm-forecasts/weatherdata/geo_weights-0.5.nc')
-weightsHRes = xr.open_dataarray(
-    '/home/esauvat/PycharmProjects/unseen-storm-forecasts/weatherdata/geo_weights-0.25.nc')
+if 'PycharmProjects' in os.listdir('/nird/home/esauvat/'):
+    weightsLRes = xr.open_dataarray(
+        '/home/esauvat/PycharmProjects/unseen-storm-forecasts/weatherdata/geo_weights-0.5.nc')
+    weightsHRes = xr.open_dataarray(
+        '/home/esauvat/PycharmProjects/unseen-storm-forecasts/weatherdata/geo_weights-0.25.nc')
+
+else:
+    weightsLRes = xr.open_dataarray(
+        '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.5.nc')
+    weightsHRes = xr.open_dataarray(
+        '/nird/projects/NS9873K/emile/unseen-storm-forecasts/weatherdata/geo_weights-0.25.nc')
 
 
 ###   Map background   ###
